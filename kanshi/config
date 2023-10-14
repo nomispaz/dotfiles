@@ -1,0 +1,8 @@
+profile laptop {
+	output eDP-1 position 0,0 mode 2560x1440
+}
+
+profile external {
+	output eDP-1 position 0,0 mode 2560x1440
+	output DP-5 position 2560,0 mode 2560x1440
+}
