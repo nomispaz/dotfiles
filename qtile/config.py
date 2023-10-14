@@ -30,7 +30,7 @@ import qtile_extras
 from colors import colors
 from qtile_extras import widget
 from libqtile import bar, layout, qtile
-from libqtile.config import Click, Drag, Group, Key, Match, Screen
+from libqtile.config import Click, Drag, Group, Key, Match, Screen, ScratchPad, DropDown
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile.backend.wayland import InputConfig
@@ -234,6 +234,15 @@ groups = [
     Group(name="2", screen_affinity=0),
     Group(name="3", screen_affinity=1),
     Group(name="4", screen_affinity=1),
+    ScratchPad("0", [
+        # define a drop down terminal.
+        # it is placed in the upper third of screen by default.
+        DropDown("term", "kitty", opacity=0.5),
+
+        # define another terminal exclusively for ``qtile shell` at different position
+        DropDown("tcc", "tuxedo-control-center"), 
+        ]
+    ),
 ]
 
 for i in groups:
@@ -248,6 +257,13 @@ for i in groups:
         # Move window to group N
         Key([mod, "shift"], i.name, lazy.window.togroup(i.name, switch_group=True),),
     ])
+
+#extend keys for scratchpads
+keys.extend([
+    Key([mod], 'F11', lazy.group['0'].dropdown_toggle('term')),
+    Key([mod], 'F12', lazy.group['0'].dropdown_toggle('tcc')),
+])
+
 
 # Drag floating layouts.
 mouse = [
