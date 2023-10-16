@@ -155,6 +155,11 @@ decoration_group = {
     "padding": 10,
 }
 
+#echo read device name for backlight control 
+vDevBacklightLaptopCmd = subprocess.run('brightnessctl -m | grep amdgpu', capture_output=True, shell=True, text=True).stdout
+vDevBacklightLaptop = str(vDevBacklightLaptopCmd).split(',')[0]
+
+
 # inject qtile-extra decorations into mywidgets
 widget.modify(myvolume.Volume, **decoration_group)
 widget.modify(mymicrophone.Mic, **decoration_group)
@@ -166,7 +171,7 @@ wWindowName = widget.WindowName(background=colors['Transparent'],**decoration_gr
 wTextBox = widget.TextBox(width=1000,background=colors['Transparent'])
 wStatusNotifier = qtile_extras.widget.StatusNotifier(background=colors['Transparent'],**decoration_group)
 wThermalSensor = widget.ThermalSensor(background=colors['Red'], threshold=100, width=80,**decoration_group)
-wBacklight = widget.Backlight(background=colors['Rosewater'],backlight_name="amdgpu_bl1",**decoration_group,width=70,format=myfunctions.myfunctions.get_icons('nerd_sun')+" {percent:2.0%}")
+wBacklight = widget.Backlight(background=colors['Rosewater'],backlight_name=vDevBacklightLaptop,**decoration_group,width=70,format=myfunctions.myfunctions.get_icons('nerd_sun')+" {percent:2.0%}")
 wVolume = myvolume.Volume(background=colors['Lavender'],**decoration_group)
 wMic = mymicrophone.Mic(background=colors['Lavender'],**decoration_group)
 wCPU = widget.CPU(background=colors['Sky'],width=180,**decoration_group)
