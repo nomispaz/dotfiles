@@ -260,8 +260,8 @@ for i in groups:
 
 #extend keys for scratchpads
 keys.extend([
-    Key([mod], 'F11', lazy.group['0'].dropdown_toggle('term')),
-    Key([mod], 'F12', lazy.group['0'].dropdown_toggle('tcc')),
+    Key(['control'], 'F11', lazy.group['0'].dropdown_toggle('term')),
+    Key(['control'], 'F12', lazy.group['0'].dropdown_toggle('tcc')),
 ])
 
 
