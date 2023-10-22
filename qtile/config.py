@@ -118,6 +118,9 @@ keys = [
     Key([], "XF86AudioRaiseVolume", lazy.spawn('wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+')),
     Key([], "XF86AudioMute", lazy.spawn('wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle')),
 
+    # mute microphone
+    Key([mod], "y", lazy.spawn('wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle')),
+
     # start programs with shortcuts
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     Key([mod], "b", lazy.spawn('brave-bin'), desc="Launch Brave-bin"),
@@ -243,9 +246,8 @@ groups = [
         # define a drop down terminal.
         # it is placed in the upper third of screen by default.
         DropDown("term", "kitty", opacity=0.5),
-
-        # define another terminal exclusively for ``qtile shell` at different position
         DropDown("tcc", "tuxedo-control-center"), 
+        DropDown("wdisplays", "wdisplays"), 
         ]
     ),
 ]
@@ -265,6 +267,7 @@ for i in groups:
 
 #extend keys for scratchpads
 keys.extend([
+    Key(['control'], 'F10', lazy.group['0'].dropdown_toggle('wdisplays')),
     Key(['control'], 'F11', lazy.group['0'].dropdown_toggle('term')),
     Key(['control'], 'F12', lazy.group['0'].dropdown_toggle('tcc')),
 ])
