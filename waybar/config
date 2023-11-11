@@ -20,8 +20,8 @@
     "modules-right": [
 		"tray", 
 //		"idle_inhibitor", 
-		"network", 
-//		"cpu", 
+//		"network", 
+		"cpu", 
 //		"memory", 
 		"temperature", 
 		"backlight", 
@@ -93,7 +93,7 @@
     },
 
     "cpu": {
-        "format": "{usage}% ",
+        "format": "{usage}% {avg_frequency} Ghz ",
         "tooltip": false
     },
 
