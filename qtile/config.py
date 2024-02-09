@@ -123,7 +123,7 @@ keys = [
 
     # start programs with shortcuts
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-    Key([mod], "b", lazy.spawn('brave-bin'), desc="Launch Brave-bin"),
+    Key([mod], "b", lazy.spawn('firefox-bin'), desc="Launch firefox-bin"),
     Key([mod], "s", lazy.spawn('prime-run steam'), desc="Launch steam on nvidia"),
     Key([mod], "r", lazy.spawn('wofi --show drun'), desc="Launch wofi"),
     Key([mod], "e", lazy.spawn('vscodium'), desc="Launch vscodium"),
@@ -252,26 +252,43 @@ groups = [
     ),
 ]
 
+def go_to_group(name: str):
+    def _inner(qtile):
+        if len(qtile.screens) == 1:
+            qtile.groups_map[name].toscreen()
+            return
+
+        if name in '12':
+            qtile.focus_screen(0)
+            qtile.groups_map[name].toscreen()
+        else:
+            qtile.focus_screen(1)
+            qtile.groups_map[name].toscreen()
+
+    return _inner
+
+def go_to_group_and_move_window(name: str):
+    def _inner(qtile):
+        if len(qtile.screens) == 1:
+            qtile.current_window.togroup(name, switch_group=True)
+            return
+
+        if name in "121":
+            qtile.current_window.togroup(name, switch_group=False)
+            qtile.focus_screen(0)
+            qtile.groups_map[name].toscreen()
+        else:
+            qtile.current_window.togroup(name, switch_group=False)
+            qtile.focus_screen(1)
+            qtile.groups_map[name].toscreen()
+
+    return _inner
+
 for i in groups:
-    keys.extend([
-        # Switch to group N
-        Key(
-            [mod], 
-            i.name, 
-            lazy.to_screen(0) if i.name in '12' else lazy.to_screen(1),
-            lazy.group[i.name].toscreen()
-        ),
-        # Move window to group N
-        Key([mod, "shift"], i.name, lazy.window.togroup(i.name, switch_group=True),),
-    ])
+    keys.append(Key([mod], i.name, lazy.function(go_to_group(i.name))))
 
-#extend keys for scratchpads
-keys.extend([
-    Key(['control'], 'F10', lazy.group['0'].dropdown_toggle('wdisplays')),
-    Key(['control'], 'F11', lazy.group['0'].dropdown_toggle('term')),
-    Key(['control'], 'F12', lazy.group['0'].dropdown_toggle('tcc')),
-])
-
+for i in groups:
+    keys.append(Key([mod, "shift"], i.name, lazy.function(go_to_group_and_move_window(i.name))))
 
 # Drag floating layouts.
 mouse = [

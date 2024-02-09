@@ -60,6 +60,7 @@ tooltip {
     background-color: #eb4d4b;
 }
 
+#custom-tuxmgr,
 #tray,
 #window,
 #mode,
@@ -141,6 +142,11 @@ tooltip {
     border-radius: 10px 0px 0px 10px;
     margin-left: 5px;
     border-right: 0px;
+}
+
+#custom-tuxmgr {
+    border-radius: 10px;
+    margin-right: 10px;
 }
 
 #tray {

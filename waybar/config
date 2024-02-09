@@ -19,6 +19,7 @@
 
     "modules-right": [
 		"tray", 
+        "custom/tuxmgr",
 //		"idle_inhibitor", 
 //		"network", 
 		"cpu", 
@@ -30,6 +31,13 @@
 		"clock"],
 
     // Modules configuration
+
+    "custom/tuxmgr": {
+        "format": "",
+        "tooltip": false,
+        "spacing": 10,
+        "on-click": "kitty ~/Documents/Coding/git_repos/qttuxmgr/tuxmgr.sh"
+    },
 
     "hyprland/workspaces": {
         "all-outputs": true,
@@ -94,7 +102,8 @@
 
     "cpu": {
         "format": "{usage}% {avg_frequency} Ghz ",
-        "tooltip": false
+        "tooltip": false,
+        "interval": 5
     },
 
     "memory": {
