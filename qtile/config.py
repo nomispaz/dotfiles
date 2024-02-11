@@ -65,7 +65,7 @@ elif qtile.core.name == "wayland":
 mod = "mod4"
 
 # standard terminal
-terminal = 'kitty'
+terminal = 'alacritty'
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -98,6 +98,19 @@ keys = [
         lazy.layout.toggle_split(),
         desc="Toggle between split and unsplit sides of stack",
     ),
+    #switch between stacked windows
+    Key(
+        #mod1 = RAlt Key
+        ["shift", "mod1"],
+        "right",
+        lazy.layout.up(),
+    ),
+    Key(
+        #mod1 = Alt Key
+        ["shift", "mod1"],
+        "left",
+        lazy.layout.down(),
+    ),
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod], "q", lazy.window.kill(), desc="Kill focused window"),
@@ -125,7 +138,7 @@ keys = [
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     Key([mod], "b", lazy.spawn('firefox-bin'), desc="Launch firefox-bin"),
     Key([mod], "s", lazy.spawn('prime-run steam'), desc="Launch steam on nvidia"),
-    Key([mod], "r", lazy.spawn('wofi --show drun'), desc="Launch wofi"),
+    Key([mod], "r", lazy.spawn('rofi -show drun'), desc="Launch wofi"),
     Key([mod], "e", lazy.spawn('vscodium'), desc="Launch vscodium"),
 
     # screenshots
@@ -170,18 +183,18 @@ widget.modify(mymicrophone.Mic, **decoration_group)
 #widgets
 #widget.CurrentLayout(**decoration_group),
 wGroupBox = widget.GroupBox(background=colors['Overlay0'],**decoration_group)
-wWindowName = widget.WindowName(background=colors['Transparent'],**decoration_group)
-wTextBox = widget.TextBox(width=1000,background=colors['Transparent'])
-wStatusNotifier = qtile_extras.widget.StatusNotifier(background=colors['Transparent'],**decoration_group)
-wThermalSensor = widget.ThermalSensor(background=colors['Red'], threshold=100, width=80,**decoration_group)
+wWindowName = widget.WindowName(**decoration_group)
+wTextBox = widget.TextBox(width=1000)
+wStatusNotifier = qtile_extras.widget.StatusNotifier(background=colors['Text'],**decoration_group)
+wThermalSensor = widget.ThermalSensor(background=colors['Red'], threshold=100, width=80,**decoration_group, mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('tcc')})
 wBacklight = widget.Backlight(background=colors['Rosewater'],backlight_name=vDevBacklightLaptop,**decoration_group,width=70,format=myfunctions.myfunctions.get_icons('nerd_sun')+" {percent:2.0%}")
 wVolume = myvolume.Volume(background=colors['Lavender'],**decoration_group)
 wMic = mymicrophone.Mic(background=colors['Lavender'],**decoration_group)
-wCPU = widget.CPU(background=colors['Sky'],width=180,**decoration_group)
-wMemory = widget.Memory(background=colors['Sky'],width=120, format="RAM: {MemPercent}%",**decoration_group)
+wCPU = widget.CPU(background=colors['Sky'],width=180,**decoration_group,mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('htop')})
+wMemory = widget.Memory(background=colors['Sky'],width=120, format="RAM: {MemPercent}%",**decoration_group,mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('htop')})
 wNet = widget.Net(background=colors['Sapphire'],**decoration_group,width=180,format='Net: {down:.0f}{down_suffix} ↓↑ {up:.0f}{up_suffix}')
-wBattery = widget.Battery(background=colors['Sapphire'],width=50,**decoration_group)
-wClock = widget.Clock(background=colors['Blue'],format="%Y-%m-%d %a %H:%M",width=220,**decoration_group)
+#wBattery = widget.Battery(background=colors['Sapphire'],width=50,**decoration_group)
+wClock = widget.Clock(background=colors['Blue'],format="%Y-%m-%d %a %H:%M",width=220,**decoration_group,mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('khal')})
             
 screens = [
     Screen(
@@ -200,7 +213,7 @@ screens = [
                 wCPU,
                 wMemory,
                 wNet,
-                wBattery,
+                #wBattery,
                 wClock
                 ],
             32,
@@ -219,7 +232,7 @@ screens = [
                 wGroupBox,
                 wWindowName,
                 wTextBox,
-                wStatusNotifier,
+                #wStatusNotifier,
                 wThermalSensor,
                 wBacklight,
                 wVolume,
@@ -227,7 +240,7 @@ screens = [
                 wCPU,
                 wMemory,
                 wNet,
-                wBattery,
+                #wBattery,
                 wClock
                 ],
             32,
@@ -245,9 +258,11 @@ groups = [
     ScratchPad("0", [
         # define a drop down terminal.
         # it is placed in the upper third of screen by default.
-        DropDown("term", "kitty", opacity=0.5),
+        DropDown("term", terminal, opacity=0.5),
         DropDown("tcc", "tuxedo-control-center"), 
         DropDown("wdisplays", "wdisplays"), 
+        DropDown("htop", terminal + " -e htop"), 
+        DropDown('khal', terminal + " -e ikhal", x=0.5, height=0.5, opacity=1),
         ]
     ),
 ]
@@ -273,7 +288,7 @@ def go_to_group_and_move_window(name: str):
             qtile.current_window.togroup(name, switch_group=True)
             return
 
-        if name in "121":
+        if name in "12":
             qtile.current_window.togroup(name, switch_group=False)
             qtile.focus_screen(0)
             qtile.groups_map[name].toscreen()
@@ -289,6 +304,13 @@ for i in groups:
 
 for i in groups:
     keys.append(Key([mod, "shift"], i.name, lazy.function(go_to_group_and_move_window(i.name))))
+
+#extend keys for scratchpads
+keys.extend([
+    Key(['control'], 'F10', lazy.group['0'].dropdown_toggle('wdisplays')),
+    Key(['control'], 'F11', lazy.group['0'].dropdown_toggle('term')),
+    Key(['control'], 'F12', lazy.group['0'].dropdown_toggle('tcc')),
+])
 
 # Drag floating layouts.
 mouse = [
@@ -313,6 +335,7 @@ floating_layout = layout.Floating(
         Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
+        Match(title="ck3"), #crusader kings 3
     ]
 )
 auto_fullscreen = True
