@@ -41,6 +41,9 @@ import myfunctions
 
 from libqtile import hook
 
+#read current path
+absolute_path = os.path.dirname(__file__)
+
 # environment variables
 os.environ["WLR_NO_HARDWARE_CURSORS"] = "1"
 os.environ["RANGER_LOAD_DEFAULT_RC"] = "false"
@@ -263,7 +266,7 @@ groups = [
         DropDown("wdisplays", "wdisplays"), 
         DropDown("htop", terminal + " -e htop"), 
         #DropDown('khal', terminal + " -e ikhal", x=0.5, height=0.5, opacity=1),
-        DropDown('qtCal', "python /home/simonheise/Documents/Coding/git_repos/qtcal/qtcal.py", x=0.7, height=0.3, opacity=1),
+        DropDown("qtCal", "python " + os.path.join(absolute_path, "mymodules/myclasses/qtcal/qtcal.py"), x=0.7, height=0.3, opacity=1),
         ]
     ),
 ]
