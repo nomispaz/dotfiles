@@ -41,6 +41,9 @@ import myfunctions
 
 from libqtile import hook
 
+#read current path
+absolute_path = os.path.dirname(__file__)
+
 # environment variables
 os.environ["WLR_NO_HARDWARE_CURSORS"] = "1"
 os.environ["RANGER_LOAD_DEFAULT_RC"] = "false"
@@ -146,7 +149,6 @@ keys = [
 
 ]
 
-
 layouts = [
     layout.Columns(border_focus_stack=colors['Red'],border_focus=[colors['Rosewater']], border_width=4, insert_position=1),
     # Try more layouts by unleashing below layouts.
@@ -194,7 +196,7 @@ wCPU = widget.CPU(background=colors['Sky'],width=180,**decoration_group,mouse_ca
 wMemory = widget.Memory(background=colors['Sky'],width=120, format="RAM: {MemPercent}%",**decoration_group,mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('htop')})
 wNet = widget.Net(background=colors['Sapphire'],**decoration_group,width=180,format='Net: {down:.0f}{down_suffix} ↓↑ {up:.0f}{up_suffix}')
 #wBattery = widget.Battery(background=colors['Sapphire'],width=50,**decoration_group)
-wClock = widget.Clock(background=colors['Blue'],format="%Y-%m-%d %a %H:%M",width=220,**decoration_group,mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('khal')})
+wClock = widget.Clock(background=colors['Blue'],format="%Y-%m-%d %a %H:%M",width=220,**decoration_group,mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('qtcal')})
             
 screens = [
     Screen(
@@ -262,7 +264,8 @@ groups = [
         DropDown("tcc", "tuxedo-control-center"), 
         DropDown("wdisplays", "wdisplays"), 
         DropDown("htop", terminal + " -e htop"), 
-        DropDown("khal", terminal + " -e ikhal", x=0.5, height=0.5, opacity=1),
+        #DropDown('khal', terminal + " -e ikhal", x=0.5, height=0.5, opacity=1),
+        DropDown("qtcal", "python " + os.path.join(absolute_path, "myclasses/qtcal/qtcal.py"), x=0.5, height=0.5, opacity=1),
         ]
     ),
 ]
