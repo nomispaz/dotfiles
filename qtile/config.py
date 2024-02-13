@@ -265,7 +265,7 @@ groups = [
         DropDown("wdisplays", "wdisplays"), 
         DropDown("htop", terminal + " -e htop"), 
         #DropDown('khal', terminal + " -e ikhal", x=0.5, height=0.5, opacity=1),
-        DropDown("qtcal", "python " + os.path.join(absolute_path, "myclasses/qtcal/qtcal.py"), x=0.5, height=0.5, opacity=1),
+        DropDown("qtcal", "python " + os.path.join(absolute_path, "myclasses/qtcal/qtcal.py --datadir=/home/simonheise/.local/share/qtcal"), x=0.5, height=0.5, opacity=1),
         ]
     ),
 ]

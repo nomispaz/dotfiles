@@ -19,7 +19,7 @@
 import sqlite3
 import psutil
 from re import match
-from os import sys, path
+import os, sys
 from PyQt6.QtCore import Qt, QDate
 from PyQt6 import uic
 from datetime import date, datetime, timedelta
@@ -139,9 +139,9 @@ class QtCalWindow(QMainWindow):
         self.curDay = date.today()
         self.numColumns = 5
 
-        self.absolute_path = path.dirname(__file__)
+        self.absolute_path = os.path.dirname(__file__)
 
-        uic.loadUi(path.join(self.absolute_path, "config/ui/QtCalWindow.ui"),self)
+        uic.loadUi(os.path.join(self.absolute_path, "config/ui/QtCalWindow.ui"),self)
         self.setupUIfunctions()
         self.selectedQDate = self.calendarWidget.selectedDate()
 
@@ -239,14 +239,23 @@ def execute_sqlfile(conn, filename):
 
 def main():
 
+    try:
+        if match("--datadir",sys.argv[1]):
+            datadir = sys.argv[1][10:]
+            if not os.path.exists(datadir):
+                os.makedirs(datadir)
+    except:
+        absolute_path = os.path.dirname(__file__)
+        relative_path = "data"
+        datadir = os.path.join(absolute_path, relative_path)
+        if not os.path.exists(datadir):
+                os.makedirs(datadir)
+
     vDbVersion = None
     vDbConnection = None
     #create Database-Connection to sqllite-DB
     #important: "~" for home doesn't work
-    absolute_path = path.dirname(__file__)
-    relative_path = "data"
-    full_path = path.join(absolute_path, relative_path)
-    vDbVersion, vDbConnection = createDatabaseConnection(full_path+'/qtcal.db')
+    vDbVersion, vDbConnection = createDatabaseConnection(datadir+'/qtcal.db')
 
     instance_found = False
     for process in psutil.process_iter(['name']):
