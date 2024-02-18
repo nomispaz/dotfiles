@@ -20,7 +20,7 @@
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# LIABILITY, WHETHER YIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
@@ -30,7 +30,7 @@ import qtile_extras
 from colors import colors
 from qtile_extras import widget
 from libqtile import bar, layout, qtile
-from libqtile.config import Click, Drag, Group, Key, Match, Screen, ScratchPad, DropDown
+from libqtile.config import Click, Drag, Group, Key, Match, Screen, ScratchPad, DropDown, KeyChord
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile.backend.wayland import InputConfig
@@ -142,7 +142,11 @@ keys = [
     Key([mod], "b", lazy.spawn('firefox-bin'), desc="Launch firefox-bin"),
     Key([mod], "s", lazy.spawn('prime-run steam'), desc="Launch steam on nvidia"),
     Key([mod], "r", lazy.spawn('rofi -show drun'), desc="Launch wofi"),
-    Key([mod], "e", lazy.spawn('vscodium'), desc="Launch vscodium"),
+    #Key([mod], "e", lazy.spawn('vscodium'), desc="Launch vscodium"),
+    KeyChord([mod], "e", [
+        Key([], "v", lazy.spawn("vscodium")),
+        Key([], "k", lazy.spawn("kate"))
+    ]),
 
     # screenshots
     Key([mod], "Print", lazy.spawn('grim -g "$(slurp)"', shell=True), desc="Screenshot"),
@@ -194,7 +198,7 @@ wVolume = myvolume.Volume(background=colors['Lavender'],**decoration_group)
 wMic = mymicrophone.Mic(background=colors['Lavender'],**decoration_group)
 wCPU = widget.CPU(background=colors['Sky'],width=180,**decoration_group,mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('htop')})
 wMemory = widget.Memory(background=colors['Sky'],width=120, format="RAM: {MemPercent}%",**decoration_group,mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('htop')})
-wNet = widget.Net(background=colors['Sapphire'],**decoration_group,width=180,format='Net: {down:.0f}{down_suffix} ↓↑ {up:.0f}{up_suffix}')
+#wNet = widget.Net(background=colors['Sapphire'],**decoration_group,width=180,format='Net: {down:.0f}{down_suffix} ↓↑ {up:.0f}{up_suffix}')
 #wBattery = widget.Battery(background=colors['Sapphire'],width=50,**decoration_group)
 wClock = widget.Clock(background=colors['Blue'],format="%Y-%m-%d %a %H:%M",width=220,**decoration_group,mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('qtcal')})
             
@@ -214,7 +218,7 @@ screens = [
                 wMic,
                 wCPU,
                 wMemory,
-                wNet,
+                #wNet,
                 #wBattery,
                 wClock
                 ],
@@ -241,7 +245,7 @@ screens = [
                 wMic,
                 wCPU,
                 wMemory,
-                wNet,
+                #wNet,
                 #wBattery,
                 wClock
                 ],
