@@ -35,3 +35,10 @@ vim.cmd.colorscheme "catppuccin"
 
 require("bufferline").setup({opts})
 require("persistence").setup({opts})
+require("null-ls").setup({
+        sources = {
+            require("null-ls").builtins.formatting.shfmt,
+        },
+    })
+require("mini.pairs").setup()
+require("config.whichkey")
