@@ -142,11 +142,11 @@ keys = [
     Key([mod], "b", lazy.spawn('firefox-bin'), desc="Launch firefox-bin"),
     Key([mod], "s", lazy.spawn('prime-run steam'), desc="Launch steam on nvidia"),
     Key([mod], "r", lazy.spawn('rofi -show drun'), desc="Launch wofi"),
-    #Key([mod], "e", lazy.spawn('vscodium'), desc="Launch vscodium"),
-    KeyChord([mod], "e", [
-        Key([], "v", lazy.spawn("vscodium")),
-        Key([], "k", lazy.spawn("kate"))
-    ]),
+    Key([mod], "e", lazy.spawn('emacs'), desc="Launch emacs"),
+    #KeyChord([mod], "e", [
+    #    Key([], "v", lazy.spawn("vscodium")),
+    #    Key([], "k", lazy.spawn("kate"))
+    #]),
 
     # screenshots
     Key([mod], "Print", lazy.spawn('grim -g "$(slurp)"', shell=True), desc="Screenshot"),

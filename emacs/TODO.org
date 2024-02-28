@@ -1,0 +1,15 @@
+* Offene Fragen
+- Look into command-log-mode
+- Do I need projectile?
+- [[https://www.youtube.com/watch?v=INTu30BHZGk&list=PLEoMzSkcN8oPH1au7H6B7bBJ4ZO7BXjSZ&index=5][Magit Video]]. Brauche ich das wirklich?
+  
+* TODO Zu prüfende Dokus
+SCHEDULED: <2024-02-29 Thu>
+
+- [[https://www.youtube.com/watch?v=VcgjTEa0kU4&list=PLEoMzSkcN8oPH1au7H6B7bBJ4ZO7BXjSZ&index=5][Org-Mode Einleitung]]
+- [[https://www.youtube.com/watch?v=PNE-mgkZ6HM&list=PLEoMzSkcN8oPH1au7H6B7bBJ4ZO7BXjSZ&index=6][Org-Mode Erweitert]]
+
+  
+
+
+ 

@@ -50,7 +50,10 @@ class QtCalWindow(QMainWindow):
             (selectedDate,),
         )
         self.lEntries = []
+def testtt(self, test):
+    test
 
+    insertDbData()
         # write sql results into list
         for results in vSqlResults:
             self.lEntries.append(results)
