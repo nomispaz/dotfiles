@@ -2,54 +2,66 @@
 ;; --------------------------------------------------------------------------
 ;; Desktop File for Emacs
 ;; --------------------------------------------------------------------------
-;; Created Wed Feb 28 07:41:56 2024
+;; Created Thu Feb 29 20:38:10 2024
 ;; Desktop file format version 208
 ;; Emacs version 29.2
 
 ;; Global section:
-(setq desktop-saved-frameset [frameset 1 (26078 54708 995201 739000) (desktop . "208") "simonheise@XMGgentoo" nil nil ((((minibuffer . t) (undecorated) (override-redirect) (font . "-PfEd-DejaVu Sans Mono-regular-normal-normal-*-24-*-*-*-m-0-iso10646-1") (border-width . 0) (internal-border-width . 0) (child-frame-border-width) (right-divider-width . 0) (bottom-divider-width . 0) (vertical-scroll-bars) (horizontal-scroll-bars) (foreground-color . "#b2b2b2") (background-color . "#292b2e") (mouse-color . "black") (border-color . "black") (screen-gamma) (line-spacing) (left-fringe . 8) (right-fringe . 8) (no-special-glyphs) (scroll-bar-foreground) (scroll-bar-background) (menu-bar-lines . 0) (tab-bar-lines . 0) (tool-bar-lines . 0) (title) (wait-for-wm . t) (tool-bar-position . top) (inhibit-double-buffering) (icon-type . t) (auto-raise) (auto-lower) (cursor-type . box) (scroll-bar-width . 14) (scroll-bar-height) (alpha) (alpha-background) (no-focus-on-map) (no-accept-focus) (fullscreen) (visibility . t) (use-frame-synchronization) (skip-taskbar) (z-group) (display-type . color) (background-mode . dark) (cursor-color . "#e3dedd") (font-parameter) (sticky) (shaded) (environment) (dnd-root-window-position) (last-focus-update) (frameset--id . "076D-B71B-09E3-5D9F") (frameset--mini t . t) (modeline . t) (unsplittable) (icon-name) (display . ":1") (explicit-name) (height . 48) (width . 89) (left . 3840) (top . 32)) ((min-height . 4) (min-width . 10) (min-height-ignore . 3) (min-width-ignore . 4) (min-height-safe . 1) (min-width-safe . 2) (min-pixel-height . 116) (min-pixel-width . 140) (min-pixel-height-ignore . 87) (min-pixel-width-ignore . 56) (min-pixel-height-safe . 29) (min-pixel-width-safe . 28)) leaf (pixel-width . 1272) (pixel-height . 1371) (total-width . 90) (total-height . 47) (normal-height . 1.0) (normal-width . 1.0) (buffer "init.el" (selected . t) (hscroll . 0) (fringes 8 8 nil nil) (margins nil) (scroll-bars nil 0 t nil 0 nil nil) (vscroll . 0) (dedicated) (point . 828) (start . 396)) (prev-buffers ("TODO.org" 1 218))))])
+(setq desktop-saved-frameset [frameset 1 (26080 56610 348254 613000) (desktop . "208") "simonheise@XMGgentoo" nil nil ((((minibuffer . t) (undecorated) (override-redirect) (font . "-PfEd-DejaVu Sans Mono-regular-normal-normal-*-24-*-*-*-m-0-iso10646-1") (border-width . 0) (internal-border-width . 0) (child-frame-border-width) (right-divider-width . 0) (bottom-divider-width . 0) (vertical-scroll-bars) (horizontal-scroll-bars) (foreground-color . "#b2b2b2") (background-color . "#292b2e") (mouse-color . "black") (border-color . "black") (screen-gamma) (line-spacing) (left-fringe . 8) (right-fringe . 8) (no-special-glyphs) (scroll-bar-foreground) (scroll-bar-background) (menu-bar-lines . 0) (tab-bar-lines . 0) (tool-bar-lines . 0) (title) (wait-for-wm . t) (tool-bar-position . top) (inhibit-double-buffering) (icon-type . t) (auto-raise) (auto-lower) (cursor-type . box) (scroll-bar-width . 14) (scroll-bar-height) (alpha) (alpha-background) (no-focus-on-map) (no-accept-focus) (fullscreen) (visibility . t) (use-frame-synchronization) (skip-taskbar) (z-group) (display-type . color) (background-mode . dark) (cursor-color . "#e3dedd") (font-parameter) (sticky) (shaded) (environment) (dnd-root-window-position) (last-focus-update) (frameset--id . "076D-B71B-09E3-5D9F") (frameset--mini t . t) (modeline . t) (unsplittable) (icon-name) (display . ":1") (explicit-name) (height . 47) (width . 89) (left . 1283) (top . 58)) ((min-height . 4) (min-width . 10) (min-height-ignore . 3) (min-width-ignore . 4) (min-height-safe . 1) (min-width-safe . 2) (min-pixel-height . 116) (min-pixel-width . 140) (min-pixel-height-ignore . 87) (min-pixel-width-ignore . 56) (min-pixel-height-safe . 29) (min-pixel-width-safe . 28)) leaf (pixel-width . 1274) (pixel-height . 1350) (total-width . 91) (total-height . 47) (normal-height . 1.0) (normal-width . 1.0) (buffer "init.el" (selected . t) (hscroll . 0) (fringes 8 8 nil nil) (margins nil) (scroll-bars nil 0 t nil 0 nil nil) (vscroll . 0) (dedicated) (point . 2784) (start . 1604)) (prev-buffers ("init.el" 1604 2830) ("TODO.org" 1 616) ("filme_und_serien.org" 1 8) ("tasks.org" 1 1) ("*scratch*" 1 1))))])
 (setq desktop-missing-file-warning nil)
 (setq tags-file-name nil)
 (setq tags-table-list nil)
-(setq search-ring '(#("org-" 0 4 (isearch-case-fold-search t isearch-regexp-function nil)) #("org" 0 3 (isearch-case-fold-search t isearch-regexp-function nil)) #("desktop" 0 7 (isearch-case-fold-search t isearch-regexp-function nil)) #("desk" 0 4 (isearch-case-fold-search t isearch-regexp-function nil))))
+(setq search-ring '(#("pickpo" 0 6 (isearch-case-fold-search t isearch-regexp-function nil)) #("vscod" 0 5 (isearch-case-fold-search t isearch-regexp-function nil)) #("org-" 0 4 (isearch-case-fold-search t isearch-regexp-function nil)) #("org" 0 3 (isearch-case-fold-search t isearch-regexp-function nil)) #("desktop" 0 7 (isearch-case-fold-search t isearch-regexp-function nil)) #("desk" 0 4 (isearch-case-fold-search t isearch-regexp-function nil))))
 (setq regexp-search-ring nil)
 (setq register-alist nil)
-(setq file-name-history '("~/git_repos/dotfiles/emacs/TODO.org" "~/Pictures/20240224_103040.jpg" "~/git_repos/dotfiles/emacs/init.el" "~/git_repos/dotfiles/qtile/config.py" "~/git_repos/dotfiles/emacs/TODO.org" "~/Pictures/20240224_103040.jpg" "~/git_repos/dotfiles/qtile/myclasses/qtcal/qtcal.py" "~/Documents/RPG/orgmode/monsteroftheweek.org" "~/dotfiles_backup/emacs/scripts/install-packages.el" "~/merge_gentoo_profile"))
+(setq file-name-history '("~/Documents/RPG/Monster-of-the-Week-Revised-Playbooks.pdf" "~/git_repos/dotfiles/emacs/init.el" "~/Documents/" "~/Documents/orgfiles/filme_und_serien.org" "~/Documents/" "~/git_repos/dotfiles/qtile/myclasses/qtcal/qtcal.py" "~/git_repos/dotfiles/hypr/hyprland.conf" "~/git_repos/dotfiles/hypr/" "~/git_repos/dotfiles/emacs/TODO.org" "~/Pictures/20240224_103040.jpg" "~/git_repos/dotfiles/emacs/init.el" "~/git_repos/dotfiles/qtile/config.py" "~/git_repos/dotfiles/emacs/TODO.org" "~/Pictures/20240224_103040.jpg" "~/git_repos/dotfiles/qtile/myclasses/qtcal/qtcal.py" "~/Documents/RPG/orgmode/monsteroftheweek.org" "~/dotfiles_backup/emacs/scripts/install-packages.el" "~/merge_gentoo_profile"))
 
 ;; Buffer section -- buffers listed in same order as in buffer list:
 (desktop-create-buffer 208
   "/home/simonheise/git_repos/dotfiles/emacs/init.el"
   "init.el"
   'emacs-lisp-mode
-  '(yas-minor-mode company-mode display-line-numbers-mode eldoc-mode font-lock-mode)
-  828
-  '(871 nil)
+  '(display-line-numbers-mode yas-minor-mode company-mode eldoc-mode font-lock-mode)
+  2784
+  '(8682 nil)
   nil
   nil
-  '((buffer-display-time 26078 54575 754595 939000) (buffer-file-coding-system . utf-8-unix))
-  '((mark-ring (7872 7872 7872 5411 570 1 1 1 4770 5127 1 1 1 1 1 828))))
+  '((buffer-display-time 26080 56551 868960 160000) (buffer-file-coding-system . utf-8-unix))
+  '((mark-ring (2731 2789 2789))))
 
 (desktop-create-buffer 208
   "/home/simonheise/git_repos/dotfiles/emacs/TODO.org"
   "TODO.org"
   'org-mode
-  '(font-lock-mode org-indent-mode buffer-face-mode visual-line-mode company-mode)
-  218
-  '(219 nil)
+  '(company-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode)
+  616
+  '(233 nil)
   nil
   nil
-  '((indent-tabs-mode) (buffer-display-time 26078 54546 747769 806000) (buffer-file-coding-system . utf-8-unix) (truncate-lines))
-  '((mark-ring nil)))
+  '((indent-tabs-mode) (buffer-display-time 26080 55838 120815 601000) (buffer-file-coding-system . utf-8-unix) (truncate-lines))
+  '((mark-ring (132 229 233 132 229 233 132 229 380 486 229 523 378 281 605 237))))
 
 (desktop-create-buffer 208
   "/home/simonheise/Documents/orgfiles/tasks.org"
   "tasks.org"
   'org-mode
-  '(font-lock-mode org-indent-mode buffer-face-mode visual-line-mode company-mode)
+  '(company-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode)
   1
   '(nil nil)
   nil
   nil
-  '((indent-tabs-mode) (buffer-display-time 26078 54575 707326 324000) (buffer-file-coding-system . undecided-unix) (truncate-lines))
+  '((indent-tabs-mode) (buffer-display-time 26080 55838 539425 799000) (buffer-file-coding-system . undecided-unix) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/home/simonheise/Documents/orgfiles/filme_und_serien.org"
+  "filme_und_serien.org"
+  'org-mode
+  '(company-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode)
+  8
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26080 56300 327469 189000) (buffer-file-coding-system . undecided-unix) (truncate-lines))
   '((mark-ring nil)))
 

@@ -71,7 +71,10 @@
 
     ;; always show line and column numbers
     (column-number-mode 1)
-    (global-display-line-numbers-mode 1)
+    ;; display line numbers but not in special view modes
+    (unless (derived-mode-p 'image-mode 'doc-view-mode 'pdf-view-mode)
+      (display-line-numbers-mode 1)
+      )
     
     ;; but not in specific modes
     (dolist (mode '(org-mode-hook
@@ -216,7 +219,7 @@
                           '(("^ *\\([-]\\) "
                              (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
-;;  Set faces for heading levels.
+  ;;Set faces for heading levels.
   (dolist (face '((org-level-1 . 1.2)
                   (org-level-2 . 1.1)
                   (org-level-3 . 1.05)
@@ -249,14 +252,20 @@
   (setq org-agenda-start-with-log-mode t)
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
-  
-  (setq org-agenda-files
-	'("~/Documents/orgfiles/tasks.org")
-	)
+  ;; RETURN will follow links in org-mode files
+  (setq org-return-follows-link  t)  
+  ;; (setq org-agenda-files
+  ;; 	'("~/Documents/orgfiles/")
+  ;; 	)
+  (setq org-agenda-files (directory-files-recursively "~/Documents/orgfiles/" "\\.org"))
   (my/org-font-setup)
+  :bind (;;copy link anker to clipboard, insert with C-c C-l
+	 ("C-c l" . org-stored-links)
+	 )
   )
 
 (use-package org-agenda)
+
 
 ;; -----------------------------------------------------------------------
 
@@ -267,6 +276,7 @@
 ;; reload yas-snippets and activate in python-ts-mode
 (yas-reload-all)
 (add-hook 'prog-mode-hook #'yas-minor-mode)
+
 
 ;; ------------------------------------------------------------------------
 
@@ -288,7 +298,7 @@
  '(custom-safe-themes
    '("7fd8b914e340283c189980cd1883dbdef67080ad1a3a9cc3df864ca53bdc89cf" "eab123a5ed21463c780e17fc44f9ffc3e501655b966729a2d5a2072832abd3ac" "80214de566132bf2c844b9dee3ec0599f65c5a1f2d6ff21a2c8309e6e70f9242" default))
  '(org-agenda-files
-   '("~/git_repos/dotfiles/emacs/TODO.org" "/home/simonheise/Documents/orgfiles/tasks.org"))
+   '("~/Documents/orgfiles/filme_und_serien.org" "/home/simonheise/git_repos/dotfiles/emacs/TODO.org" "/home/simonheise/Documents/orgfiles/tasks.org"))
  '(package-selected-packages
    '(which-key company yasnippet consult orderless vertico marginalia)))
 (custom-set-faces

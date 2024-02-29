@@ -50,7 +50,6 @@ class QtCalWindow(QMainWindow):
             (selectedDate,),
         )
         self.lEntries = []
-
         # write sql results into list
         for results in vSqlResults:
             self.lEntries.append(results)
