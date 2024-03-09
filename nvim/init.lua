@@ -31,7 +31,7 @@ require("lazy").setup({
 })
 
 --load colorscheme
-vim.cmd.colorscheme "catppuccin"
+vim.cmd.colorscheme "catppuccin-mocha"
 
 require("bufferline").setup({opts})
 require("persistence").setup({opts})

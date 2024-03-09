@@ -71,6 +71,13 @@ local mappings = {
         name = "Open files", 
         f = { "<cmd>Telescope find_files<cr>", "Find File"},
         r = { "<cmd>Telescope oldfiles<cr>", "Recent Files"},
+        e = { "<cmd>ene <BAR> startinsert<cr>", "New File"},
+    },
+    ["t"] = {
+        name = "Telescope functions",
+        k = { "<cmd>Telescope keymaps<cr>", "Display keymaps"},
+        f = { "<cmd>Telescope current_buffer_fuzzy_find<cr>", "Fuzzy find in buffer"},
+        d = { "<cmd>Telescope diagnostics<cr>", "LSP Errors/Warnings"},
     },
     ["p"] = { "<cmd>Lazy<CR>", "Plugin Manager" }, 
     ["m"] = { "<cmd>MarkdownPreviewToggle<cr>", "Markdown Preview"},
@@ -89,8 +96,22 @@ local mappings = {
         ["s"] = { [[<cmd>lua require("persistence").load()<cr>]], "Restore Session for current directory" },
         ["l"] = { [[<cmd>lua require("persistence").load({ last = true })<cr>]], "Restore last session" },
         ["d"] = { [[<cmd>lua require("persistence").stop()<cr>]], "Don't save session on exit" },
-    }
-
+    },
+    ["o"] = {
+        name = "Org-mode",
+        ["a"] = { "oa", "Org-Agenda"},
+        ["t"] = { "ot", "Add tag"},
+        ["i"] = {
+            name = "Insert",
+            ["s"] = { "ois", "Insert scheduled date"},
+            ["t"] = { "oit", "Insert todo entry"},
+        },
+        ["b"] = {
+            name = "Babel",
+            ["t"] = { "obt", "Extract source code to file"},
+        },
+    },
+   
   -- ["c"] = { name = "+code" },
    --["gh"] = { name = "+hunks" },
     --["q"] = { name = "+quit/session" },
