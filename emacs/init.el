@@ -1,4 +1,4 @@
-;; keybindings
+;; some standard keybindings to remember
 ;; C-x r t : change mutiple lines at the same time
 ;; C-g : close Minibuffer
 ;; C-x k : kill-buffer
@@ -13,8 +13,10 @@
 ;; general setup
 
 ;; update path so that pyright can be installed into the folder with npm install -g pyright.
-(setenv "PATH" (concat (getenv "PATH") ":~/npm-packages/bin"))
-(setq exec-path (append exec-path '("~/npm-packages/bin")))
+;; not necessary anymore since change from pyright to pylsp
+;; emerge -ag dev-python/flake8 dev-python/python-lsp-server
+;; (setenv "PATH" (concat (getenv "PATH") ":~/npm-packages/bin"))
+;; (setq exec-path (append exec-path '("~/npm-packages/bin")))
 
 ;; remap old node names to new ones with tree-sitter
 (setq major-mode-remap-alist
@@ -61,7 +63,7 @@
      (tool-bar-mode -1)		; Disable the toolbar
      (menu-bar-mode -1)		; Disable the menu bar
      (scroll-bar-mode -1) 	; Disable visible scrollbar
-					;(load-theme 'wombat)
+				       
     ;; load spacemacs theme. "t" to automatically confirm
     (load-theme 'spacemacs-dark t)
     (set-face-attribute 'default nil :font "DejaVu Sans Mono" :height 180)
@@ -71,7 +73,7 @@
 
     ;; always show line and column numbers
     (column-number-mode 1)
-    ;; display line numbers but not in special view modes
+    ;; display line numbers but not in specific view modes
     (unless (derived-mode-p 'image-mode 'doc-view-mode 'pdf-view-mode)
       (display-line-numbers-mode 1)
       )
@@ -136,13 +138,112 @@
          ;; Switch to another buffer, or bookmarked file, or recently
          ;; opened file.
          ("M-s M-b" . consult-buffer)))
-	 ;;instead overwrite standard buffer switch
-         ;;("\C-xb" . consult-buffer)))
 
+;; -----------------------------------------------------------------------
+;;config mode-line
+
+(use-package nerd-icons
+  :ensure t)
+
+;; declare local variables for modeline
+
+(defvar-local my-modeline-file-status
+    '(:eval
+      ;; insert save icon from nerd-fonts when buffer was changed
+      (if (buffer-modified-p) 
+	 (propertize (format " %s" (nerd-icons-mdicon "nf-md-content_save_edit")))
+      )
+      )
+  )
+
+(defvar-local my-modeline-buffer-name
+    '(;; eval to always update the variable
+      :eval
+      ;; set property face (display) to the color of mode-line-buffer-id
+      ;; format with spaces around name
+       (propertize (format " %s " (buffer-file-name)) 'face 'mode-line-buffer-id)
+     )
+  )
+
+ (defvar-local my-modeline-flycheck-python
+     '(:eval
+       (force-mode-line-update)	  	   
+	   (propertize (format " FlyC " )
+	    'help-echo "Flycheck "
+	    'mouse-face 'spacemacs-theme-comment-bg
+                       'local-map (let ((map (make-sparse-keymap)))
+                                    (define-key map [mode-line down-mouse-1]
+                                      flycheck-mode-menu-map)
+                                    (define-key map [mode-line mouse-2]
+                                      (lambda ()
+                                        (interactive)
+                                        (describe-function 'flycheck-mode)))
+                                    map))
+;;       (propertize (format " "))
+ ;;		    'face 'spacemacs-theme-comment-bg)
+	   )
+       ;; (if (bound-and-true-p elisp-mode)
+       ;; 	   (force-mode-line-update)
+       ;; 	 propertize (format " "))
+
+   )
+
+(defvar-local my-modeline-flycheck
+    '(:eval
+      nil))
+
+;; (add-hook python-mode-hook my-modeline-flycheck my-modeline-flycheck-python)
+
+;; display klickable major-mode with keybindings
+(defvar-local my-modeline-mode-name
+    '(:eval
+        (propertize 
+	 (format-mode-line mode-name)
+	 'help-echo "Major mode\n\
+mouse-1: Display major mode menu\n\
+mouse-2: Show help for major mode\n\
+mouse-3: Toggle minor modes"
+	 'mouse-face 'spacemacs-theme-custom-colors
+	 'local-map mode-line-major-mode-keymap)
+	)
+  )
+
+;; create list of all custom mode-line variables.
+;; without setting them to risky mode, they will not work
+(dolist (construct '(my-modeline-buffer-name
+		     my-modeline-file-status
+		     my-modeline-mode-name
+		     my-modeline-flycheck
+                     ))
+  (put construct 'risky-local-variable t))
+
+;; setq-default to effect all mode-lines and not only the local one
+(setq-default mode-line-format
+	      '(;; error-message
+		"%e"
+		mode-line-front-space
+		;; display save icon if buffer was changed
+		my-modeline-file-status
+		;; display buffer name
+		my-modeline-buffer-name
+		;; display row and column numbers
+		mode-line-position-column-line-format
+		" "
+	        my-modeline-mode-name
+		my-modeline-flycheck-python
+		;; show git status
+		vc-mode
+		" "
+		mode-line-end-spaces
+		)
+	      )
+	      
 ;; change info-line
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1))
+;; (use-package doom-modeline
+;;   :ensure t
+;;   :init (doom-modeline-mode 1))
+
+;; ---------------------------------------------------------------
 
 ;; show keybindings
 (use-package which-key
@@ -185,12 +286,40 @@
   :ensure t
   )
 
+;; LSP
+;; use either
+;; -----------------------------------
 ;; buildin client for language server
-(use-package eglot
+;; (use-package eglot
+;;   :ensure t
+;;   :hook
+;;   (python-ts-mode . eglot-ensure)
+;;  )
+;; ;; -----------------------------------
+;; ; or
+;; ;; -----------------------------------
+;; lsp-mode
+(use-package lsp-mode
   :ensure t
-  :hook
-  (python-ts-mode . eglot-ensure)
- )
+  :commands lsp lsp-deferred
+  :hook ((python-ts-mode . lsp-deferred))
+  :config
+  (lsp-enable-which-key-integration t)
+    )
+;; lsp ui for sideline check and peek
+(use-package lsp-ui
+  :ensure t
+  :hook (lsp-mode . lsp-ui-mode)
+  )
+;; language server
+;; not installed anymore since switch to pylsp
+;; (use-package lsp-pyright
+;;   :ensure t)
+;; better integration of lsp-mode
+  (use-package flycheck
+    :ensure t)
+;; ---------------------------------------
+;; end LSP block
 
 ;; activate autosuggestions
 (use-package company
