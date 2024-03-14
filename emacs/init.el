@@ -165,9 +165,12 @@
      )
   )
 
- (defvar-local my-modeline-flycheck-python
-     '(:eval
-       (force-mode-line-update)	  	   
+ (defvar-local my-modeline-flycheck
+   '(:eval
+     (when (and (bound-and-true-p flycheck-mode)
+              (or flycheck-current-errors
+                  (eq 'running flycheck-last-status-change)))
+	 ;;(bound-and-true-p t)
 	   (propertize (format " FlyC " )
 	    'help-echo "Flycheck "
 	    'mouse-face 'spacemacs-theme-comment-bg
@@ -179,20 +182,35 @@
                                         (interactive)
                                         (describe-function 'flycheck-mode)))
                                     map))
-;;       (propertize (format " "))
- ;;		    'face 'spacemacs-theme-comment-bg)
-	   )
-       ;; (if (bound-and-true-p elisp-mode)
-       ;; 	   (force-mode-line-update)
-       ;; 	 propertize (format " "))
-
+       ))
    )
 
-(defvar-local my-modeline-flycheck
-    '(:eval
-      nil))
+;; read errors and warnings from flycheck
+(defun my/flycheck-lighter (state)
+  "Return flycheck information for the given error type STATE."
+  (let* ((counts (flycheck-count-errors flycheck-current-errors))
+         (errorp (flycheck-has-current-errors-p state))
+         (err (or (cdr (assq state counts)) "?"))
+         (running (eq 'running flycheck-last-status-change)))
+    (if (or errorp running) (format "•%s" err))))
 
-;; (add-hook python-mode-hook my-modeline-flycheck my-modeline-flycheck-python)
+(defvar-local my-modeline-flycheck-errors
+'(:eval
+   (when (and (bound-and-true-p flycheck-mode)
+              (or flycheck-current-errors
+                  (eq 'running flycheck-last-status-change)))
+     (concat
+      (cl-loop for state in '((error . "#e0211d")
+                              (warning . "#dc752f")
+                              (info . "#83A598"))
+
+               as lighter = (my/flycheck-lighter (car state))
+               when lighter
+               concat (propertize
+                       lighter
+                       'face `(:foreground ,(cdr state))))
+      " "))))
+
 
 ;; display klickable major-mode with keybindings
 (defvar-local my-modeline-mode-name
@@ -208,20 +226,33 @@ mouse-3: Toggle minor modes"
 	)
   )
 
+;; state of evil-mode in mode-line
+(defvar-local my-modeline-evil-state
+    '(:eval (cond
+       (( eq evil-state 'visual) "V")
+       (( eq evil-state 'normal) "N")
+       (( eq evil-state 'insert) "I")
+       (t "*")))
+    )
+
 ;; create list of all custom mode-line variables.
 ;; without setting them to risky mode, they will not work
 (dolist (construct '(my-modeline-buffer-name
 		     my-modeline-file-status
 		     my-modeline-mode-name
 		     my-modeline-flycheck
+		     my-modeline-flycheck-errors
+		     my-modeline-evil-state
                      ))
   (put construct 'risky-local-variable t))
 
 ;; setq-default to effect all mode-lines and not only the local one
 (setq-default mode-line-format
 	      '(;; error-message
-		"%e"
+		"%e"			
 		mode-line-front-space
+		my-modeline-evil-state
+		" "
 		;; display save icon if buffer was changed
 		my-modeline-file-status
 		;; display buffer name
@@ -230,7 +261,8 @@ mouse-3: Toggle minor modes"
 		mode-line-position-column-line-format
 		" "
 	        my-modeline-mode-name
-		my-modeline-flycheck-python
+		my-modeline-flycheck
+		my-modeline-flycheck-errors
 		;; show git status
 		vc-mode
 		" "
@@ -238,11 +270,6 @@ mouse-3: Toggle minor modes"
 		)
 	      )
 	      
-;; change info-line
-;; (use-package doom-modeline
-;;   :ensure t
-;;   :init (doom-modeline-mode 1))
-
 ;; ---------------------------------------------------------------
 
 ;; show keybindings
@@ -305,7 +332,9 @@ mouse-3: Toggle minor modes"
   :hook ((python-ts-mode . lsp-deferred))
   :config
   (lsp-enable-which-key-integration t)
-    )
+  (setq-default lsp-pylsp-plugins-flake8-max-line-length 200)
+  (setq-default lsp-pylsp-plugins-pycodestyle-max-line-length 200)
+  )
 ;; lsp ui for sideline check and peek
 (use-package lsp-ui
   :ensure t
@@ -317,7 +346,9 @@ mouse-3: Toggle minor modes"
 ;;   :ensure t)
 ;; better integration of lsp-mode
   (use-package flycheck
-    :ensure t)
+    :ensure t
+    :config
+    (setq-default flycheck-flake8-maximum-line-length 200))
 ;; ---------------------------------------
 ;; end LSP block
 
@@ -328,6 +359,7 @@ mouse-3: Toggle minor modes"
 					;(add-to-list 'company-backends 'company-dabbrev)
   ;;  add text suggestions "company-dabbrev" to elisp suggestions
   (add-to-list 'company-backends '(company-capf :with company-dabbrev))
+  (add-to-list 'company-backends '(company-capf :with company-yasnippet))
   )
 
 ;; org-mode
@@ -386,14 +418,54 @@ mouse-3: Toggle minor modes"
   ;; (setq org-agenda-files
   ;; 	'("~/Documents/orgfiles/")
   ;; 	)
-  (setq org-agenda-files (directory-files-recursively "~/Documents/orgfiles/" "\\.org"))
   (my/org-font-setup)
   :bind (;;copy link anker to clipboard, insert with C-c C-l
 	 ("C-c l" . org-stored-links)
 	 )
   )
 
-(use-package org-agenda)
+(use-package org-agenda
+  :config
+    (setq org-agenda-files (directory-files-recursively "orgmode/" "\\*.org"))
+)
+
+;; vim key-bindings
+(use-package evil
+  :ensure t
+  :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
+  :config
+  (evil-mode 1)
+  )
+
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
+
+;; set leader key in all states
+(evil-set-leader nil (kbd "SPC"))
+
+;; set local leader
+(evil-set-leader 'normal "," t)
+
+;; evil keybindings
+(define-key evil-normal-state-map (kbd "<leader> f f") 'find-file)
+(define-key evil-normal-state-map (kbd "<leader> f r") 'consult-recent-file)
+(define-key evil-normal-state-map (kbd "<leader> f g") 'consult-grep)
+(define-key evil-normal-state-map (kbd "<leader> s o") 'consult-outline)
+(define-key evil-normal-state-map (kbd "<leader> s l") 'consult-line)
+
+(define-key evil-normal-state-map (kbd "<leader> TAB b") 'consult-buffer)
+;; switch to tag
+(define-key evil-normal-state-map (kbd "<leader> TAB t") 'tab-switch)
+;; org-mode
+(define-key evil-normal-state-map (kbd "<leader> o e") 'org-export-dispatch)
+(define-key evil-normal-state-map (kbd "<leader> o a") 'org-agenda)
+(define-key evil-normal-state-map (kbd "<leader> o i s") 'org-schedule)
+;;(define-key evil-normal-state-map (kbd "<leader> o i s") 'org-agenda)
 
 
 ;; -----------------------------------------------------------------------
@@ -405,6 +477,7 @@ mouse-3: Toggle minor modes"
 ;; reload yas-snippets and activate in python-ts-mode
 (yas-reload-all)
 (add-hook 'prog-mode-hook #'yas-minor-mode)
+
 
 
 ;; ------------------------------------------------------------------------
@@ -427,7 +500,7 @@ mouse-3: Toggle minor modes"
  '(custom-safe-themes
    '("7fd8b914e340283c189980cd1883dbdef67080ad1a3a9cc3df864ca53bdc89cf" "eab123a5ed21463c780e17fc44f9ffc3e501655b966729a2d5a2072832abd3ac" "80214de566132bf2c844b9dee3ec0599f65c5a1f2d6ff21a2c8309e6e70f9242" default))
  '(org-agenda-files
-   '("~/Documents/orgfiles/filme_und_serien.org" "/home/simonheise/git_repos/dotfiles/emacs/TODO.org" "/home/simonheise/Documents/orgfiles/tasks.org"))
+   '("/home/simonheise/Documents/orgfiles/filme_und_serien.org" "/home/simonheise/Documents/orgfiles/tasks.org"))
  '(package-selected-packages
    '(which-key company yasnippet consult orderless vertico marginalia)))
 (custom-set-faces
