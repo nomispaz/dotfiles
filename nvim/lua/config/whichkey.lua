@@ -72,15 +72,17 @@ local mappings = {
         f = { "<cmd>Telescope find_files<cr>", "Find File"},
         r = { "<cmd>Telescope oldfiles<cr>", "Recent Files"},
         e = { "<cmd>ene <BAR> startinsert<cr>", "New File"},
+        p = { "<cmd>Telescope projects<cr>", "Project list"}
     },
     ["t"] = {
-        name = "Telescope functions",
+        name = "Telescope search functions",
         k = { "<cmd>Telescope keymaps<cr>", "Display keymaps"},
         f = { "<cmd>Telescope current_buffer_fuzzy_find<cr>", "Fuzzy find in buffer"},
+        g = { "<cmd>Telescope live_grep<cr>", "Grep in current dir and subdirs"},
         d = { "<cmd>Telescope diagnostics<cr>", "LSP Errors/Warnings"},
     },
     ["p"] = { "<cmd>Lazy<CR>", "Plugin Manager" }, 
-    ["m"] = { "<cmd>MarkdownPreviewToggle<cr>", "Markdown Preview"},
+--    ["m"] = { "<cmd>MarkdownPreviewToggle<cr>", "Markdown Preview"},
     ["e"] = { "<cmd>Neotree toggle<cr>", "Toggle Neotree"},
 
     [","] = { "<cmd>WhichKey<CR>", "WhichKey" },
