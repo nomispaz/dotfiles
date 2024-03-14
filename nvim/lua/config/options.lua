@@ -1,5 +1,5 @@
 vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
+vim.g.maplocalleader = " "
 
 vim.keymap.set({"n","v"}, "<Space>", "<Nop>", { silent = true })
 
@@ -30,7 +30,7 @@ opt.timeoutlen = 300
 opt.undofile = true
 opt.undolevels = 10000
 opt.wildmode = "longest:full,full" -- Command-line completion mode
-opt.wrap = true -- enable line wrap
+opt.wrap = true -- line wrap
 vim.opt.conceallevel = 2 --conceal links
 vim.opt.concealcursor = 'nc'
 vim.opt.completeopt = {'menu', 'menuone', 'noselect'} --autocomplete selection

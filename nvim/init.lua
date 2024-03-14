@@ -42,3 +42,12 @@ require("null-ls").setup({
     })
 require("mini.pairs").setup()
 require("config.whichkey")
+
+-- automatically set current directory to dir of the buffer
+vim.api.nvim_create_autocmd(
+    {"BufEnter"}, 
+    { pattern = "*",
+    desc = "Automatically change directory to directory of current file",
+    command = "cd %:p:h"
+   }
+)

@@ -1,0 +1,3 @@
+# ignore everything in emacs but init.el
+emacs/*
+!init.e

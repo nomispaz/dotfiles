@@ -99,8 +99,8 @@
 (use-package marginalia
   :ensure t
   :config
-	      (marginalia-mode 1)
-	      )
+  (marginalia-mode 1)
+  )
 
 ;; vertical layout of the minibuffer
 (use-package vertico
@@ -161,7 +161,10 @@
       :eval
       ;; set property face (display) to the color of mode-line-buffer-id
       ;; format with spaces around name
-       (propertize (format " %s " (buffer-file-name)) 'face 'mode-line-buffer-id)
+      ;; file name with complete path
+      ;; (propertize (format " %s " (buffer-file-name)) 'face 'mode-line-buffer-id)
+       (propertize (format " %s " (buffer-name)) 'face 'mode-line-buffer-id)
+
      )
   )
 
@@ -426,13 +429,21 @@ mouse-3: Toggle minor modes"
 
 (use-package org-agenda
   :config
-    (setq org-agenda-files (directory-files-recursively "orgmode/" "\\*.org"))
-)
+    (setq org-agenda-files (directory-files-recursively "~/orgmode/" "\\.org$"))
+    )
+
+(use-package org-superstar
+  :ensure t
+  :config
+  (org-superstar-mode 1)
+  )
 
 ;; vim key-bindings
 (use-package evil
   :ensure t
   :init
+  ;; enable tab functionality for org-mode folding
+  (setq evil-want-C-i-jump nil)
   (setq evil-want-integration t)
   (setq evil-want-keybinding nil)
   :config
@@ -452,7 +463,7 @@ mouse-3: Toggle minor modes"
 (evil-set-leader 'normal "," t)
 
 ;; evil keybindings
-(define-key evil-normal-state-map (kbd "<leader> f f") 'find-file)
+(define-key evil-normal-state-map (kbd "<leader> f f") 'consult-find)
 (define-key evil-normal-state-map (kbd "<leader> f r") 'consult-recent-file)
 (define-key evil-normal-state-map (kbd "<leader> f g") 'consult-grep)
 (define-key evil-normal-state-map (kbd "<leader> s o") 'consult-outline)
@@ -465,7 +476,7 @@ mouse-3: Toggle minor modes"
 (define-key evil-normal-state-map (kbd "<leader> o e") 'org-export-dispatch)
 (define-key evil-normal-state-map (kbd "<leader> o a") 'org-agenda)
 (define-key evil-normal-state-map (kbd "<leader> o i s") 'org-schedule)
-;;(define-key evil-normal-state-map (kbd "<leader> o i s") 'org-agenda)
+(define-key evil-normal-state-map (kbd "<leader> o t") 'org-babel-tangle)
 
 
 ;; -----------------------------------------------------------------------
@@ -502,7 +513,7 @@ mouse-3: Toggle minor modes"
  '(org-agenda-files
    '("/home/simonheise/Documents/orgfiles/filme_und_serien.org" "/home/simonheise/Documents/orgfiles/tasks.org"))
  '(package-selected-packages
-   '(which-key company yasnippet consult orderless vertico marginalia)))
+   '(org-superstar org-superstar-mode org-superstart-mode which-key company yasnippet consult orderless vertico marginalia)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
