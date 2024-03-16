@@ -1,0 +1,131 @@
+(use-package emacs
+    :init
+    ;; always show line and column numbers
+    ;; display line numbers but not in specific view modes
+   
+    ; tree-sitter setup languages
+    (setq treesit-language-source-alist
+	  '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+	    (python "https://github.com/tree-sitter/tree-sitter-python"))
+	  )
+;; save last session
+;; setup IDE
+;; automatically activate python-ts-mode when opening py-files
+(use-package python-ts-mode
+  :mode "\\.py\\'"
+  )
+
+;; activate language snippets
+(use-package yasnippet
+  :ensure t
+  )
+
+;; load prepared snippets
+(use-package yasnippet-snippets
+  :ensure t
+  )
+
+;; LSP
+;; use either
+;; -----------------------------------
+;; buildin client for language server
+;; (use-package eglot
+;;   :ensure t
+;;   :hook
+;;   (python-ts-mode . eglot-ensure)
+;;  )
+;; ;; -----------------------------------
+;; ; or
+;; ;; -----------------------------------
+;; lsp-mode
+(use-package lsp-mode
+  :ensure t
+  :commands lsp lsp-deferred
+  :hook ((python-ts-mode . lsp-deferred))
+  :config
+  (lsp-enable-which-key-integration t)
+  (setq-default lsp-pylsp-plugins-flake8-max-line-length 200)
+  (setq-default lsp-pylsp-plugins-pycodestyle-max-line-length 200)
+  )
+;; lsp ui for sideline check and peek
+(use-package lsp-ui
+  :ensure t
+  :hook (lsp-mode . lsp-ui-mode)
+  )
+;; language server
+;; not installed anymore since switch to pylsp
+;; (use-package lsp-pyright
+;;   :ensure t)
+;; better integration of lsp-mode
+  (use-package flycheck
+    :ensure t
+    :config
+    (setq-default flycheck-flake8-maximum-line-length 200))
+;; ---------------------------------------
+;; end LSP block
+
+;; activate autosuggestions
+(use-package company
+  :ensure t
+  :config
+					;(add-to-list 'company-backends 'company-dabbrev)
+  ;;  add text suggestions "company-dabbrev" to elisp suggestions
+  (add-to-list 'company-backends '(company-capf :with company-dabbrev))
+  (add-to-list 'company-backends '(company-capf :with company-yasnippet))
+  )
+
+;; org-mode
+
+
+;; vim key-bindings
+
+;; -----------------------------------------------------------------------
+
+;; hooks and settings outside of packages
+
+;; activate company in all modes
+(add-hook 'after-init-hook 'global-company-mode)
+;; reload yas-snippets
+(yas-reload-all)
+
+;;python-mode-hooks
+(add-hook 'python-mode-hook 'yas-minor-mode)
+
+;;elisp-mode-hooks
+(add-hook 'elisp-mode-hook 'yas-minor-mode)
+
+;; hooks for org-mode files
+(add-hook 'org-mode-hook 'yas-minor-mode)
+(add-hook 'org-mode-hook 'org-superstar-mode)
+
+
+
+;; ------------------------------------------------------------------------
+
+;; functions
+;; function to instal all treesitter languages that were defined above
+(defun my/install-treesit_languages()
+ (interactive)
+ (mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
+ )
+
+
+;; -------------------------------------------------------------------------
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("7fd8b914e340283c189980cd1883dbdef67080ad1a3a9cc3df864ca53bdc89cf" "eab123a5ed21463c780e17fc44f9ffc3e501655b966729a2d5a2072832abd3ac" "80214de566132bf2c844b9dee3ec0599f65c5a1f2d6ff21a2c8309e6e70f9242" default))
+ '(org-agenda-files
+   '("/home/simonheise/Documents/orgfiles/filme_und_serien.org" "/home/simonheise/Documents/orgfiles/tasks.org"))
+ '(package-selected-packages
+   '(org-superstar org-superstar-mode org-superstart-mode which-key company yasnippet consult orderless vertico marginalia)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
