@@ -1,3 +1,5 @@
+(setq backup-directory-alist '((".*" . "~/.local/share/emacs/backups")))
+
 (setq major-mode-remap-alist
             '((bash-mode . bash-ts-mode)
               (python-mode . python-ts-mode)))
@@ -57,20 +59,52 @@
 
 (electric-pair-mode 1)
 
+(use-package dashboard
+  :ensure t
+  :init
+  (setq initial-buffer-choice 'dashboard-open)
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-center-content nil) ;; set to 't' for centered content
+  (setq dashboard-items '((recents . 7)
+                          (agenda . 5)
+                          (bookmarks . 3)
+                          (projects . 3))
+  )
+)
+
+(delete-selection-mode 1)    ;; You can select text and delete it by typing.
+    (electric-indent-mode -1)    ;; Turn off the weird indenting that Emacs does by default.
+    ;; The following prevents <> from auto-pairing when electric-pair-mode is on.
+    ;; Otherwise, org-tempo is broken when you try to <s TAB...
+    (add-hook 'org-mode-hook (lambda ()
+               (setq-local electric-pair-inhibit-predicate
+                       `(lambda (c)
+                      (if (char-equal c ?<) t (,electric-pair-inhibit-predicate c))))))
+  (setq org-edit-src-content-indentation 0) ;; Set src block automatic indent to 0 instead of 2.
+  (setq use-dialog-box nil)    ;; No dialog box
+(setq pop-up-windows nil)    ;; No popup windows
+
 (set-face-attribute 'default nil :font "DejaVu Sans Mono" :height 180)
 
 (set-face-attribute 'fixed-pitch nil :font "DejaVu Sans Mono" :height 180)
 
 (set-face-attribute 'variable-pitch nil :font "DejaVu Sans" :height 180)
 
+(global-set-key (kbd "C-+") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+
 (use-package company
   :ensure t
-  :config
-  ;; (add-to-list 'company-backends 'company-dabbrev)
-  ;;  add text suggestions "company-dabbrev" to elisp suggestions
-  (add-to-list 'company-backends '(company-capf :with company-dabbrev))
- (add-to-list 'company-backends '(company-capf :with company-yasnippet))
-  )
+  :custom
+  (company-idle-delay .1)
+  (company-minimum-prefix-length 2)
+  (company-show-numbers t)
+  (company-tooltip-align-annotations 't)
+  (global-company-mode t)
+ )
 
 (use-package marginalia
   :ensure t
@@ -232,6 +266,7 @@ mouse-3: Toggle minor modes"
   :diminish which-key-mode
   :config
   (setq which-key-idle-delay 0.3)
+  (setq which-key-allow-evil-operators t)
   )
 
 (defun my/org-mode-setup()
@@ -300,56 +335,64 @@ mouse-3: Toggle minor modes"
     )
 
 (use-package evil
-  :ensure t
-  :init
-  ;; enable tab functionality for org-mode folding
-  (setq evil-want-C-i-jump nil)
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-  :config
-  (evil-mode 1)
-  )
+    :ensure t
+    :init
+    (setq evil-want-integration t)
+    (setq evil-want-keybinding nil)
+    :config
+    (evil-mode 1)
+    )
 
-(use-package evil-collection
-  :after evil
-  :ensure t
-  :config
-  (evil-collection-init))
+  (use-package evil-collection
+    :after evil
+    :ensure t
+    :config
+    (evil-collection-init))
+
+;; Using RETURN to follow links in Org/Evil 
+;; Unmap keys in 'evil-maps if not done, (setq org-return-follows-link t) will not work
+(with-eval-after-load 'evil-maps
+  (define-key evil-motion-state-map (kbd "SPC") nil)
+  (define-key evil-motion-state-map (kbd "RET") nil)
+  (define-key evil-motion-state-map (kbd "TAB") nil))
+;; Setting RETURN key in org-mode to follow links
+  (setq org-return-follows-link  t)
 
 ;; set leader key in all states
-(evil-set-leader nil (kbd "SPC"))
+ (evil-set-leader nil (kbd "SPC"))
 
-;; set local leader
-(evil-set-leader 'normal "," t)
+ ;; set local leader
+ (evil-set-leader 'normal "," t)
 
-;; evil keybindings
-;; search and open new file
-(define-key evil-normal-state-map (kbd "<leader> f f") 'consult-find)
-(define-key evil-normal-state-map (kbd "<leader> f r") 'consult-recent-file)
-(define-key evil-normal-state-map (kbd "<leader> f g") 'consult-grep)
-(define-key evil-normal-state-map (kbd "<leader> f n") 'evil-buffer-new)
+;; files
+ (define-key evil-normal-state-map (kbd "<leader> f f") '("Search files" . consult-find))
+ (define-key evil-normal-state-map (kbd "<leader> f r") '("Recent files" . consult-recent-file))
+ (define-key evil-normal-state-map (kbd "<leader> f g") '("Search files (grep)" . consult-grep))
+ (define-key evil-normal-state-map (kbd "<leader> f n") '("New file" . evil-buffer-new))
 
-;; switch buffers
-(define-key evil-normal-state-map (kbd "<leader> f b") 'consult-buffer)
-;; switch to tag
-(define-key evil-normal-state-map (kbd "<leader> f t") 'tab-switch)
-;; search in opened file
-(define-key evil-normal-state-map (kbd "<leader> s o") 'consult-outline)
-(define-key evil-normal-state-map (kbd "<leader> s l") 'consult-line)
+ ;; buffers
+ (define-key evil-normal-state-map (kbd "<leader> b b") '("Switch to buffer" . consult-buffer))
+ (define-key evil-normal-state-map (kbd "<leader> b k") '("Kill current buffer" . kill-current-buffer))
+ (define-key evil-normal-state-map (kbd "<leader> b r") '("Rename buffer" . rename-buffer))
+ (define-key evil-normal-state-map (kbd "<leader> b s") '("Save buffer" . basic-save-buffer))
 
-;; org-mode
-;; export org-file into different format
-(define-key evil-normal-state-map (kbd "<leader> o e") 'org-export-dispatch)
-;; open org agenda for schedule and todo items
-(define-key evil-normal-state-map (kbd "<leader> o a") 'org-agenda)
-;; export codeblocks
-(define-key evil-normal-state-map (kbd "<leader> o t") 'org-babel-tangle)
-;; add or change scheduled date to headline
-(define-key evil-normal-state-map (kbd "<leader> o i s") 'org-schedule)
-;; flycheck
-(define-key evil-normal-state-map (kbd "<leader> l l") 'flycheck-list-errors)
-(define-key evil-normal-state-map (kbd "<leader> l n") 'flycheck-next-error)
-(define-key evil-normal-state-map (kbd "<leader> l p") 'flycheck-previous-error)
+ ;; tabs
+ (define-key evil-normal-state-map (kbd "<leader> t t") '("Switch to tab" . tab-switch))
+
+ ;; search
+ (define-key evil-normal-state-map (kbd "<leader> s o") '("Search heading" - consult-outline))
+ (define-key evil-normal-state-map (kbd "<leader> s l") '("Search line" . consult-line))
+
+ ;; org-mode
+ (define-key evil-normal-state-map (kbd "<leader> o e") '("Export org file" . org-export-dispatch))
+  (define-key evil-normal-state-map (kbd "<leader> o a") '("Open org agenda" . org-agenda))
+ (define-key evil-normal-state-map (kbd "<leader> o t") '("Export code blocks" . org-babel-tangle))
+ (define-key evil-normal-state-map (kbd "<leader> o i s") '("Insert scheduled date" . org-schedule))
+
+ ;; flycheck
+ (define-key evil-normal-state-map (kbd "<leader> l l") '("Show list of flycheck errors" . flycheck-list-errors))
+ (define-key evil-normal-state-map (kbd "<leader> l n") '("Next flycheck error" . flycheck-next-error))
+ (define-key evil-normal-state-map (kbd "<leader> l p") '("Previous flycheck error" . flycheck-previous-error))
 
 (setq treesit-language-source-alist
 	  '((bash "https://github.com/tree-sitter/tree-sitter-bash")
@@ -393,8 +436,6 @@ mouse-3: Toggle minor modes"
   :ensure t
   :config
   (setq-default flycheck-flake8-maximum-line-length 200))
-
-(add-hook 'after-init-hook 'global-company-mode)
 
 (yas-reload-all)
 
