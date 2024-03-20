@@ -120,25 +120,7 @@ By default, Emacs creates automatic backups of files in their original directori
   (electric-pair-mode 1)
 #+end_src
 
-** Dashboard
-Startup screen showing recent files, bookmarks, agenda items
-#+begin_src emacs-lisp :tangle yes
-      (use-package dashboard
-        :ensure t
-        :init
-        (setq initial-buffer-choice 'dashboard-open)
-        (setq dashboard-set-heading-icons t)
-        (setq dashboard-set-file-icons t)
-        (setq dashboard-center-content nil) ;; set to 't' for centered content
-        (setq dashboard-items '((recents . 7)
-                                (agenda . 5)
-                                (bookmarks . 3)
-                                (projects . 3))
-        )
-      )
-#+end_src
-
-** Fonts
+*** Fonts
 ** Defaults
 #+begin_src emacs-lisp :tangle yes
     (delete-selection-mode 1)    ;; You can select text and delete it by typing.

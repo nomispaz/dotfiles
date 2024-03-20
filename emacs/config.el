@@ -59,20 +59,6 @@
 
 (electric-pair-mode 1)
 
-(use-package dashboard
-  :ensure t
-  :init
-  (setq initial-buffer-choice 'dashboard-open)
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-center-content nil) ;; set to 't' for centered content
-  (setq dashboard-items '((recents . 7)
-                          (agenda . 5)
-                          (bookmarks . 3)
-                          (projects . 3))
-  )
-)
-
 (delete-selection-mode 1)    ;; You can select text and delete it by typing.
     (electric-indent-mode -1)    ;; Turn off the weird indenting that Emacs does by default.
     ;; The following prevents <> from auto-pairing when electric-pair-mode is on.

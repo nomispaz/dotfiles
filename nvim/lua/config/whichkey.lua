@@ -71,14 +71,14 @@ local mappings = {
         name = "Open files", 
         f = { "<cmd>Telescope find_files<cr>", "Find File"},
         r = { "<cmd>Telescope oldfiles<cr>", "Recent Files"},
-        e = { "<cmd>ene <BAR> startinsert<cr>", "New File"},
+        n = { "<cmd>ene <BAR> startinsert<cr>", "New File"},
+        g = { "<cmd>Telescope live_grep<cr>", "Search files (grep)"},
         p = { "<cmd>Telescope projects<cr>", "Project list"}
     },
     ["t"] = {
         name = "Telescope search functions",
         k = { "<cmd>Telescope keymaps<cr>", "Display keymaps"},
         f = { "<cmd>Telescope current_buffer_fuzzy_find<cr>", "Fuzzy find in buffer"},
-        g = { "<cmd>Telescope live_grep<cr>", "Grep in current dir and subdirs"},
         d = { "<cmd>Telescope diagnostics<cr>", "LSP Errors/Warnings"},
     },
     ["p"] = { "<cmd>Lazy<CR>", "Plugin Manager" }, 
@@ -86,12 +86,12 @@ local mappings = {
     ["e"] = { "<cmd>Neotree toggle<cr>", "Toggle Neotree"},
 
     [","] = { "<cmd>WhichKey<CR>", "WhichKey" },
-    ["<tab>"] = {
+    ["b"] = {
         name = "Tabs",
-        ["<tab>"] = { "<cmd>Telescope buffers<cr>", "Switch Tab" },
-        ["q"] = { "<cmd>bd<cr>", "Close Tab"},
-        ["<Left>"] = { "<cmd>:BufferLineCyclePrev<cr>", "Switch to left tab" },
-        ["<Right>"] = { "<cmd>:BufferLineCycleNext<cr>", "Switch to right tab" },
+        ["b"] = { "<cmd>Telescope buffers<cr>", "Switch to buffer" },
+        ["k"] = { "<cmd>bd<cr>", "Close  buffer" },
+        ["<Left>"] = { "<cmd>:BufferLineCyclePrev<cr>", "Switch to left buffer" },
+        ["<Right>"] = { "<cmd>:BufferLineCycleNext<cr>", "Switch to right buffer" },
     },
     ["s"] = {
         name = "Session management",
@@ -106,12 +106,9 @@ local mappings = {
         ["i"] = {
             name = "Insert",
             ["s"] = { "ois", "Insert scheduled date"},
-            ["t"] = { "oit", "Insert todo entry"},
+            ["t"] = { "oit", "Insert todo item"},
         },
-        ["b"] = {
-            name = "Babel",
-            ["t"] = { "obt", "Extract source code to file"},
-        },
+        ["b"] =  { "obt", "Export code blocks"},
     },
    
   -- ["c"] = { name = "+code" },
