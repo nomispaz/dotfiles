@@ -24,6 +24,7 @@ return {
         org_startup_indented = true,
         org_hide_leading_stars = true,
         org_hide_emphasis_markers = true,
+        org_id_link_to_org_use_id = true,
         emacs_config = { executable_path = 'emacs', config_path='$HOME/.config/nvim/init_export.el' }
 
         })

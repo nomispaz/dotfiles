@@ -108,7 +108,16 @@ local mappings = {
             ["s"] = { "ois", "Insert scheduled date"},
             ["t"] = { "oit", "Insert todo item"},
         },
-        ["b"] =  { "obt", "Export code blocks"},
+        ["b"] = {
+            name = "Babel",
+            ["t"] = { "obt", "Export code blocks"},
+        },
+        ["l"] = { 
+            name = "Links",
+            ["s"] = { "ols", "Store link ID"},
+            ["i"] = { "oli", "Insert stored link ID"},
+        },
+        ["o"] = { "oo", "Jump to link destination"},
     },
    
   -- ["c"] = { name = "+code" },
@@ -121,3 +130,4 @@ local mappings = {
 
 wk.setup(setup)
 wk.register(mappings, { prefix = "<leader>" }, opts)
+

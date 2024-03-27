@@ -1,6 +1,7 @@
 --load configs
 require("config.icons")
 require("config.options")
+require("config.keymaps")
 
 --load lazy.nvim plugin manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
