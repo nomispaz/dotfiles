@@ -319,6 +319,21 @@ return {
     dependencies = "nvim-treesitter/nvim-treesitter",
 }
 #+END_SRC
+** Config orgmode-headlines
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/config/orgmode-headlines.lua
+vim.cmd [[highlight Headline1 guibg=#24283b]]
+vim.cmd [[highlight Headline2 guibg=#24283b]]
+vim.cmd [[highlight CodeBlock guibg=#394b70]]
+vim.cmd [[highlight Dash guibg=#D19A66 gui=bold]]
+
+require("headlines").setup {
+    org = {
+        headline_highlights = { "Headline1", "Headline2" },
+        fat_headlines = false,
+       },
+}
+
+#+END_SRC
 ** emacs config
 Create empty emacs config so that babel and export in orgmode can use emacs.
 #+BEGIN_SRC elisp :tangle ~/.config/nvim/init_export.el
@@ -523,7 +538,16 @@ return {
 * Load Modules
 Load custom configs and functions
 #+BEGIN_SRC lua :tangle ~/.config/nvim/init.lua
+require("mini.pairs").setup()
 require("config.whichkey")
+require("persistence").setup({opts})
+require("config.orgmode-headlines")
+require("config.autocommands")
+require("null-ls").setup({
+        sources = {
+            require("null-ls").builtins.formatting.shfmt,
+        },
+})
 #+END_SRC
 * Keymaps
 Keymaps outside of which-key
@@ -566,6 +590,17 @@ keymap("n", "<leader><Right>", "<cmd>wincmd l<cr>", { desc = "Move to right wind
 
 --markdown preview
 keymap("n", "<leader>cp", "<cmd>MarkdownPreviewToggle<cr>", { desc = "Markdown Preview" })
+#+END_SRC
+* Autocommands
+Automatically change directory to opened file
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/config/autocommands.lua
+vim.api.nvim_create_autocmd(
+    {"BufEnter"}, 
+    { pattern = "*",    
+    desc = "Automatically change directory to directory of current file",
+    command = "cd %:p:h"
+   }
+)
 #+END_SRC
 * Additional configs
 #+BEGIN_SRC lua :tangle ~/.config/nvim/lua/config/icons.lua

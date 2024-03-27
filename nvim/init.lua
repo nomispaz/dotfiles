@@ -64,4 +64,13 @@ require("lazy").setup({
 
 vim.cmd.colorscheme "tokyonight-night"
 
+require("mini.pairs").setup()
 require("config.whichkey")
+require("persistence").setup({opts})
+require("config.orgmode-headlines")
+require("config.autocommands")
+require("null-ls").setup({
+        sources = {
+            require("null-ls").builtins.formatting.shfmt,
+        },
+})
