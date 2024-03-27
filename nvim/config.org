@@ -1,13 +1,17 @@
 * General options
 Set leader-key to space.
-#+BEGIN_SRC lua :tangle ~/.config/nvim_new/init.lua
+#+BEGIN_SRC lua :tangle ~/.config/nvim/init.lua
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.keymap.set({"n","v"}, "<Space>", "<Nop>", { silent = true })
 #+END_SRC
-
+Load various configs
+#+BEGIN_SRC lua :tangle~/.config/nvim/init.lua
+require("config.icons")
+require("config.keymaps")
+#+END_SRC
 Set several other options.
-#+BEGIN_SRC lua :tangle ~/.config/nvim_new/init.lua
+#+BEGIN_SRC lua :tangle ~/.config/nvim/init.lua
 local opt = vim.opt
 
 vim.g.autoformat = true
@@ -42,7 +46,7 @@ opt.completeopt = {'menu', 'menuone', 'noselect'} --autocomplete selection
 #+END_SRC
 * Lazy plugin manager
 Install plugin manager
-#+BEGIN_SRC lua :tangle ~/.config/nvim_new/init.lua
+#+BEGIN_SRC lua :tangle ~/.config/nvim/init.lua
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -72,7 +76,7 @@ require("lazy").setup({
 #+END_SRC
 * Colorscheme
 Install Colorscheme tokynight
-#+BEGIN_SRC lua :tangle ~/.config/nvim_new/lua/plugins/colorscheme.lua
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/colorscheme.lua
 
 return {
     {
@@ -85,13 +89,13 @@ return {
 #+END_SRC
 
 Load colorscheme
-#+BEGIN_SRC lua :tangle ~/.config/nvim_new/init.lua
+#+BEGIN_SRC lua :tangle ~/.config/nvim/init.lua
 
 vim.cmd.colorscheme "tokyonight-night"
 #+END_SRC
 * Lualine
 Preconfigured statusline
-#+BEGIN_SRC lua :tangle ~/.config/nvim_new/lua/plugins/lualine.lua
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/lualine.lua
 return {
     {
         'nvim-lualine/lualine.nvim',
@@ -102,9 +106,39 @@ return {
     },
 }
 #+END_SRC
+* Bufferline
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/bufferline.lua
+return {
+    {
+        "akinsho/bufferline.nvim",
+        event = "VeryLazy",
+        opts = {
+            options = {
+                diagnostics = "nvim_lsp",
+                always_show_bufferline = false,
+            },
+        },
+    },
+}
+#+END_SRC
+* Neovim tree
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/neotree.lua
+return {
+    {
+        "nvim-neo-tree/neo-tree.nvim",
+        branch = "v3.x",
+        dependencies = {
+        "nvim-lua/plenary.nvim",
+        "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+        "MunifTanjim/nui.nvim",
+        -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
+        },
+   },
+}
+#+END_SRC
 * Which-key
 ** Install
-#+BEGIN_SRC lua :tangle ~/.config/nvim_new/lua/plugins/whichkey.lua
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/whichkey.lua
 return {
     "folke/which-key.nvim",
     event = "VeryLazy",
@@ -115,7 +149,7 @@ return {
 }
 #+END_SRC
 ** Keyconfigs
-#+BEGIN_SRC lua :tangle ~/.config/nvim_new/lua/config/whichkey.lua
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/config/whichkey.lua
 local wk = require("which-key")
 
 local setup = {
@@ -203,7 +237,7 @@ wk.register(mappings, { prefix = "<leader>" }, opts)
 
 #+END_SRC
 * Telescope
-#+BEGIN_SRC lua :tangle ~/.config/nvim_new/lua/plugins/telescope.lua
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/telescope.lua
 return {
     { 
         "nvim-telescope/telescope.nvim",
@@ -213,7 +247,7 @@ return {
 #+END_SRC
 * Luasnip
 Snippets to use for autocomplete
-#+BEGIN_SRC lua :tangle ~/.config/nvim_new/lua/plugins/luasnip.lua
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/luasnip.lua
 return {
     { 
         "L3MON4D3/LuaSnip", event = "VeryLazy",
@@ -228,9 +262,20 @@ return {
     },
 }
 #+END_SRC
+* Mini pairs
+Autoclose brackets
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/minipairs.lua
+
+return {
+    {
+        "echasnovski/mini.pairs",
+        event = "VeryLazy",
+    },
+}
+#+END_SRC
 * Orgmode
 ** Setup Orgmode
-#+BEGIN_SRC lua :tangle ~/.config/nvim_new/lua/plugins/orgmode.lua
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/orgmode.lua
 
 return {
     {
@@ -268,14 +313,19 @@ return {
 #+END_SRC
 ** Setup Orgmode-headlines
 Nicer Headlines and config options for Code-blocks. Additionally bullets instead of stars for headlines
-#+BEGIN_SRC lua :tangle ~/.config/nvim_new/lua/plugins/orgmode-headlines.lua
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/orgmode-headlines.lua
 return {
     "lukas-reineke/headlines.nvim",
     dependencies = "nvim-treesitter/nvim-treesitter",
 }
 #+END_SRC
+** emacs config
+Create empty emacs config so that babel and export in orgmode can use emacs.
+#+BEGIN_SRC elisp :tangle ~/.config/nvim/init_export.el
+ 
+#+END_SRC
 * Session management
-#+BEGIN_SRC lua :tangle ~/.config/nvim_new/lua/plugins/persistence.lua
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/persistence.lua
 return {
     {
         "folke/persistence.nvim",
@@ -286,7 +336,7 @@ return {
 #+END_SRC
 * IDE
 ** Treesitter
-#+BEGIN_SRC lua :tangle ~/.config/nvim_new/lua/plugins/treesitter.lua
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/treesitter.lua
 return {
     { 
         "nvim-treesitter/nvim-treesitter",
@@ -355,7 +405,7 @@ return {
 }
 #+END_SRC
 ** Autocomplete
-#+BEGIN_SRC lua :tangle ~/.config/nvim_new/lua/plugins/nvimcmp.lua
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/nvimcmp.lua
 return {
     "hrsh7th/nvim-cmp",
     version = false,
@@ -414,7 +464,7 @@ return {
 #+END_SRC
 ** LSP-Config
 Currently only python with lsp pylsp configured
-#+BEGIN_SRC lua :tangle ~/.config/nvim_new/lua/plugins/lspconfig.lua
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/lspconfig.lua
 return {
     "neovim/nvim-lspconfig",
     dependencies = {
@@ -459,14 +509,146 @@ return {
 #+END_SRC
 ** Null-ls
 Use neovim as a language server to hook into LSP.
-#+BEGIN_SRC lua :tangle ~/.config/nvim_new/lua/plugins/nonels.lua
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/nonels.lua
 return {
     { "nvimtools/none-ls.nvim" },
 }
 #+END_SRC
+** Devicons
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/devicons.lua
+return {
+    { "nvim-tree/nvim-web-devicons", lazy = true },
+}
+#+END_SRC
 * Load Modules
 Load custom configs and functions
-#+BEGIN_SRC lua :tangle ~/.config/nvim_new/init.lua
+#+BEGIN_SRC lua :tangle ~/.config/nvim/init.lua
 require("config.whichkey")
 #+END_SRC
+* Keymaps
+Keymaps outside of which-key
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/config/keymaps.lua
+local keymap = vim.api.nvim_set_keymap
 
+--work with tabs (nvim buffers)
+keymap("n", "<C-tab>", "<cmd>Telescope buffers<cr>", { desc = "Switch Tab" })
+keymap("n", "<C-w>", "<cmd>bd<cr>", { desc = "Close Tab" })
+
+--Neotree
+keymap("n", "<leader>e", "<cmd>Neotree toggle<cr>", { desc = "Toggle Neotree (root dir)" })
+
+--session management
+-- restore the session for the current directory
+keymap("n", "<leader>ls", [[<cmd>lua require("persistence").load()<cr>]], {desc = "Restore Session for current directory"} )
+-- restore the last session
+keymap("n", "<leader>ll", [[<cmd>lua require("persistence").load({ last = true })<cr>]], { desc = "Restore last session" })
+-- stop Persistence => session won't be saved on exit
+keymap("n", "<leader>ld", [[<cmd>lua require("persistence").stop()<cr>]], { desc = "Don't save session on exit" })
+
+--open search for files
+--keymap("n", "<leader>f", "<cmd>Telescope find_files<cr>", { desc = "Open file search" })
+
+--split windows
+--horizontal
+keymap("n", "<leader>s", "<cmd>split<cr>", { desc = "Horizontal split" })
+--vertical
+keymap("n", "<leader>v", "<cmd>vsplit<cr>", { desc = "Vertical split" })
+
+--navigate windows
+--up
+keymap("n", "<leader><Up>", "<cmd>wincmd k<cr>", { desc = "Move to window above" })
+--down
+keymap("n", "<leader><Down>", "<cmd>wincmd j<cr>", { desc = "Move to window below" })
+--left
+keymap("n", "<leader><Left>", "<cmd>wincmd h<cr>", { desc = "Move to left window" })
+--right
+keymap("n", "<leader><Right>", "<cmd>wincmd l<cr>", { desc = "Move to right window" })
+
+--markdown preview
+keymap("n", "<leader>cp", "<cmd>MarkdownPreviewToggle<cr>", { desc = "Markdown Preview" })
+#+END_SRC
+* Additional configs
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/config/icons.lua
+local M = {}
+
+local icons = {
+        misc = {
+            dots = "󰇘",
+        },
+        dap = {
+            Stopped             = { "󰁕 ", "DiagnosticWarn", "DapStoppedLine" },
+            Breakpoint          = " ",
+            BreakpointCondition = " ",
+            BreakpointRejected  = { " ", "DiagnosticError" },
+            LogPoint            = ".>",
+        },
+        diagnostics = {
+            Error = " ",
+            Warn  = " ",
+            Hint  = " ",
+            Info  = " ",
+        },
+        git = {
+            added    = " ",
+            modified = " ",
+            removed  = " ",
+        },
+        kinds = {
+            Array         = " ",
+            Boolean       = "󰨙 ",
+            Class         = " ",
+            Codeium       = "󰘦 ",
+            Color         = " ",
+            Control       = " ",
+            Collapsed     = " ",
+            Constant      = "󰏿 ",
+            Constructor   = " ",
+            Copilot       = " ",
+            Enum          = " ",
+            EnumMember    = " ",
+            Event         = " ",
+            Field         = " ",
+            File          = " ",
+            Folder        = " ",
+            Function      = "󰊕 ",
+            Interface     = " ",
+            Key           = " ",
+            Keyword       = " ",
+            Method        = "󰊕 ",
+            Module        = " ",
+            Namespace     = "󰦮 ",
+            Null          = " ",
+            Number        = "󰎠 ",
+            Object        = " ",
+            Operator      = " ",
+            Package       = " ",
+            Property      = " ",
+            Reference     = " ",
+            Snippet       = " ",
+            String        = " ",
+            Struct        = "󰆼 ",
+            TabNine       = "󰏚 ",
+            Text          = " ",
+            TypeParameter = " ",
+            Unit          = " ",
+            Value         = " ",
+        },
+    }
+
+for type, icon in pairs(icons.diagnostics) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
+
+return M
+#+END_SRC
+* Disabled modules
+Currently disabled
+  - bufferline
+  - neo-tree
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/disabled.lua
+    return {
+        { "akinsho/bufferline.nvim", enabled = false },
+        { "nvim-neo-tree/neo-tree.nvim", enabled = false },
+}
+#+END_SRC

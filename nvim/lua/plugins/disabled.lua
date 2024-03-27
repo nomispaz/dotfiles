@@ -1,4 +1,4 @@
-return {
-        --{ "nvim-treesitter/nvim-treesitter", enabled = false },
-        --{ "nvim-treesitter/nvim-treesitter-context", enabled = false },
-    }
+    return {
+        { "akinsho/bufferline.nvim", enabled = false },
+        { "nvim-neo-tree/neo-tree.nvim", enabled = false },
+}
