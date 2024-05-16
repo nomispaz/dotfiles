@@ -40,7 +40,7 @@ popupWidth=647
 
 [Containments][2][Applets][3][Configuration][General]
 favoritesPortedToKAstats=true
-icon=start-here-branding
+icon=start-here-kde-symbolic
 
 [Containments][2][Applets][3][Configuration][Shortcuts]
 global=Alt+F1
