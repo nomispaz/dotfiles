@@ -6,8 +6,9 @@ RightButton;NoModifier=org.kde.contextmenu
 RightButton;NoModifier=org.kde.contextmenu
 
 [Containments][1]
-ItemGeometries-1707x960=Applet-26:864,64,272,272,0;Applet-28:1200,48,240,256,0;Applet-30:1136,320,240,352,0;Applet-27:1376,608,304,272,0;Applet-31:1440,48,240,256,0;
-ItemGeometriesHorizontal=Applet-26:864,64,272,272,0;Applet-28:1200,48,240,256,0;Applet-30:1136,320,240,352,0;Applet-27:1376,608,304,272,0;Applet-31:1440,48,240,256,0;
+ItemGeometries-1707x960=Applet-26:880,16,272,272,0;Applet-28:1184,16,240,256,0;Applet-27:1376,624,304,272,0;Applet-31:1440,16,240,256,0;Applet-30:1440,272,240,352,0;
+ItemGeometries-2560x1440=Applet-26:1296,64,272,272,0;Applet-28:2048,48,240,256,0;Applet-30:1984,560,240,352,0;Applet-27:2224,1088,304,272,0;Applet-31:2288,48,240,256,0;
+ItemGeometriesHorizontal=Applet-26:880,16,272,272,0;Applet-28:1184,16,240,256,0;Applet-27:1376,624,304,272,0;Applet-31:1440,16,240,256,0;Applet-30:1440,272,240,352,0;
 activityId=7cf909a2-d06a-43e4-a19e-e48cc77bc7c6
 formfactor=0
 immutability=1
@@ -103,7 +104,7 @@ totalSensors=["memory/physical/usedPercent"]
 
 [Containments][1][General]
 ToolBoxButtonState=topcenter
-ToolBoxButtonX=393
+ToolBoxButtonX=278
 
 [Containments][2]
 activityId=
@@ -117,6 +118,11 @@ wallpaperplugin=org.kde.image
 [Containments][2][Applets][20]
 immutability=1
 plugin=org.kde.plasma.digitalclock
+
+[Containments][2][Applets][20][Configuration]
+PreloadWeight=60
+popupHeight=450
+popupWidth=560
 
 [Containments][2][Applets][21]
 immutability=1
@@ -157,11 +163,20 @@ immutability=1
 plugin=org.kde.plasma.systemtray
 
 [Containments][2][Applets][7][Configuration]
-PreloadWeight=65
+PreloadWeight=90
 SystrayContainmentId=8
 
 [Containments][2][General]
 AppletOrder=3;4;5;6;7;20;21
+
+[Containments][33]
+activityId=7cf909a2-d06a-43e4-a19e-e48cc77bc7c6
+formfactor=0
+immutability=1
+lastScreen=1
+location=0
+plugin=org.kde.plasma.folder
+wallpaperplugin=org.kde.image
 
 [Containments][8]
 activityId=
@@ -185,6 +200,9 @@ PreloadWeight=60
 immutability=1
 plugin=org.kde.plasma.devicenotifier
 
+[Containments][8][Applets][11][Configuration]
+PreloadWeight=70
+
 [Containments][8][Applets][12]
 immutability=1
 plugin=org.kde.plasma.manage-inputmethod
@@ -201,6 +219,9 @@ plugin=org.kde.plasma.keyboardindicator
 immutability=1
 plugin=org.kde.kscreen
 
+[Containments][8][Applets][15][Configuration]
+PreloadWeight=55
+
 [Containments][8][Applets][16]
 immutability=1
 plugin=org.kde.plasma.keyboardlayout
@@ -208,6 +229,9 @@ plugin=org.kde.plasma.keyboardlayout
 [Containments][8][Applets][17]
 immutability=1
 plugin=org.kde.plasma.volume
+
+[Containments][8][Applets][17][Configuration]
+PreloadWeight=65
 
 [Containments][8][Applets][17][Configuration][General]
 migrated=true
@@ -239,11 +263,14 @@ immutability=1
 plugin=org.kde.plasma.bluetooth
 
 [Containments][8][Applets][24][Configuration]
-PreloadWeight=42
+PreloadWeight=10
 
 [Containments][8][Applets][25]
 immutability=1
 plugin=org.kde.plasma.networkmanagement
+
+[Containments][8][Applets][25][Configuration]
+PreloadWeight=100
 
 [Containments][8][Applets][32]
 immutability=1

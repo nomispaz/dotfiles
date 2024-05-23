@@ -35,8 +35,8 @@ end
 #    sudo pacman -Rsn
 #end
 alias pacupdate='sudo pacman -Syu'
-alias pacinstall='sudo pacman -Syu $argv'
-alias pacremove='sudo pacman -Rsn $argv'
+alias pacinstall='sudo pacman -Syu'
+alias pacremove='sudo pacman -Rsn'
 function pacclean
     # see https://wiki.archlinux.org/title/system_maintenance
     # check if services are not starting

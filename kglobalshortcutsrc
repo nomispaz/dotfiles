@@ -182,7 +182,7 @@ Window to Next Screen=none,Meta+Shift+Right,Move Window to Next Screen
 Window to Previous Desktop=none,,Window to Previous Desktop
 Window to Previous Screen=none,Meta+Shift+Left,Move Window to Previous Screen
 Window to Screen 0=none,,Move Window to Screen 0
-Window to Screen 1=none,,Move Window to Screen 1
+Window to Screen 1=Meta+Ctrl+2,,Move Window to Screen 1
 Window to Screen 2=none,,Move Window to Screen 2
 Window to Screen 3=none,,Move Window to Screen 3
 Window to Screen 4=none,,Move Window to Screen 4
@@ -270,7 +270,7 @@ _launch=Meta+S
 [wacomtablet]
 Map to fullscreen=Meta+Ctrl+F,Meta+Ctrl+F,Map to fullscreen
 Map to screen 1=Meta+Ctrl+1,Meta+Ctrl+1,Map to screen 1
-Map to screen 2=Meta+Ctrl+2,Meta+Ctrl+2,Map to screen 2
+Map to screen 2=none,Meta+Ctrl+2,Map to screen 2
 Next Profile=Meta+Ctrl+N,Meta+Ctrl+N,Next profile
 Previous Profile=Meta+Ctrl+P,Meta+Ctrl+P,Previous Profile
 Toggle screen map selection=Meta+Ctrl+M,Meta+Ctrl+M,Toggle between all screens
