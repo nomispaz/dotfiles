@@ -451,7 +451,7 @@ Set options for every Orgfile. Like
   ;; RETURN will follow links in org-mode files
   (setq org-return-follows-link  t)  
   ;; (setq org-agenda-files
-  ;; 	'("~/Documents/orgfiles/")
+  ;; 	'("/data/orgmode/")
   ;; 	)
   (my/org-font-setup)
   :bind (;;copy link anker to clipboard, insert with C-c C-l
@@ -472,7 +472,7 @@ Define folder for org agenda files.
 #+begin_src emacs-lisp :tangle yes
 (use-package org-agenda
   :config
-    (setq org-agenda-files (directory-files-recursively "~/orgmode/" "\\.org$"))
+    (setq org-agenda-files (directory-files-recursively "/data/orgmode/" "\\.org$"))
     )
 #+end_src
 
@@ -591,8 +591,8 @@ Automatically start python mode, wenn opening py-files.
 ** LSP-Clients
 *** Eglot
 
-Currently not activated since lsp-mode has more functions
-#+begin_src emacs-lisp
+Currently acticated since it is included in emacs
+#+begin_src emacs-lisp :tangle yes
 (use-package eglot
    :ensure t
    :hook
@@ -602,9 +602,10 @@ Currently not activated since lsp-mode has more functions
 
 *** LSP-Mode
 
+Currently disabled in favour of eglot.
 Enable which-key integration.
 lsp-ui to enable inline check messages and flyby function.
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
 (use-package lsp-mode
   :ensure t
   :commands lsp lsp-deferred
@@ -621,7 +622,7 @@ lsp-ui to enable inline check messages and flyby function.
   )
 #+end_src
 
-Use flycheck instead of flymake since the integration with lsp-mode is better with more information shown.
+Use flycheck instead of flymake since more information is shown with lsp-mode as well as eglot.
 #+begin_src emacs-lisp :tangle yes
   (use-package flycheck
     :ensure t

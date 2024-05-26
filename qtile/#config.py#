@@ -46,7 +46,7 @@ absolute_path = os.path.dirname(__file__)
 
 # environment variables
 os.environ["WLR_NO_HARDWARE_CURSORS"] = "1"
-os.environ["RANGER_LOAD_DEFAULT_RC"] = "false"
+# os.environ["RANGER_LOAD_DEFAULT_RC"] = "false"
 os.environ["XDG_SESSION_TYPE"] = "wayland"
 
 # autostart
@@ -320,6 +320,8 @@ mouse = [
     Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
     Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
+
+ a as das das das 
 
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: list
