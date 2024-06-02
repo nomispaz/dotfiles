@@ -11,6 +11,7 @@ class myfunctions:
             'nerd_brightness6': '',
             'nerd_brightness7': '',
             'nerd_brightness8': '',
-            'nerd_sun': ''
+            'nerd_sun': '',
+            'nerd_mic_mute': ''
         }
         return icons[fonticon]

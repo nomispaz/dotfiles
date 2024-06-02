@@ -55,6 +55,19 @@ def start_once():
     script = os.path.expanduser("~/.config/qtile/autostart.sh")
     subprocess.run([script])
 
+# define custom function with integration with dunst
+@lazy.function
+def mute_microphone(qtile):
+    subprocess.run('dunstify test', shell=True)
+    #check_mute = ""
+    #check_mute = subprocess.run('wpctl get-volume @DEFAULT_AUDIO_SOURCE@', capture_output=True, shell=True, text=True).stdout[10:]
+    #return 'dunstify ' + check_mute
+
+    #if "MUTED" in check_mute:
+    #    return 'dunstify ' + myfunctions.myfunctions.get_icons('nerd_mic_mute')
+    #else:
+    #    return 'dunstify ' + 'test'
+       
 # define input configurations for x11/wayland
 if qtile.core.name == "x11":
     None
@@ -130,13 +143,33 @@ keys = [
     # fn keys
     Key([], "XF86MonBrightnessDown", lazy.spawn('brightnessctl set 5%-')),
     Key([], "XF86MonBrightnessUp", lazy.spawn('brightnessctl set 5%+')),
-    Key([], "XF86AudioLowerVolume", lazy.spawn('wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-')),
-    Key([], "XF86AudioRaiseVolume", lazy.spawn('wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+')),
-    Key([], "XF86AudioMute", lazy.spawn('wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle')),
+    Key([], "XF86AudioLowerVolume", lazy.spawn('wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- & dunstctl close-all & dunstify $(wpctl get-volume @DEFAULT_AUDIO_SINK@)', shell=True)),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn('wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ & dunstctl close-all & dunstify $(wpctl get-volume @DEFAULT_AUDIO_SINK@)', shell=True)),
+    Key([], "XF86AudioMute",
+        lazy.spawn('wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle \
+        & dunstctl close-all',
+                   shell=True),
+        lazy.spawn('dunstify $(wpctl get-volume @DEFAULT_AUDIO_SINK@ \
+        | awk "!/MUTED/{exit 1}" && echo "sound muted")',
+                   shell=True),
+        lazy.spawn('dunstify $(wpctl get-volume @DEFAULT_AUDIO_SINK@ \
+        | awk "/MUTED/{exit 1}" && echo "sound unmuted")',
+                   shell=True)),
 
     # mute microphone
-    Key([mod], "y", lazy.spawn('wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle')),
+    Key([mod], "y",
+        lazy.spawn('wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle \
+        & dunstctl close-all',
+                   shell=True),
+        lazy.spawn('dunstify $(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ \
+        | awk "!/MUTED/{exit 1}" && echo "mic muted")',
+                   shell=True),
+        lazy.spawn('dunstify $(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ \
+        | awk "/MUTED/{exit 1}" && echo "mic unmuted")',
+                   shell=True)),
+#    Key([mod], "y", lazy.spawn("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"), lazy.function(mute_microphone)),
 
+ 
     # start programs with shortcuts
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     Key([mod], "b", lazy.spawn('firefox'), desc="Launch firefox"),
@@ -190,12 +223,12 @@ wTextBox = widget.TextBox(width=1000)
 wStatusNotifier = qtile_extras.widget.StatusNotifier(background=colors['Text'],**decoration_group)
 wThermalSensor = widget.ThermalSensor(background=colors['Red'], threshold=100, width=80,**decoration_group, mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('tcc')})
 wBacklight = widget.Backlight(background=colors['Rosewater'],backlight_name=vDevBacklightLaptop,**decoration_group,width=70,format=myfunctions.myfunctions.get_icons('nerd_sun')+" {percent:2.0%}")
-wVolume = myvolume.Volume(background=colors['Lavender'],**decoration_group)
-wMic = mymicrophone.Mic(background=colors['Lavender'],**decoration_group)
+#wVolume = myvolume.Volume(background=colors['Lavender'],**decoration_group)
+#wMic = mymicrophone.Mic(background=colors['Lavender'],**decoration_group)
 wCPU = widget.CPU(background=colors['Sky'],width=180,**decoration_group,mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('htop')})
 wMemory = widget.Memory(background=colors['Sky'],width=120, format="RAM: {MemPercent}%",**decoration_group,mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('htop')})
-#wNet = widget.Net(background=colors['Sapphire'],**decoration_group,width=180,format='Net: {down:.0f}{down_suffix} ↓↑ {up:.0f}{up_suffix}')
-#wBattery = widget.Battery(background=colors['Sapphire'],width=50,**decoration_group)
+wNet = widget.Net(background=colors['Sapphire'],**decoration_group,width=180,format='Net: {down:.0f}{down_suffix} ↓↑ {up:.0f}{up_suffix}')
+wBattery = widget.Battery(background=colors['Sapphire'],width=50,**decoration_group)
 wClock = widget.Clock(background=colors['Blue'],format="%Y-%m-%d %a %H:%M",width=220,**decoration_group,mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('qtcal')})
             
 screens = [
@@ -208,14 +241,12 @@ screens = [
                 wWindowName,
                 wTextBox,
                 wStatusNotifier,
-                wThermalSensor,
+                #wThermalSensor,
                 wBacklight,
-                wVolume,
-                wMic,
+                #wVolume,
+                #wMic,
                 wCPU,
                 wMemory,
-                #wNet,
-                #wBattery,
                 wClock
                 ],
             32,
@@ -234,15 +265,12 @@ screens = [
                 wGroupBox,
                 wWindowName,
                 wTextBox,
-                #wStatusNotifier,
-                wThermalSensor,
+                #wThermalSensor,
                 wBacklight,
-                wVolume,
-                wMic,
+                #wVolume,
+                #wMic,
                 wCPU,
                 wMemory,
-                #wNet,
-                #wBattery,
                 wClock
                 ],
             32,

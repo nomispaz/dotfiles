@@ -6,9 +6,9 @@ RightButton;NoModifier=org.kde.contextmenu
 RightButton;NoModifier=org.kde.contextmenu
 
 [Containments][1]
-ItemGeometries-1707x960=Applet-26:880,16,272,272,0;Applet-28:1184,16,240,256,0;Applet-27:1376,624,304,272,0;Applet-31:1440,16,240,256,0;Applet-30:1440,272,240,352,0;
+ItemGeometries-1707x960=Applet-26:880,16,272,272,0;Applet-30:1152,272,224,400,0;Applet-28:1184,16,240,256,0;Applet-27:1376,624,304,272,0;Applet-31:1440,16,240,256,0;
 ItemGeometries-2560x1440=Applet-26:1296,64,272,272,0;Applet-28:2048,48,240,256,0;Applet-30:1984,560,240,352,0;Applet-27:2224,1088,304,272,0;Applet-31:2288,48,240,256,0;
-ItemGeometriesHorizontal=Applet-26:880,16,272,272,0;Applet-28:1184,16,240,256,0;Applet-27:1376,624,304,272,0;Applet-31:1440,16,240,256,0;Applet-30:1440,272,240,352,0;
+ItemGeometriesHorizontal=Applet-26:880,16,272,272,0;Applet-30:1152,272,224,400,0;Applet-28:1184,16,240,256,0;Applet-27:1376,624,304,272,0;Applet-31:1440,16,240,256,0;
 activityId=7cf909a2-d06a-43e4-a19e-e48cc77bc7c6
 formfactor=0
 immutability=1
@@ -74,6 +74,7 @@ disk/.*/usedPercent=61,174,233
 disk/30039aa4-8303-4e90-a82c-4ab549f048f6/usedPercent=61,233,86
 disk/4ec3f8b8-cf0d-43df-ad57-3c73f08742c9/usedPercent=206,61,233
 disk/5478d2bc-1d51-467f-b488-87fed42efffb/usedPercent=233,61,105
+disk/669a734f-bdb7-482e-8513-9fba2ffc6d78/usedPercent=61,174,233
 disk/ad2b-4935/usedPercent=233,120,61
 disk/all/usedPercent=88,233,61
 disk/b7166444-cb6f-4381-b073-c85a56552ccc/usedPercent=61,174,233
@@ -120,7 +121,7 @@ immutability=1
 plugin=org.kde.plasma.digitalclock
 
 [Containments][2][Applets][20][Configuration]
-PreloadWeight=65
+PreloadWeight=70
 popupHeight=450
 popupWidth=560
 
@@ -134,8 +135,8 @@ plugin=org.kde.plasma.kickoff
 
 [Containments][2][Applets][3][Configuration]
 PreloadWeight=100
-popupHeight=510
-popupWidth=647
+popupHeight=720
+popupWidth=1440
 
 [Containments][2][Applets][3][Configuration][General]
 favoritesPortedToKAstats=true
@@ -201,7 +202,7 @@ immutability=1
 plugin=org.kde.plasma.devicenotifier
 
 [Containments][8][Applets][11][Configuration]
-PreloadWeight=80
+PreloadWeight=100
 
 [Containments][8][Applets][12]
 immutability=1
@@ -263,7 +264,7 @@ immutability=1
 plugin=org.kde.plasma.bluetooth
 
 [Containments][8][Applets][24][Configuration]
-PreloadWeight=10
+PreloadWeight=0
 
 [Containments][8][Applets][25]
 immutability=1

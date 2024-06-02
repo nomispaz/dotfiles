@@ -33,9 +33,7 @@
 import re
 import subprocess
 
-from libqtile import bar
 from libqtile.command.base import expose_command
-from libqtile.log_utils import logger
 from libqtile.widget import base
 
 __all__ = [
@@ -49,7 +47,7 @@ class Volume(base._TextBox):
     orientations = base.ORIENTATION_HORIZONTAL
     defaults = [
         ("padding", 3, "Padding left and right. Calculated if None."),
-        ("update_interval", 0.2, "Update time in seconds."),
+        ("update_interval", 1.0, "Update time in seconds."),
         ("mute_command", "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle", "Mute command"),
         ("volume_app", "pavucontrol", "App to control volume"),
         ("volume_up_command", "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+", "Volume up command"),
@@ -73,7 +71,7 @@ class Volume(base._TextBox):
     def __init__(self, **config):
         base._TextBox.__init__(self, "0", **config)
         self.add_defaults(Volume.defaults)
-        self.surfaces = {}
+        #self.surfaces = {}
         self.volume = None
         self.activeport = "speakers"
 
@@ -86,19 +84,19 @@ class Volume(base._TextBox):
             }
         )
 
-    def _configure(self, qtile, parent_bar):
-        base._TextBox._configure(self, qtile, parent_bar)
+    #def _configure(self, qtile, parent_bar):
+    #    base._TextBox._configure(self, qtile, parent_bar)
 
     def timer_setup(self):
         self.timeout_add(self.update_interval, self.update)
 
-    def button_press(self, x, y, button):
-        base._TextBox.button_press(self, x, y, button)
-        self.draw()
+    #def button_press(self, x, y, button):
+    #    base._TextBox.button_press(self, x, y, button)
+    #    self.draw()
 
     def update(self):
         vol = self.get_volume()
-        audioport = self.get_audio_port()
+        #audioport = self.get_audio_port()
 
         if vol != self.volume:
             self.volume = vol
@@ -159,13 +157,14 @@ class Volume(base._TextBox):
         volume_up_cmd = self.volume_up_command
         
         subprocess.call(volume_up_cmd, shell=True)
-
+        
 
     @expose_command()
     def decrease_vol(self):
         volume_down_cmd = self.volume_down_command
         
         subprocess.call(volume_down_cmd, shell=True)
+        
 
 
     @expose_command()
@@ -173,6 +172,7 @@ class Volume(base._TextBox):
         mute_cmd = self.mute_command
         
         subprocess.call(mute_cmd, shell=True)
+        
 
 
     @expose_command()

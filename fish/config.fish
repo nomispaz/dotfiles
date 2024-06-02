@@ -3,6 +3,11 @@
 set fish_greeting
 
 # set aliases
+
+# restart emacs client
+alias emacsd='systemctl --user restart --now emacs'
+
+#
 # gentoo
 alias emergesync='sudo emerge --sync'
 function emergeinstall
@@ -19,21 +24,6 @@ function emergeclean
 end
 
 #arch
-#function pacupdate
-#    sudo snapper -c root create --description "system update"
-#    sudo pacman -Syu
-#end
-#function pacinstall
-#    sudo snapper -c root create --description "install package $argv"
-#    sudo pacman -Syu $argv
-#end
-#function pacremove
-#    sudo snapper -c root create --description "removed package $argv"
-#    # R : remove package
-#    # s : remove dependencies (recursively) that are not needed by other packages 
-#    # n : remove configs
-#    sudo pacman -Rsn
-#end
 alias pacupdate='sudo pacman -Syu'
 alias pacinstall='sudo pacman -Syu'
 alias pacremove='sudo pacman -Rsn'

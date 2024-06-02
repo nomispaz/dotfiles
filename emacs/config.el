@@ -13,24 +13,8 @@
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
   (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
 
-;; (setq wl-copy-process nil)
-;;   (defun wl-copy (text)
-;;     (setq wl-copy-process (make-process :name "wl-copy"
-;;                                         :buffer nil
-;;                                         :command '("wl-copy" "-f" "-n")
-;;                                         :connection-type 'pipe
-;;                                         :noquery t))
-;;     (process-send-string wl-copy-process text)
-;;     (process-send-eof wl-copy-process))
-;; (defun wl-paste ()
-;;     (if (and wl-copy-process (process-live-p wl-copy-process))
-;;         nil ; should return nil if we're the current paste owner
-;;         (shell-command-to-string "wl-paste -n | tr -d \r")))
-;; (setq interprogram-cut-function 'wl-copy)
-;; (setq interprogram-paste-function 'wl-paste)
-
 (when (getenv "WAYLAND_DISPLAY")
-  (setq wl-copy-process nil)
+(setq wl-copy-process nil)
   (defun wl-copy (text)
     (setq wl-copy-process (make-process :name "wl-copy"
                                         :buffer nil
@@ -39,14 +23,14 @@
                                         :noquery t))
     (process-send-string wl-copy-process text)
     (process-send-eof wl-copy-process))
-  (defun wl-paste ()
+(defun wl-paste ()
     (if (and wl-copy-process (process-live-p wl-copy-process))
         nil ; should return nil if we're the current paste owner
         (shell-command-to-string "wl-paste -n | tr -d \r")))
-  (setq interprogram-cut-function 'wl-copy)
-  (setq interprogram-paste-function 'wl-paste))
+(setq interprogram-cut-function 'wl-copy)
+(setq interprogram-paste-function 'wl-paste))
 
-(use-package spacemacs-theme
+  (use-package spacemacs-theme
       :ensure t
       :config
       (load-theme 'spacemacs-dark t)
@@ -78,7 +62,7 @@
   (electric-pair-mode 1)
 
     (delete-selection-mode 1)    ;; You can select text and delete it by typing.
-    (electric-indent-mode -1)    ;; Turn off the weird indenting that Emacs does by default.
+    (electric-indent-mode 1)    ;; Turn on automatic indenting.
     ;; The following prevents <> from auto-pairing when electric-pair-mode is on.
     ;; Otherwise, org-tempo is broken when you try to <s TAB...
     (add-hook 'org-mode-hook (lambda ()
@@ -422,11 +406,27 @@ mouse-3: Toggle minor modes"
   :ensure t
   )
 
-(use-package eglot
-   :ensure t
-   :hook
-   (python-ts-mode . eglot-ensure)
+(use-package lsp-mode
+  :ensure t
+  :commands lsp lsp-deferred
+  :hook ((python-ts-mode . lsp-deferred))
+  :config
+  (lsp-enable-which-key-integration t)
+  (setq-default lsp-pylsp-plugins-flake8-max-line-length 200)
+  (setq-default lsp-pylsp-plugins-pycodestyle-max-line-length 200)
   )
+
+(use-package lsp-ui
+  :ensure t
+  :hook (lsp-mode . lsp-ui-mode)
+  )
+
+
+;; (use-package eglot
+;;   :ensure t
+;;    :hook
+;;    (python-ts-mode . eglot-ensure)
+;;   )
 
   (use-package flycheck
     :ensure t
