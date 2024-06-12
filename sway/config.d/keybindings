@@ -36,6 +36,9 @@ bindsym $mod+s exec steam
 # open start menu
 bindsym $mod+d exec $menu
 
+# create screenshot with grim
+bindsym $mod+PRINT exec grim -g "$(slurp)"
+
 # close window
 bindsym $mod+q kill
 

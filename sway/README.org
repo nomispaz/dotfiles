@@ -156,6 +156,12 @@ bindsym $mod+s exec steam
 bindsym $mod+d exec $menu
 #+end_src
 
+*** Create Screeshots
+#+begin_src sway :tangle config.d/keybindings
+# create screenshot with grim
+bindsym $mod+PRINT exec grim -g "$(slurp)"
+#+end_src
+
 *** Kill focused window
 #+begin_src sway :tangle config.d/keybindings
 # close window
