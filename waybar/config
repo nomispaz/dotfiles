@@ -9,51 +9,38 @@
     "gtk-layer-shell": "true",
 
     "modules-left": [
-		"hyprland/workspaces", 
+		"sway/workspaces", 
 		"wlr/taskbar"
 	],
 
     "modules-center": [
-		"hyprland/window"
+		"sway/window"
 	],
 
     "modules-right": [
 		"tray", 
-        "custom/tuxmgr",
-//		"idle_inhibitor", 
-//		"network", 
-		"cpu", 
-//		"memory", 
+         	"cpu", 
+		"memory", 
 		"temperature", 
-		"backlight", 
+	//	"backlight", 
 		"battery", 
 		"pulseaudio", 
-		"clock"],
+		"clock"
+        ],
 
     // Modules configuration
 
-    "custom/tuxmgr": {
-        "format": "",
-        "tooltip": false,
-        "spacing": 10,
-        "on-click": "kitty ~/Documents/Coding/git_repos/qttuxmgr/tuxmgr.sh"
-    },
-
-    "hyprland/workspaces": {
+    "sway/workspaces": {
         "all-outputs": true,
 	"active-only": false,
-        //"format": "{name}: {icon}",
-	"format": "{name}",
-        //"format-icons": {
-        //     "1": "",
-        //     "2": "",
-        //     "3": "",
-        //     "4": "",
-        //     "5": "",
-        //     "urgent": "",
-        //     "focused": "",
-        //     "default": ""
-        //},
+	"format": "{icon}",
+        "format-icons": {
+             "1": "1",
+             "2": "2",
+             "3": "3",
+             "4": "4",
+             "5": "5",
+       },
 	"on-click": "activate"
      },
 
@@ -68,7 +55,7 @@
         ],
     },
 
-    "hyprland/window": {
+    "sway/window": {
 	"format": "{}",
 	"max-length": 200,
 	"separate-outputs": true
@@ -83,8 +70,8 @@
     },
 
     "tray": {
-        // "icon-size": 21,
-        "spacing": 10
+        // "icon-size": 14,
+        "spacing": 5
     },
 
     "clock": {
@@ -103,11 +90,13 @@
     "cpu": {
         "format": "{usage}% {avg_frequency} Ghz ",
         "tooltip": false,
-        "interval": 5
+        "interval": 5,
+        "on-click": "alacritty -e htop"
     },
 
     "memory": {
-        "format": "{}% "
+        "format": "{}% ",
+        "on-click": "alacritty -e htop"
     },
 
     "temperature": {

@@ -62,7 +62,7 @@
   (electric-pair-mode 1)
 
     (delete-selection-mode 1)    ;; You can select text and delete it by typing.
-    (electric-indent-mode 1)    ;; Turn on automatic indenting.
+    (electric-indent-mode -1)    ;; Turn off automatic indenting.
     ;; The following prevents <> from auto-pairing when electric-pair-mode is on.
     ;; Otherwise, org-tempo is broken when you try to <s TAB...
     (add-hook 'org-mode-hook (lambda ()
@@ -406,27 +406,11 @@ mouse-3: Toggle minor modes"
   :ensure t
   )
 
-(use-package lsp-mode
-  :ensure t
-  :commands lsp lsp-deferred
-  :hook ((python-ts-mode . lsp-deferred))
-  :config
-  (lsp-enable-which-key-integration t)
-  (setq-default lsp-pylsp-plugins-flake8-max-line-length 200)
-  (setq-default lsp-pylsp-plugins-pycodestyle-max-line-length 200)
+(use-package eglot
+   :ensure t
+   :hook
+   (python-ts-mode . eglot-ensure)
   )
-
-(use-package lsp-ui
-  :ensure t
-  :hook (lsp-mode . lsp-ui-mode)
-  )
-
-
-;; (use-package eglot
-;;   :ensure t
-;;    :hook
-;;    (python-ts-mode . eglot-ensure)
-;;   )
 
   (use-package flycheck
     :ensure t

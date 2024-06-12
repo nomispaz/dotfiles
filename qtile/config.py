@@ -143,8 +143,16 @@ keys = [
     # fn keys
     Key([], "XF86MonBrightnessDown", lazy.spawn('brightnessctl set 5%-')),
     Key([], "XF86MonBrightnessUp", lazy.spawn('brightnessctl set 5%+')),
-    Key([], "XF86AudioLowerVolume", lazy.spawn('wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- & dunstctl close-all & dunstify $(wpctl get-volume @DEFAULT_AUDIO_SINK@)', shell=True)),
-    Key([], "XF86AudioRaiseVolume", lazy.spawn('wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ & dunstctl close-all & dunstify $(wpctl get-volume @DEFAULT_AUDIO_SINK@)', shell=True)),
+    Key([], "XF86AudioLowerVolume",
+        lazy.spawn('wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- \
+        & dunstctl close-all \
+        & dunstify $(wpctl get-volume @DEFAULT_AUDIO_SINK@)',
+                   shell=True)),
+    Key([], "XF86AudioRaiseVolume",
+        lazy.spawn('wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ \
+        & dunstctl close-all \
+        & dunstify $(wpctl get-volume @DEFAULT_AUDIO_SINK@)',
+                   shell=True)),
     Key([], "XF86AudioMute",
         lazy.spawn('wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle \
         & dunstctl close-all',

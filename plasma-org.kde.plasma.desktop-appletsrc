@@ -6,9 +6,9 @@ RightButton;NoModifier=org.kde.contextmenu
 RightButton;NoModifier=org.kde.contextmenu
 
 [Containments][1]
-ItemGeometries-1707x960=Applet-26:880,16,272,272,0;Applet-30:1152,272,224,400,0;Applet-28:1184,16,240,256,0;Applet-27:1376,624,304,272,0;Applet-31:1440,16,240,256,0;
+ItemGeometries-1707x960=Applet-26:880,16,272,272,0;Applet-28:1184,16,240,256,0;Applet-30:1152,272,224,400,0;Applet-27:1376,624,304,272,0;Applet-31:1440,16,240,256,0;
 ItemGeometries-2560x1440=Applet-26:1296,64,272,272,0;Applet-28:2048,48,240,256,0;Applet-30:1984,560,240,352,0;Applet-27:2224,1088,304,272,0;Applet-31:2288,48,240,256,0;
-ItemGeometriesHorizontal=Applet-26:880,16,272,272,0;Applet-30:1152,272,224,400,0;Applet-28:1184,16,240,256,0;Applet-27:1376,624,304,272,0;Applet-31:1440,16,240,256,0;
+ItemGeometriesHorizontal=Applet-26:880,16,272,272,0;Applet-28:1184,16,240,256,0;Applet-30:1152,272,224,400,0;Applet-27:1376,624,304,272,0;Applet-31:1440,16,240,256,0;
 activityId=7cf909a2-d06a-43e4-a19e-e48cc77bc7c6
 formfactor=0
 immutability=1
@@ -71,6 +71,7 @@ title=Disk Usage
 
 [Containments][1][Applets][30][Configuration][SensorColors]
 disk/.*/usedPercent=61,174,233
+disk/2676a6b076a68063/usedPercent=61,174,233
 disk/30039aa4-8303-4e90-a82c-4ab549f048f6/usedPercent=61,233,86
 disk/4ec3f8b8-cf0d-43df-ad57-3c73f08742c9/usedPercent=206,61,233
 disk/5478d2bc-1d51-467f-b488-87fed42efffb/usedPercent=233,61,105
@@ -232,7 +233,7 @@ immutability=1
 plugin=org.kde.plasma.volume
 
 [Containments][8][Applets][17][Configuration]
-PreloadWeight=65
+PreloadWeight=85
 
 [Containments][8][Applets][17][Configuration][General]
 migrated=true

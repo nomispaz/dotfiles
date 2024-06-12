@@ -8,3 +8,6 @@ do
     ln -s ~/dotfiles/$program ~/.config/$program
   fi
 done
+
+# make some scripts executable
+chmod +x ~/dotfiles/sway/scripts/autotiling/main.py

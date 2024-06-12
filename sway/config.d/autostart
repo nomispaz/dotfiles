@@ -1,0 +1,25 @@
+# setup environment
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
+exec hash dbus-update-activation-environment 2>/dev/null && \
+     dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
+
+# start authentication agent
+exec /usr/lib64/polkit-kde-authentication-agent-1
+
+# start networkmanager applet
+exec nm-applet --indicator
+
+# start notification agent
+exec dunst
+
+# start gammastep indicator for systray
+exec gammastep-indicator
+
+# start statusbar
+exec waybar
+
+# enable autotiling via additional personal script
+exec $HOME/dotfiles/sway/scripts/autotiling/main.py
+
+# set default background
+output "*" bg $HOME/dotfiles/sway/background/wald.jpg fill

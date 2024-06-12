@@ -125,7 +125,7 @@ By default, Emacs creates automatic backups of files in their original directori
 ** Defaults
 #+begin_src emacs-lisp :tangle yes
     (delete-selection-mode 1)    ;; You can select text and delete it by typing.
-    (electric-indent-mode 1)    ;; Turn on automatic indenting.
+    (electric-indent-mode -1)    ;; Turn off automatic indenting.
     ;; The following prevents <> from auto-pairing when electric-pair-mode is on.
     ;; Otherwise, org-tempo is broken when you try to <s TAB...
     (add-hook 'org-mode-hook (lambda ()
