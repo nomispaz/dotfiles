@@ -180,6 +180,15 @@ location=0
 plugin=org.kde.plasma.folder
 wallpaperplugin=org.kde.image
 
+[Containments][34]
+activityId=7cf909a2-d06a-43e4-a19e-e48cc77bc7c6
+formfactor=0
+immutability=1
+lastScreen=2
+location=0
+plugin=org.kde.plasma.folder
+wallpaperplugin=org.kde.image
+
 [Containments][8]
 activityId=
 formfactor=2
@@ -233,7 +242,7 @@ immutability=1
 plugin=org.kde.plasma.volume
 
 [Containments][8][Applets][17][Configuration]
-PreloadWeight=85
+PreloadWeight=95
 
 [Containments][8][Applets][17][Configuration][General]
 migrated=true

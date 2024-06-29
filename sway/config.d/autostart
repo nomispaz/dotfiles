@@ -6,6 +6,9 @@ exec hash dbus-update-activation-environment 2>/dev/null && \
 # start authentication agent
 exec /usr/lib64/polkit-kde-authentication-agent-1
 
+exec kwalletd6
+exec /usr/lib/pam_kwallet_init
+
 # start networkmanager applet
 exec nm-applet --indicator
 
@@ -14,6 +17,11 @@ exec dunst
 
 # start gammastep indicator for systray
 exec gammastep-indicator
+
+# start tuxedo control center
+exec tuxedo-control-center
+# send tcc to scratchpad
+for_window [class="tuxedo-control-center"] move scratchpad
 
 # start statusbar
 exec waybar

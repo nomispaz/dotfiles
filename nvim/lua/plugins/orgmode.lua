@@ -6,15 +6,15 @@ return {
         { 'nvim-treesitter/nvim-treesitter', lazy = true },
     },
     event = 'VeryLazy',
-    ft = { 'org' },
     config = function()
+        
         -- Setup treesitter
-        --require('nvim-treesitter.configs').setup({
-        --highlight = {
-        --    enable = true,
-        --},
-        --ensure_installed = { 'org' },
-        --})
+        require('nvim-treesitter.configs').setup({
+        highlight = {
+            enable = true,
+        },
+        ensure_installed = { 'org' },
+        })
 
         -- Setup orgmode
         require('orgmode').setup({

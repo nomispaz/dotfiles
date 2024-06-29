@@ -82,3 +82,4 @@ local mappings = {
 
 wk.setup(setup)
 wk.register(mappings, { prefix = "<leader>" }, opts)
+wk.register({["gd"] = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Go to function definition" }}, opts)

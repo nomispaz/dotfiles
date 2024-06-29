@@ -19,7 +19,7 @@ vim.g.autoformat = true
 opt.clipboard = "unnamedplus" -- Sync with system clipboard
 opt.confirm = true -- Confirm to save changes before exiting modified buffer
 opt.cursorline = false -- highlighting of the current line
-opt.expandtab = true -- Use spaces instead of tabs
+--opt.expandtab = true -- Use spaces instead of tabs
 opt.ignorecase = true -- Ignore case
 opt.inccommand = "nosplit" -- preview incremental substitute
 opt.laststatus = 3 -- global statusline
@@ -27,7 +27,7 @@ opt.mouse = "a" -- Enable mouse mode
 opt.number = true -- Print line number
 opt.scrolloff = 4 -- Lines of context
 opt.shiftround = true -- Round indent
-opt.shiftwidth = 4 -- Size of an indent
+--opt.shiftwidth = 4 -- Size of an indent
 opt.showmode = false -- Dont show mode since we have a statusline
 opt.smartcase = true -- Don't ignore case with capitals
 opt.smartindent = true -- Insert indents automatically
@@ -234,7 +234,7 @@ local mappings = {
 
 wk.setup(setup)
 wk.register(mappings, { prefix = "<leader>" }, opts)
-
+wk.register({["gd"] = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Go to function definition" }}, opts)
 #+END_SRC
 * Telescope
 #+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/telescope.lua
@@ -285,9 +285,7 @@ return {
     },
     event = 'VeryLazy',
     config = function()
-        -- Load treesitter grammar for org
-        require('orgmode').setup_ts_grammar()
-
+        
         -- Setup treesitter
         require('nvim-treesitter.configs').setup({
         highlight = {
@@ -363,6 +361,7 @@ return {
                     "bash",
                     "c",
                     "diff",
+                    "go",
                     "html",
                     "javascript",
                     "jsdoc",
@@ -433,13 +432,8 @@ return {
     },
     
     config = function()
-    local has_words_before = function()
-      unpack = unpack or table.unpack
-      local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-      return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-    end
 
-    local cmp = require('cmp')
+	local cmp = require('cmp')
     local luasnip = require('luasnip')
 
     cmp.setup({
@@ -449,17 +443,14 @@ return {
         end
       },
       completion = {
-        autocomplete = false
+        --autocomplete = false
+		completeopt = 'menu,menuone,noinsert'
       },
        mapping = cmp.mapping.preset.insert ({
            ["<Tab>"] = cmp.mapping(function(fallback)
-           if cmp.visible() then
-             cmp.select_next_item()
-           elseif luasnip.expand_or_jumpable() then
+           if luasnip.expand_or_jumpable() then
              luasnip.expand_or_jump()
-          elseif has_words_before() then
-             cmp.complete()
-           else
+          else
              fallback()
            end
          end, { "i", "s" }),
@@ -478,7 +469,7 @@ return {
 }
 #+END_SRC
 ** LSP-Config
-Currently only python with lsp pylsp configured
+Currently only python with lsp pylsp and go with gopls are configured
 #+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/lspconfig.lua
 return {
     "neovim/nvim-lspconfig",
@@ -516,6 +507,24 @@ return {
             }
         }
     }
+
+    require("lspconfig").gopls.setup{
+	cmd = {'gopls'},
+	-- for postfix snippets and analyzers
+	capabilities = capabilities,
+	    settings = {
+	      gopls = {
+		      experimentalPostfixCompletions = true,
+		      analyses = {
+		        unusedparams = true,
+		        shadow = true,
+		     },
+		     staticcheck = true,
+		    },
+	    },
+	on_attach = on_attach,
+    }
+
     require("lspconfig").marksman.setup {
         capabilities = capabilities,
     }

@@ -554,7 +554,9 @@ Setup treesitter languages.
 #+begin_src emacs-lisp :tangle yes
 (setq treesit-language-source-alist
 	  '((bash "https://github.com/tree-sitter/tree-sitter-bash")
-	    (python "https://github.com/tree-sitter/tree-sitter-python"))
+	    (python "https://github.com/tree-sitter/tree-sitter-python")
+	    (go "https://github.com/tree-sitter/tree-sitter-go")
+	    )
 	  )
 
 #+end_src
@@ -598,6 +600,7 @@ Currently acticated since it is included in emacs
    :ensure t
    :hook
    (python-ts-mode . eglot-ensure)
+   (go-mode . eglot-ensure)
   )
 #+end_src
 
@@ -644,6 +647,15 @@ Not used at the moment since pylsp has more functions and checkups.
 *** Pylsp
 Pylsp is installed in the distro by dev-python/lsp-language-server.
 
+** Golang
+#+begin_src emacs-lisp :tangle yes
+(use-package go-mode
+     :ensure t
+     :hook (
+	    (go-mode . electric-indent-mode)
+)) 
+#+end_src
+
 * Hooks
 
 Reload yas-snippets.
@@ -655,6 +667,11 @@ Hooks per Major mode.
 Python-mode
 #+begin_src emacs-lisp :tangle yes
 (add-hook 'python-mode-hook 'yas-minor-mode)
+#+end_src
+
+Go-mode
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'go-mode-hook 'yas-minor-mode)
 #+end_src
 
 Elisp-mode

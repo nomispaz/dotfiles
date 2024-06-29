@@ -26,6 +26,13 @@ exec hash dbus-update-activation-environment 2>/dev/null && \
 exec /usr/lib64/polkit-kde-authentication-agent-1
 #+end_src
 
+** Keyring
+- Use kwallet if kde is installed
+#+begin_src sway :tangle config.d/autostart
+exec kwalletd6
+exec /usr/lib/pam_kwallet_init 
+#+end_src
+
 ** Start networkmanager applet
 #+begin_src sway :tangle config.d/autostart
 # start networkmanager applet
@@ -42,6 +49,15 @@ exec dunst
 #+begin_src sway :tangle config.d/autostart
 # start gammastep indicator for systray
 exec gammastep-indicator 
+#+end_src
+
+** Tuxedo control center applet
+- Autostart tuxedo-control-center and send it to scratchpad
+#+begin_src sway :tangle config.d/autostart
+# start tuxedo control center
+exec tuxedo-control-center
+# send tcc to scratchpad
+for_window [class="tuxedo-control-center"] move scratchpad
 #+end_src
 
 ** Waybar
@@ -327,10 +343,11 @@ bindsym XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
 *** Toggle microphone mute and display via dunst
 #+begin_src sway :tangle config.d/keybindings
 # mute microphone
-bindsym $mod+y exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle 
+bindsym $mod+y exec ~/dotfiles/sway/scripts/audio/toggle_mic_mute.sh
 #+end_src
 
 * Window rules
+** Set programs to floating
 #+begin_src sway :tangle config.d/windowrules
 # set floating for window roles
 for_window [app_id="pavucontrol" ] floating enable, resize set width 40 ppt height 30 ppt
@@ -346,3 +363,4 @@ for_window [title="File Operation Progress"] floating enable, border pixel 1, st
 for_window [title="Picture in picture"] floating enable, sticky enable
 for_window [title="Save File"] floating enable
 #+end_src
+

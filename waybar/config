@@ -9,8 +9,8 @@
     "gtk-layer-shell": "true",
 
     "modules-left": [
-		"sway/workspaces", 
-		"wlr/taskbar"
+		"sway/workspaces" 
+	//	"wlr/taskbar"
 	],
 
     "modules-center": [

@@ -24,8 +24,13 @@ function emergeclean
 end
 
 #arch
-alias pacupdate='sudo pacman -Syu'
+function pacupdate
+    sudo pacman -Syu
+    # automatically perform diff if new config files are available
+    sudo DIFFPROG='nvim -d' pacdiff
+end
 alias pacinstall='sudo pacman -Syu'
+
 alias pacremove='sudo pacman -Rsn'
 function pacclean
     # see https://wiki.archlinux.org/title/system_maintenance

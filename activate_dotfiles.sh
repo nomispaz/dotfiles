@@ -11,3 +11,4 @@ done
 
 # make some scripts executable
 chmod +x ~/dotfiles/sway/scripts/autotiling/main.py
+chmod +x ~/dotfiles/sway/scripts/audio/toggle_mic_mute.sh 

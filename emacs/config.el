@@ -1,17 +1,16 @@
 (setq backup-directory-alist '((".*" . "~/.local/share/emacs/backups")))
 
-  (setq major-mode-remap-alist
-              '((bash-mode . bash-ts-mode)
-                (python-mode . python-ts-mode)))
+(setq major-mode-remap-alist
+            '((bash-mode . bash-ts-mode)
+              (python-mode . python-ts-mode)))
 
+(unless (package-installed-p 'use-package)
+   (package-install 'use-package))
 
-  (unless (package-installed-p 'use-package)
-     (package-install 'use-package))
+(require 'package)
 
-  (require 'package)
-
-  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-  (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
 
 (when (getenv "WAYLAND_DISPLAY")
 (setq wl-copy-process nil)
@@ -30,38 +29,38 @@
 (setq interprogram-cut-function 'wl-copy)
 (setq interprogram-paste-function 'wl-paste))
 
-  (use-package spacemacs-theme
-      :ensure t
-      :config
-      (load-theme 'spacemacs-dark t)
-      )
+(use-package spacemacs-theme
+    :ensure t
+    :config
+    (load-theme 'spacemacs-dark t)
+    )
 
 (use-package nerd-icons
   :ensure t)
 
-  (setq inhibit-startup-screen t)
+(setq inhibit-startup-screen t)
 
-  (tool-bar-mode -1)	          ;; Disable the toolbar
+(tool-bar-mode -1)	          ;; Disable the toolbar
 
-  (menu-bar-mode -1)            ;; Disable the menu bar
+(menu-bar-mode -1)            ;; Disable the menu bar
 
-  (scroll-bar-mode -1)          ;; Disable visible scrollbar
+(scroll-bar-mode -1)          ;; Disable visible scrollbar
 
-    (column-number-mode 1)
+(column-number-mode 1)
 
-     (unless (derived-mode-p 'image-mode 'doc-view-mode 'pdf-view-mode)
-      (global-display-line-numbers-mode 1)
-      )
+(unless (derived-mode-p 'image-mode 'doc-view-mode 'pdf-view-mode)
+ (global-display-line-numbers-mode 1)
+ )
 
-    (dolist (mode '(org-mode-hook
-		    term-mode-hook
-		    shell-mode-hook
-		    eshell-mode-hook))
-      (add-hook mode (lambda() (display-line-numbers-mode 0))))
+(dolist (mode '(org-mode-hook
+		term-mode-hook
+		shell-mode-hook
+		eshell-mode-hook))
+  (add-hook mode (lambda() (display-line-numbers-mode 0))))
 
-  (electric-pair-mode 1)
+(electric-pair-mode 1)
 
-    (delete-selection-mode 1)    ;; You can select text and delete it by typing.
+(delete-selection-mode 1)    ;; You can select text and delete it by typing.
     (electric-indent-mode -1)    ;; Turn off automatic indenting.
     ;; The following prevents <> from auto-pairing when electric-pair-mode is on.
     ;; Otherwise, org-tempo is broken when you try to <s TAB...
@@ -73,26 +72,26 @@
   (setq use-dialog-box nil)    ;; No dialog box
 (setq pop-up-windows nil)    ;; No popup windows
 
-  (set-face-attribute 'default nil :font "DejaVu Sans Mono" :height 180)
+(set-face-attribute 'default nil :font "DejaVu Sans Mono" :height 180)
 
-  (set-face-attribute 'fixed-pitch nil :font "DejaVu Sans Mono" :height 180)
+(set-face-attribute 'fixed-pitch nil :font "DejaVu Sans Mono" :height 180)
 
-  (set-face-attribute 'variable-pitch nil :font "DejaVu Sans" :height 180)
+(set-face-attribute 'variable-pitch nil :font "DejaVu Sans" :height 180)
 
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
 (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
 
-  (use-package company
-    :ensure t
-    :custom
-    (company-idle-delay .1)
-    (company-minimum-prefix-length 2)
-    (company-show-numbers t)
-    (company-tooltip-align-annotations 't)
-    (global-company-mode t)
-   )
+(use-package company
+  :ensure t
+  :custom
+  (company-idle-delay .1)
+  (company-minimum-prefix-length 2)
+  (company-show-numbers t)
+  (company-tooltip-align-annotations 't)
+  (global-company-mode t)
+ )
 
 (use-package marginalia
   :ensure t
@@ -247,49 +246,49 @@ mouse-3: Toggle minor modes"
    desktop-base-lock-name "desktop.lock"
    )
 
-  (use-package which-key
-    :ensure t
-    :init
-    (which-key-mode 1)
-    :diminish which-key-mode
-    :config
-    (setq which-key-idle-delay 0.3)
-    (setq which-key-allow-evil-operators t)
-    )
-
-    (defun my/org-mode-setup()
-      ;; active automatic indentation
-      (org-indent-mode)
-      ;; proportially resize font
-      (variable-pitch-mode 1)
-      ;; automatically perform line wrap
-      (visual-line-mode 1)
-      )
-  (defun my/org-font-setup()
-    ;; Replace list hyphen with dot
-    (font-lock-add-keywords 'org-mode
-                            '(("^ *\\([-]\\) "
-                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-
-    ;;Set faces for heading levels.
-    (dolist (face '((org-level-1 . 1.2)
-                    (org-level-2 . 1.1)
-                    (org-level-3 . 1.05)
-                    (org-level-4 . 1.0)
-                    (org-level-5 . 1.1)
-                    (org-level-6 . 1.1)
-                    (org-level-7 . 1.1)
-                    (org-level-8 . 1.1)))
-      (set-face-attribute (car face) nil :font "DejaVu Sans" :weight 'regular :height (cdr face)))
-  ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-  (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-table nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+(use-package which-key
+  :ensure t
+  :init
+  (which-key-mode 1)
+  :diminish which-key-mode
+  :config
+  (setq which-key-idle-delay 0.3)
+  (setq which-key-allow-evil-operators t)
   )
+
+(defun my/org-mode-setup()
+    ;; active automatic indentation
+    (org-indent-mode)
+    ;; proportially resize font
+    (variable-pitch-mode 1)
+    ;; automatically perform line wrap
+    (visual-line-mode 1)
+    )
+(defun my/org-font-setup()
+  ;; Replace list hyphen with dot
+  (font-lock-add-keywords 'org-mode
+                          '(("^ *\\([-]\\) "
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+
+  ;;Set faces for heading levels.
+  (dolist (face '((org-level-1 . 1.2)
+                  (org-level-2 . 1.1)
+                  (org-level-3 . 1.05)
+                  (org-level-4 . 1.0)
+                  (org-level-5 . 1.1)
+                  (org-level-6 . 1.1)
+                  (org-level-7 . 1.1)
+                  (org-level-8 . 1.1)))
+    (set-face-attribute (car face) nil :font "DejaVu Sans" :weight 'regular :height (cdr face)))
+;; Ensure that anything that should be fixed-pitch in Org files appears that way
+(set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+(set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-table nil :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+)
 
 (use-package org
   :hook (org-mode . my/org-mode-setup)
@@ -322,7 +321,7 @@ mouse-3: Toggle minor modes"
     (setq org-agenda-files (directory-files-recursively "/data/orgmode/" "\\.org$"))
     )
 
-  (use-package evil
+(use-package evil
     :ensure t
     :init
     (setq evil-want-integration t)
@@ -346,47 +345,48 @@ mouse-3: Toggle minor modes"
 ;; Setting RETURN key in org-mode to follow links
   (setq org-return-follows-link  t)
 
-   ;; set leader key in all states
-   (evil-set-leader nil (kbd "SPC"))
+;; set leader key in all states
+ (evil-set-leader nil (kbd "SPC"))
 
-   ;; set local leader
-   (evil-set-leader 'normal "," t)
+ ;; set local leader
+ (evil-set-leader 'normal "," t)
 
-  ;; files
-   (define-key evil-normal-state-map (kbd "<leader> f f") '("Search files" . consult-find))
-   (define-key evil-normal-state-map (kbd "<leader> f r") '("Recent files" . consult-recent-file))
-   (define-key evil-normal-state-map (kbd "<leader> f g") '("Search files (grep)" . consult-grep))
-   (define-key evil-normal-state-map (kbd "<leader> f n") '("New file" . evil-buffer-new))
+;; files
+ (define-key evil-normal-state-map (kbd "<leader> f f") '("Search files" . consult-find))
+ (define-key evil-normal-state-map (kbd "<leader> f r") '("Recent files" . consult-recent-file))
+ (define-key evil-normal-state-map (kbd "<leader> f g") '("Search files (grep)" . consult-grep))
+ (define-key evil-normal-state-map (kbd "<leader> f n") '("New file" . evil-buffer-new))
 
-   ;; buffers
-   (define-key evil-normal-state-map (kbd "<leader> b b") '("Switch to buffer" . consult-buffer))
-   (define-key evil-normal-state-map (kbd "<leader> b k") '("Kill current buffer" . kill-current-buffer))
-   (define-key evil-normal-state-map (kbd "<leader> b r") '("Rename buffer" . rename-buffer))
-   (define-key evil-normal-state-map (kbd "<leader> b s") '("Save buffer" . basic-save-buffer))
+ ;; buffers
+ (define-key evil-normal-state-map (kbd "<leader> b b") '("Switch to buffer" . consult-buffer))
+ (define-key evil-normal-state-map (kbd "<leader> b k") '("Kill current buffer" . kill-current-buffer))
+ (define-key evil-normal-state-map (kbd "<leader> b r") '("Rename buffer" . rename-buffer))
+ (define-key evil-normal-state-map (kbd "<leader> b s") '("Save buffer" . basic-save-buffer))
 
-   ;; tabs
-   (define-key evil-normal-state-map (kbd "<leader> t t") '("Switch to tab" . tab-switch))
+ ;; tabs
+ (define-key evil-normal-state-map (kbd "<leader> t t") '("Switch to tab" . tab-switch))
 
-   ;; search
-   (define-key evil-normal-state-map (kbd "<leader> s o") '("Search heading" - consult-outline))
-   (define-key evil-normal-state-map (kbd "<leader> s l") '("Search line" . consult-line))
+ ;; search
+ (define-key evil-normal-state-map (kbd "<leader> s o") '("Search heading" - consult-outline))
+ (define-key evil-normal-state-map (kbd "<leader> s l") '("Search line" . consult-line))
 
-   ;; org-mode
-   (define-key evil-normal-state-map (kbd "<leader> o e") '("Export org file" . org-export-dispatch))
-    (define-key evil-normal-state-map (kbd "<leader> o a") '("Open org agenda" . org-agenda))
-   (define-key evil-normal-state-map (kbd "<leader> o t") '("Export code blocks" . org-babel-tangle))
-   (define-key evil-normal-state-map (kbd "<leader> o i s") '("Insert scheduled date" . org-schedule))
+ ;; org-mode
+ (define-key evil-normal-state-map (kbd "<leader> o e") '("Export org file" . org-export-dispatch))
+  (define-key evil-normal-state-map (kbd "<leader> o a") '("Open org agenda" . org-agenda))
+ (define-key evil-normal-state-map (kbd "<leader> o t") '("Export code blocks" . org-babel-tangle))
+ (define-key evil-normal-state-map (kbd "<leader> o i s") '("Insert scheduled date" . org-schedule))
 
-   ;; flycheck
-   (define-key evil-normal-state-map (kbd "<leader> l l") '("Show list of flycheck errors" . flycheck-list-errors))
-   (define-key evil-normal-state-map (kbd "<leader> l n") '("Next flycheck error" . flycheck-next-error))
-   (define-key evil-normal-state-map (kbd "<leader> l p") '("Previous flycheck error" . flycheck-previous-error))
+ ;; flycheck
+ (define-key evil-normal-state-map (kbd "<leader> l l") '("Show list of flycheck errors" . flycheck-list-errors))
+ (define-key evil-normal-state-map (kbd "<leader> l n") '("Next flycheck error" . flycheck-next-error))
+ (define-key evil-normal-state-map (kbd "<leader> l p") '("Previous flycheck error" . flycheck-previous-error))
 
 (setq treesit-language-source-alist
 	  '((bash "https://github.com/tree-sitter/tree-sitter-bash")
-	    (python "https://github.com/tree-sitter/tree-sitter-python"))
+	    (python "https://github.com/tree-sitter/tree-sitter-python")
+	    (go "https://github.com/tree-sitter/tree-sitter-go")
+	    )
 	  )
-
 
 (defun my/install-treesit_languages()
  (interactive)
@@ -410,16 +410,25 @@ mouse-3: Toggle minor modes"
    :ensure t
    :hook
    (python-ts-mode . eglot-ensure)
+   (go-mode . eglot-ensure)
   )
 
-  (use-package flycheck
-    :ensure t
-    :config
-    (setq-default flycheck-flake8-maximum-line-length 200))
+(use-package flycheck
+  :ensure t
+  :config
+  (setq-default flycheck-flake8-maximum-line-length 200))
+
+(use-package go-mode
+     :ensure t
+     :hook (
+	    (go-mode . electric-indent-mode)
+))
 
 (yas-reload-all)
 
 (add-hook 'python-mode-hook 'yas-minor-mode)
+
+(add-hook 'go-mode-hook 'yas-minor-mode)
 
 (add-hook 'elisp-mode-hook 'yas-minor-mode)
 
