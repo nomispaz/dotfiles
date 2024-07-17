@@ -7,16 +7,16 @@ exec hash dbus-update-activation-environment 2>/dev/null && \
 exec /usr/lib64/polkit-kde-authentication-agent-1
 
 exec kwalletd6
-exec /usr/lib/pam_kwallet_init
+exec /usr/lib/pam_kwallet_init 
 
 # start networkmanager applet
 exec nm-applet --indicator
 
 # start notification agent
-exec dunst
+exec dunst 
 
 # start gammastep indicator for systray
-exec gammastep-indicator
+exec gammastep-indicator 
 
 # start tuxedo control center
 exec tuxedo-control-center
@@ -27,7 +27,7 @@ for_window [class="tuxedo-control-center"] move scratchpad
 exec waybar
 
 # enable autotiling via additional personal script
-exec $HOME/dotfiles/sway/scripts/autotiling/main.py
+exec $HOME/git_repos/dotfiles/sway/scripts/autotiling/main.py
 
 # set default background
-output "*" bg $HOME/dotfiles/sway/background/wald.jpg fill
+output "*" bg $HOME/git_repos/dotfiles/sway/background/wald.jpg fill

@@ -69,13 +69,13 @@ exec waybar
 ** Autotiling
 #+begin_src sway :tangle config.d/autostart
 # enable autotiling via additional personal script
-exec $HOME/dotfiles/sway/scripts/autotiling/main.py
+exec $HOME/git_repos/dotfiles/sway/scripts/autotiling/main.py
 #+end_src
 
 ** Background
 #+begin_src sway :tangle config.d/autostart
 # set default background
-output "*" bg $HOME/dotfiles/sway/background/wald.jpg fill
+output "*" bg $HOME/git_repos/dotfiles/sway/background/wald.jpg fill
 #+end_src
 
 * Theming

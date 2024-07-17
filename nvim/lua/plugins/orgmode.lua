@@ -18,8 +18,8 @@ return {
 
         -- Setup orgmode
         require('orgmode').setup({
-        org_agenda_files = '~/orgmode/**/*',
-        org_default_notes_file = '~/orgmode/refile.org',
+        org_agenda_files = '/data/orgmode/**/*',
+        org_default_notes_file = '/data/orgmode/refile.org',
         org_startup_indented = true,
         org_hide_leading_stars = true,
         org_hide_emphasis_markers = true,

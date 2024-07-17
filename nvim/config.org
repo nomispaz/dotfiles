@@ -4,6 +4,7 @@ Set leader-key to space.
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.keymap.set({"n","v"}, "<Space>", "<Nop>", { silent = true })
+
 #+END_SRC
 Load various configs
 #+BEGIN_SRC lua :tangle~/.config/nvim/init.lua
@@ -86,12 +87,13 @@ return {
       opts = {},
     },
 }
-#+END_SRC
+#+END_SRC	
 
 Load colorscheme
 #+BEGIN_SRC lua :tangle ~/.config/nvim/init.lua
 
 vim.cmd.colorscheme "tokyonight-night"
+
 #+END_SRC
 * Lualine
 Preconfigured statusline
@@ -296,8 +298,8 @@ return {
 
         -- Setup orgmode
         require('orgmode').setup({
-        org_agenda_files = '~/orgmode/**/*',
-        org_default_notes_file = '~/orgmode/refile.org',
+        org_agenda_files = '/data/orgmode/**/*',
+        org_default_notes_file = '/data/orgmode/refile.org',
         org_startup_indented = true,
         org_hide_leading_stars = true,
         org_hide_emphasis_markers = true,
@@ -319,15 +321,21 @@ return {
 #+END_SRC
 ** Config orgmode-headlines
 #+BEGIN_SRC lua :tangle ~/.config/nvim/lua/config/orgmode-headlines.lua
-vim.cmd [[highlight Headline1 guibg=#24283b]]
-vim.cmd [[highlight Headline2 guibg=#24283b]]
-vim.cmd [[highlight CodeBlock guibg=#394b70]]
+--vim.cmd [[highlight Headline1 guibg=#24283b]]
+--vim.cmd [[highlight Headline2 guibg=#24283b]]
+--vim.cmd [[highlight CodeBlock guibg=#394b70]]
+--vim.cmd [[highlight Dash guibg=#D19A66 gui=bold]]
+
+vim.cmd [[highlight Headline1 guibg=#1e2718]]
+vim.cmd [[highlight Headline2 guibg=#21262d]]
+vim.cmd [[highlight CodeBlock guibg=#1c1c1c]]
 vim.cmd [[highlight Dash guibg=#D19A66 gui=bold]]
 
 require("headlines").setup {
     org = {
-        headline_highlights = { "Headline1", "Headline2" },
-        fat_headlines = false,
+	headline_highlights = { "Headline1", "Headline2" },
+	fat_headlines = true,
+	codeblock_highlight = true
        },
 }
 
@@ -375,6 +383,7 @@ return {
                     "python",
                     "query",
                     "regex",
+		       "rust",
                     "toml",
                     "tsx",
                     "typescript",
@@ -524,6 +533,30 @@ return {
 	    },
 	on_attach = on_attach,
     }
+
+    require'lspconfig'.rust_analyzer.setup {
+    settings = {
+        ['rust-analyzer'] = {
+        cargo = {
+          allFeatures = true,
+          loadOutDirsFromCheck = true,
+          buildScripts = {
+            enable = true,
+          },
+        },
+        -- Add clippy lints for Rust.
+        checkOnSave = true,
+        procMacro = {
+          enable = true,
+          ignored = {
+            ["async-trait"] = { "async_trait" },
+            ["napi-derive"] = { "napi" },
+            ["async-recursion"] = { "async_recursion" },
+          },        
+	  },
+    },
+    }
+}
 
     require("lspconfig").marksman.setup {
         capabilities = capabilities,

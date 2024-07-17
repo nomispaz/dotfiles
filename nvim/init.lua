@@ -2,6 +2,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.keymap.set({"n","v"}, "<Space>", "<Nop>", { silent = true })
 
+
 local opt = vim.opt
 
 vim.g.autoformat = true
@@ -63,6 +64,7 @@ require("lazy").setup({
 
 
 vim.cmd.colorscheme "tokyonight-night"
+
 
 require("mini.pairs").setup()
 require("config.whichkey")

@@ -2,7 +2,7 @@
 #
 # set inner and outer window gaps
 gaps inner 3
-gaps outer 3
+gaps outer 3 
 
 # thin borders and hide titlebar
 default_border pixel 2
