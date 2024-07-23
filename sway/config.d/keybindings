@@ -146,4 +146,4 @@ bindsym XF86AudioRaiseVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
 bindsym XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle 
 
 # mute microphone
-bindsym $mod+y exec ~/dotfiles/sway/scripts/audio/toggle_mic_mute.sh
+bindsym $mod+y exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle

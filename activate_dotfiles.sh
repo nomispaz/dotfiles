@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # loop through all folders and files
 for program in $(ls -d  *)
 do
@@ -10,5 +10,6 @@ do
 done
 
 # make some scripts executable
+chmod +x $PWD/sway/scripts/autotiling/start.sh
 chmod +x $PWD/sway/scripts/autotiling/main.py
 chmod +x $PWD/sway/scripts/audio/toggle_mic_mute.sh 

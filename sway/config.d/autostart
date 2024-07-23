@@ -27,7 +27,7 @@ for_window [class="tuxedo-control-center"] move scratchpad
 exec waybar
 
 # enable autotiling via additional personal script
-exec $HOME/git_repos/dotfiles/sway/scripts/autotiling/main.py
+exec $HOME/git_repos/dotfiles/sway/scripts/autotiling/start.sh
 
 # set default background
 output "*" bg $HOME/git_repos/dotfiles/sway/background/wald.jpg fill
