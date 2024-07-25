@@ -23,6 +23,14 @@ function emergeclean
     sudo eclean distfiles
 end
 
+# nixos
+function nixosupdate
+    pushd $HOME/git_repos/nixos/
+    nix flake update
+    sudo nixos-rebuild switch --flake $HOME/git_repos/nixos#xmgneo15
+    popd
+end
+
 #arch
 function pacupdate
     sudo pacman -Syu
