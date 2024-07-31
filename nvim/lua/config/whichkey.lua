@@ -1,13 +1,6 @@
 local wk = require("which-key")
 
 local setup = {
-    window = {
-        border = "rounded", -- none, single, double, shadow
-        position = "bottom", -- bottom, top
-        margin = { 1, 0, 1, 0 }, -- extra window margin [top, right, bottom, left]
-        padding = { 2, 2, 2, 2 }, -- extra window padding [top, right, bottom, left]
-        winblend = 0,
-    },
     layout = {
         height = { min = 4, max = 25 }, -- min and max height of the columns
         width = { min = 20, max = 50 }, -- min and max width of the columns
@@ -25,61 +18,43 @@ local opts = {
     nowait = true, -- use `nowait` when creating keymaps
 }
 
-local mappings = {
-    ["f"] = {
-        name = "Open files", 
-        f = { "<cmd>Telescope find_files<cr>", "Find File"},
-        r = { "<cmd>Telescope oldfiles<cr>", "Recent Files"},
-        n = { "<cmd>ene <BAR> startinsert<cr>", "New File"},
-        g = { "<cmd>Telescope live_grep<cr>", "Search files (grep)"},
-        p = { "<cmd>Telescope projects<cr>", "Project list"}
-    },
-    ["t"] = {
-        name = "Telescope search functions",
-        k = { "<cmd>Telescope keymaps<cr>", "Display keymaps"},
-        f = { "<cmd>Telescope current_buffer_fuzzy_find<cr>", "Fuzzy find in buffer"},
-        d = { "<cmd>Telescope diagnostics<cr>", "LSP Errors/Warnings"},
-    },
-    ["p"] = { "<cmd>Lazy<CR>", "Plugin Manager" }, 
---    ["m"] = { "<cmd>MarkdownPreviewToggle<cr>", "Markdown Preview"},
-    ["e"] = { "<cmd>Neotree toggle<cr>", "Toggle Neotree"},
-
-    [","] = { "<cmd>WhichKey<CR>", "WhichKey" },
-    ["b"] = {
-        name = "Tabs",
-        ["b"] = { "<cmd>Telescope buffers<cr>", "Switch to buffer" },
-        ["k"] = { "<cmd>bd<cr>", "Close  buffer" },
-        ["<Left>"] = { "<cmd>:BufferLineCyclePrev<cr>", "Switch to left buffer" },
-        ["<Right>"] = { "<cmd>:BufferLineCycleNext<cr>", "Switch to right buffer" },
-    },
-    ["s"] = {
-        name = "Session management",
-        ["s"] = { [[<cmd>lua require("persistence").load()<cr>]], "Restore Session for current directory" },
-        ["l"] = { [[<cmd>lua require("persistence").load({ last = true })<cr>]], "Restore last session" },
-        ["d"] = { [[<cmd>lua require("persistence").stop()<cr>]], "Don't save session on exit" },
-    },
-    ["o"] = {
-        name = "Org-mode",
-        ["a"] = { "oa", "Org-Agenda"},
-        ["t"] = { "ot", "Add tag"},
-        ["i"] = {
-            name = "Insert",
-            ["s"] = { "ois", "Insert scheduled date"},
-            ["t"] = { "oit", "Insert todo item"},
-        },
-        ["b"] = {
-            name = "Babel",
-            ["t"] = { "obt", "Export code blocks"},
-        },
-        ["l"] = { 
-            name = "Links",
-            ["s"] = { "ols", "Store link ID"},
-            ["i"] = { "oli", "Insert stored link ID"},
-        },
-        ["o"] = { "oo", "Jump to link destination"},
-    },
-}
+wk.add({
+	
+    { "<leader>,", "<cmd>WhichKey<CR>", desc = "WhichKey" },
+    { "<leader>b", group = "Tabs" },
+    { "<leader>b<Left>", "<cmd>:BufferLineCyclePrev<cr>", desc = "Switch to left buffer" },
+    { "<leader>b<Right>", "<cmd>:BufferLineCycleNext<cr>", desc = "Switch to right buffer" },
+    { "<leader>bb", "<cmd>Telescope buffers<cr>", desc = "Switch to buffer" },
+    { "<leader>bk", "<cmd>bd<cr>", desc = "Close buffer" },
+    { "<leader>e", "<cmd>Neotree toggle<cr>", desc = "Toggle Neotree" },
+    { "<leader>f", group = "Open files" },
+    { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find File" },
+    { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Search files (grep)" },
+    { "<leader>fn", "<cmd>ene <BAR> startinsert<cr>", desc = "New File" },
+    { "<leader>fp", "<cmd>Telescope projects<cr>", desc = "Project list" },
+    { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent Files" },
+    { "<leader>o", group = "Org-mode" },
+    { "<leader>oa", "oa", desc = "Org-Agenda" },
+    { "<leader>ob", group = "Babel" },
+    { "<leader>obt", "obt", desc = "Export code blocks" },
+    { "<leader>oi", group = "Insert" },
+    { "<leader>ois", "ois", desc = "Insert scheduled date" },
+    { "<leader>oit", "oit", desc = "Insert todo item" },
+    { "<leader>ol", group = "Links" },
+    { "<leader>oli", "oli", desc = "Insert stored link ID" },
+    { "<leader>ols", "ols", desc = "Store link ID" },
+    { "<leader>oo", "oo", desc = "Jump to link destination" },
+    { "<leader>ot", "ot", desc = "Add tag" },
+    { "<leader>p", "<cmd>Lazy<CR>", desc = "Plugin Manager" },
+    { "<leader>s", group = "Session management" },
+    { "<leader>sd", '<cmd>lua require("persistence").stop()<cr>', desc = "Don't save session on exit" },
+    { "<leader>sl", '<cmd>lua require("persistence").load({ last = true })<cr>', desc = "Restore last session" },
+    { "<leader>ss", '<cmd>lua require("persistence").load()<cr>', desc = "Restore Session for current directory" },
+    { "<leader>t", group = "Telescope search functions" },
+    { "<leader>td", "<cmd>Telescope diagnostics<cr>", desc = "LSP Errors/Warnings" },
+    { "<leader>tf", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Fuzzy find in buffer" },
+    { "<leader>tk", "<cmd>Telescope keymaps<cr>", desc = "Display keymaps" },
+    { "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", desc = "Go to function definition", nowait = true, remap = false },
+})
 
 wk.setup(setup)
-wk.register(mappings, { prefix = "<leader>" }, opts)
-wk.register({["gd"] = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Go to function definition" }}, opts)

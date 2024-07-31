@@ -27,9 +27,10 @@ end
 function nixosupdate
     pushd $HOME/git_repos/nixos/
     nix flake update
-    sudo nixos-rebuild switch --flake $HOME/git_repos/nixos#xmgneo15
+    sudo nixos-rebuild switch --flake $HOME/git_repos/nixos#$argv
     popd
 end
+alias nixdiff='nix profile diff-closures --profile /nix/var/nix/profiles/system'
 
 #arch
 function pacupdate
