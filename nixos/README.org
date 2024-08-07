@@ -1,0 +1,89 @@
+* Installation
+** Clone nixos repository
+#+BEGIN_SRC 
+git clone https://github.com/nomispaz/nixos & cd nixos
+#+END_SRC
+** Create partition layout
+- My layout can be found in the cloned repository.
+  #+BEGIN_SRC 
+  chmod +x prepare_drives.sh
+  #+END_SRC
+
+- Uncomment the following lines if the drive is empty or the selected partitions should be formatted.
+  #+BEGIN_SRC 
+  # if mklabel is created, all existing partitions on the drive are lost (use only on completely empty drive)
+  parted /dev/$installDrive mklabel gpt
+  # the following two lines would format the selected drives
+  mkfs.vfat -F 32 /dev/$efiDrive
+  mkfs.btrfs /dev/$rootDrive
+  #+END_SRC
+
+- Execute the skript
+  #+BEGIN_SRC 
+  sudo ./prepare_drives.sh
+  #+END_SRC
+
+- Now that the drives are set up and mounted, the nixos config can be created
+  #+BEGIN_SRC
+  sudo nixos-generate-config --root /mnt
+  #+END_SRC
+
+- if a new type of host is used, create a new host-entry unter hosts (copy an existing one as a template) and change the hostname in the configuration.nix. Include the new host in the flake.nix
+- if the instal is done on a new hardware configuration, copy only the hardware configuration to the cloned repo (all other conigs are taken from the repo)
+  #+BEGIN_SRC 
+  sudo cp /mnt/etc/nixos/hardware_configuration.nix ./hosts/<yourhost>/
+  #+END_SRC
+
+- install nixos
+  #+BEGIN_SRC 
+  sudo nixos-install --flake .#<yourhost>
+  #+END_SRC
+* Useful nix and nixos commands
+** Show installed packages in store
+#+BEGIN_SRC lang
+nix-store --query --requisites /run/current-system/ | cut -d- -f2- | sort | uniq | grep discord
+#+END_SRC
+
+** Update all inputs in flake to new version
+#+BEGIN_SRC 
+nix flake update
+#+END_SRC
+
+** Update only one input of flake to new version
+#+BEGIN_SRC 
+nix flake lock --update-input nixpkgs-unstable
+#+END_SRC
+
+** Rollback to last version
+#+BEGIN_SRC 
+sudo nixos-rebuild --rollback switch --flake .
+#+END_SRC
+
+** Perform system update of all packages
+#+BEGIN_SRC 
+sudo nixos-rebuild switch --flake $HOME/git_repos/nixos#xmgneo15
+#+END_SRC
+
+** Cleanup system
+#+BEGIN_SRC 
+nix-collect-garbage
+#+END_SRC
+
+or for more garbage collection with sudo and -d to delete all backups
+#+BEGIN_SRC 
+sudo nix-collect-garbage -d
+#+END_SRC
+
+or delete backups older than xx days
+#+BEGIN_SRC 
+sudo nix-collect-garbage --delete-older-than 14d
+#+END_SRC
+
+** Install package only to a nix shell and not in the system
+#+BEGIN_SRC 
+nix-shell -p htop
+#+END_SRC
+** Check differences between versions
+#+BEGIN_SRC 
+nix profile diff-closures --profile /nix/var/nix/profiles/system
+#+END_SRC
