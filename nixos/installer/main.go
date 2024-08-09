@@ -142,20 +142,6 @@ func (t *Tui) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if t.header == "\nGenerate new GPT partition table?\n\n" {
 				if t.selected[0] == "Yes" {
 					myconfig.createNewGPT = true
-					return t, tea.Cmd(func() tea.Msg {
-						cmd, _ := exec.Command("bash", "-c", "lsblk -l").Output()
-						// convert result byte to string and split at newline
-						result := string(cmd)
-						result_split := strings.Split(result, "\n")
-						return updateMsg {
-							header: "\nSelect efi partition\n\n",
-							listitems: result_split,
-							selected:  make(map[int]string),
-							cursor: 0,
-						}
-					})
-				} else {
-					myconfig.createNewGPT = false
 					command := "echo 'Create partition table (only do this if no partition table exists!)'" +
 						"; parted /dev/" + myconfig.installDrive + " mklabel gpt" +
 						"; echo 'Create partitions'" +
@@ -170,6 +156,20 @@ func (t *Tui) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 								cursor: 0,
 							}
 						})
+				} else {
+					myconfig.createNewGPT = false
+					return t, tea.Cmd(func() tea.Msg {
+						cmd, _ := exec.Command("bash", "-c", "lsblk -l").Output()
+						// convert result byte to string and split at newline
+						result := string(cmd)
+						result_split := strings.Split(result, "\n")
+						return updateMsg {
+							header: "\nSelect efi partition\n\n",
+							listitems: result_split,
+							selected:  make(map[int]string),
+							cursor: 0,
+						}
+					})			
 				}
 			}
 			
