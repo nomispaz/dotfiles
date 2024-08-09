@@ -150,9 +150,14 @@ func (t *Tui) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					exec.Command("bash", "-c", command).Run()
 
 					return t, tea.Cmd(func() tea.Msg {
+						cmd, _ := exec.Command("bash", "-c", "lsblk -l").Output()
+						// convert result byte to string and split at newline
+						result := string(cmd)
+						result_split := strings.Split(result, "\n")
 						return updateMsg {
-							header: "\nFormat partitions\n\n",
-							listitems: []string{"efi", "root"},
+							header: "\nEFI and root partition need to be formatted.\n" +
+								"Select efi parition\n\n",
+							listitems: result_split,
 							selected:  make(map[int]string),
 							cursor: 0,
 						}
