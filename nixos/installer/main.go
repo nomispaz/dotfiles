@@ -142,36 +142,35 @@ func (t *Tui) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if t.header == "\nGenerate new GPT partition table?\n\n" {
 				if t.selected[0] == "Yes" {
 					myconfig.createNewGPT = true
-				} else {
-					myconfig.createNewGPT = false
-				}
-				return t, tea.Cmd(func() tea.Msg {
-					cmd, _ := exec.Command("bash", "-c", "lsblk -l").Output()
-					// convert result byte to string and split at newline
-					result := string(cmd)
-					result_split := strings.Split(result, "\n")
-					if !myconfig.createNewGPT {
+					return t, tea.Cmd(func() tea.Msg {
+						cmd, _ := exec.Command("bash", "-c", "lsblk -l").Output()
+						// convert result byte to string and split at newline
+						result := string(cmd)
+						result_split := strings.Split(result, "\n")
 						return updateMsg {
 							header: "\nSelect efi partition\n\n",
 							listitems: result_split,
 							selected:  make(map[int]string),
 							cursor: 0,
 						}
-					} else {
-						command := "echo 'Create partition table (only do this if no partition table exists!)'" +
+					})
+				} else {
+					myconfig.createNewGPT = false
+					command := "echo 'Create partition table (only do this if no partition table exists!)'" +
 						"; parted /dev/" + myconfig.installDrive + " mklabel gpt" +
 						"; echo 'Create partitions'" +
 						"; parted /dev/" + myconfig.installDrive + " mkpart primary fat32 3MB 515MB" +
 						"; parted /dev/" + myconfig.installDrive + " mkpart primary btrfs 515MB 100%"
 						tea.ExecProcess(exec.Command("bash", "-c", command),nil)
-						return updateMsg {
-							header: "\nFormat partitions\n\n",
-							listitems: []string{"efi", "root"},
-							selected:  make(map[int]string),
-							cursor: 0,
-						}
-					}
-				})
+						return t, tea.Cmd(func() tea.Msg {
+							return updateMsg {
+								header: "\nFormat partitions\n\n",
+								listitems: []string{"efi", "root"},
+								selected:  make(map[int]string),
+								cursor: 0,
+							}
+						})
+				}
 			}
 			
 			if t.header == "\nSelect install drive\n\n" {
