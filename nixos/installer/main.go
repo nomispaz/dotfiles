@@ -125,188 +125,183 @@ func (t *Tui) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			
 		// enter --> perform action according to selected entries
 		case "enter":
-				if t.selected[0] == "prepare volumes and partitions" {
-					return t, tea.Cmd(func() tea.Msg {
-						return updateMsg {
-							header: "\nGenerate new GPT partition table?\n\n",
-							listitems: []string{"Yes", "No"},
-							selected:  make(map[int]string),
-							cursor: 0,
-						}
-					})
-				}
-				if t.header == "\nGenerate new GPT partition table?\n\n" {
-					if t.selected[0] == "Yes" {
-						myconfig.createNewGPT = true
-					} else {
-						myconfig.createNewGPT = false
-					}
-					return t, tea.Cmd(func() tea.Msg {
-						cmd, _ := exec.Command("bash", "-c", "lsblk -l").Output()
-						// convert result byte to string and split at newline
-						result := string(cmd)
-						result_split := strings.Split(result, "\n")
-						return updateMsg {
-							header: "\nSelect install drive\n\n",
-							listitems: result_split,
-							selected:  make(map[int]string),
-							cursor: 0,
-
-						}
-					})
-				}
-				if t.header == "\nSelect install drive\n\n" {
-					for i := range t.selected {
-						myconfig.installDrive = strings.Split(t.selected[i], " ")[0]
-					}
-					return t, tea.Cmd(func() tea.Msg {
-						cmd, _ := exec.Command("bash", "-c", "lsblk -l").Output()
-						// convert result byte to string and split at newline
-						result := string(cmd)
-						result_split := strings.Split(result, "\n")
-						if !myconfig.createNewGPT {
-							return updateMsg {
-								header: "\nSelect efi partition\n\n",
-								listitems: result_split,
-								selected:  make(map[int]string),
-								cursor: 0,
-							}
-						} else {
-							return updateMsg {
-								header: "\nFormat partitions\n\n",
-								listitems: []string{"efi", "root"},
-								selected:  make(map[int]string),
-								cursor: 0,
-							}
-						}
-					})
-				}
-				if t.header == "\nSelect efi partition\n\n" {
-					for i := range t.selected {
-						myconfig.efiPartition = strings.Split(t.selected[i], " ")[0]
-					}
-					return t, tea.Cmd(func() tea.Msg {
-						cmd, _ := exec.Command("bash", "-c", "lsblk -l").Output()
-						// convert result byte to string and split at newline
-						result := string(cmd)
-						result_split := strings.Split(result, "\n")
-						return updateMsg {
-							header: "\nSelect root partition\n\n",
-							listitems: result_split,
-							selected:  make(map[int]string),
-							cursor: 0,
-
-						}
-					})
-				}
-				if t.header == "\nSelect root partition\n\n" {
-					for i := range t.selected {
-						myconfig.rootPartition = strings.Split(t.selected[i], " ")[0]
-					}					
-					return t, tea.Cmd(func() tea.Msg {
-						return updateMsg {
-							header: "\nFormat partitions\n\n",
-							listitems: []string{"efi", "root"},
-							selected:  make(map[int]string),
-							cursor: 0,
-						}
-					})
-				}
-				if t.header == "\nFormat partitions\n\n" {
-					for i := range t.selected {
-						if t.selected[i] == "efi" {
-							myconfig.formatEfiPartition = true
-						} else {
-							myconfig.formatEfiPartition = false
-						}
-						if t.selected[i] == "root" {
-							myconfig.formatRootPartition = true
-						} else {
-							myconfig.formatRootPartition = false
-						}
-					}
+			if t.selected[0] == "prepare volumes and partitions" {
 				return t, tea.Cmd(func() tea.Msg {
+					cmd, _ := exec.Command("bash", "-c", "lsblk -l").Output()
+					// convert result byte to string and split at newline
+					result := string(cmd)
+					result_split := strings.Split(result, "\n")
 					return updateMsg {
-						header: "\nHit p to perform the drive preparation according to the following settings:\n\n" +
-						"Create new GPT partition-table: " +
-						strconv.FormatBool(myconfig.createNewGPT) +
-						"\n" +
-						"Install drive: " +
-						myconfig.installDrive +
-						"\n" +
-						"Efi-Partition: " +
-						myconfig.efiPartition +
-						"\n" +
-						"Root-Partition: " +
-						myconfig.rootPartition +
-						"\n" +
-						"Format EFI partition: " +
-						strconv.FormatBool(myconfig.formatEfiPartition) + 
-						"\n" +
-						"Format root partition: " +
-						strconv.FormatBool(myconfig.formatRootPartition) +
-						"\n",
-						listitems: []string{""},
-						selected: make(map[int]string),
+						header: "\nSelect install drive\n\n",
+						listitems: result_split,
+						selected:  make(map[int]string),
 						cursor: 0,
-						footer: "\nAvailable functions\n" +
-						"- p      : prepare drives\n" +
-						"- q     : quit\n" + 
-						"- Enter : execute selected item\n",
 					}
 				})
-					
+			}
+			if t.header == "\nGenerate new GPT partition table?\n\n" {
+				if t.selected[0] == "Yes" {
+					myconfig.createNewGPT = true
+				} else {
+					myconfig.createNewGPT = false
 				}
+				return t, tea.Cmd(func() tea.Msg {
+					cmd, _ := exec.Command("bash", "-c", "lsblk -l").Output()
+					// convert result byte to string and split at newline
+					result := string(cmd)
+					result_split := strings.Split(result, "\n")
+					if !myconfig.createNewGPT {
+						return updateMsg {
+							header: "\nSelect efi partition\n\n",
+							listitems: result_split,
+							selected:  make(map[int]string),
+							cursor: 0,
+						}
+					} else {
+						command := ""
+						if myconfig.createNewGPT {
+							command += "echo 'Create partition table (only do this if no partition table exists!)'" +
+							"; parted /dev/" + myconfig.installDrive + " mklabel gpt" +
+							"; echo 'Create partitions'" +
+							"; parted /dev/" + myconfig.installDrive + " mkpart primary fat32 3MB 515MB" +
+							"; parted /dev/" + myconfig.installDrive + " mkpart primary btrfs 515MB 100%"
+									}
+									tea.ExecProcess(exec.Command("bash", "-c", command),nil)
+									return updateMsg {
+										header: "\nFormat partitions\n\n",
+										listitems: []string{"efi", "root"},
+										selected:  make(map[int]string),
+										cursor: 0,
+									}
+								}
+							})
+			}
+			
+			if t.header == "\nSelect install drive\n\n" {
+				for i := range t.selected {
+					myconfig.installDrive = strings.Split(t.selected[i], " ")[0]
+				}
+				return t, tea.Cmd(func() tea.Msg {
+					return updateMsg {
+						header: "\nGenerate new GPT partition table?\n\n",
+						listitems: []string{"Yes", "No"},
+						selected:  make(map[int]string),
+						cursor: 0,
+					}
+				})
+				
+			}
+			if t.header == "\nSelect efi partition\n\n" {
+				for i := range t.selected {
+					myconfig.efiPartition = strings.Split(t.selected[i], " ")[0]
+				}
+				return t, tea.Cmd(func() tea.Msg {
+					cmd, _ := exec.Command("bash", "-c", "lsblk -l").Output()
+					// convert result byte to string and split at newline
+					result := string(cmd)
+					result_split := strings.Split(result, "\n")
+					return updateMsg {
+						header: "\nSelect root partition\n\n",
+						listitems: result_split,
+						selected:  make(map[int]string),
+						cursor: 0,
+					}
+				})
+			}
+			if t.header == "\nSelect root partition\n\n" {
+				for i := range t.selected {
+					myconfig.rootPartition = strings.Split(t.selected[i], " ")[0]
+				}					
+				return t, tea.Cmd(func() tea.Msg {
+					return updateMsg {
+						header: "\nFormat partitions\n\n",
+						listitems: []string{myconfig.efiPartition, myconfig.rootPartition},
+						selected:  make(map[int]string),
+						cursor: 0,
+					}
+				})
+			}
+			if t.header == "\nFormat partitions\n\n" {
+				for i := range t.selected {
+					if t.selected[i] == "efi" {
+						myconfig.formatEfiPartition = true
+					}
+					if t.selected[i] == "root" {
+						myconfig.formatRootPartition = true
+					}					
+				}
+			return t, tea.Cmd(func() tea.Msg {
+				return updateMsg {
+					header: "\nHit p to perform the drive preparation according to the following settings:\n\n" +
+					"Create new GPT partition-table: " +
+					strconv.FormatBool(myconfig.createNewGPT) +
+					"\n" +
+					"Install drive: " +
+					myconfig.installDrive +
+					"\n" +
+					"Efi-Partition: " +
+					myconfig.efiPartition +
+					"\n" +
+					"Root-Partition: " +
+					myconfig.rootPartition +
+					"\n" +
+					"Format EFI partition: " +
+					strconv.FormatBool(myconfig.formatEfiPartition) + 
+					"\n" +
+					"Format root partition: " +
+					strconv.FormatBool(myconfig.formatRootPartition) +
+					"\n",
+					listitems: []string{""},
+					selected: make(map[int]string),
+					cursor: 0,
+					footer: "\nAvailable functions\n" +
+					"- p      : prepare drives\n" +
+					"- q     : quit\n" + 
+					"- Enter : execute selected item\n",
+				}
+			})			
+		}
 
 			// select p to perform preparation of drives according to the settings
-			case "p":
-				command := ""
-				if myconfig.createNewGPT {
-					command += "echo 'Create partition table (only do this if no partition table exists!)'" +
-					"; parted /dev/" + myconfig.installDrive + " mklabel gpt" +
-					"; echo 'Create partitions'" +
-					"; parted /dev/ " + myconfig.installDrive + " mkpart primary fat32 3MB 515MB" +
-					"; parted /dev/ " + myconfig.installDrive + " mkpart primary btrfs 515MB 100%"
-				}
-
-				if myconfig.formatEfiPartition {
-					command += "; echo 'Format EFI partition'" +
-					"; mkfs.vfat -F 32 /dev/" + myconfig.efiPartition
-				}
-
-				if myconfig.formatRootPartition {
-					command += "; echo 'Format root partition'" +
-					"; mkfs.btrfs /dev/" + myconfig.rootPartition
-				}
-
-				command += "; echo 'mount installDrive to /mnt'" +
-				"; mount -o noatime,compress=zstd /dev/" + myconfig.installDrive + " /mnt"
-
-				command += "echo 'create subvolumes'" +
-				"; btrfs subvolume create /mnt/root" +
-				"; btrfs subvolume create /mnt/home" +
-				"; btrfs subvolume create /mnt/nix" +
-				"; btrfs subvolume create /mnt/snapshots" +
-				"; btrfs subvolume create /mnt/var_log" +
-				"; btrfs subvolume create /mnt/swap" +
-				"; echo 'unmount installDrive'" +
-				"; umount /mnt" +
-				"; echo 'mount subvolumes'" +
-				"; mount -o noatime,compress=zstd,subvol=root /dev/" + myconfig.rootPartition + " /mnt" +
-				"; mount --mkdir -o noatime,compress=zstd,subvol=home /dev/" + myconfig.rootPartition + " /mnt/home" +
-				"; mount --mkdir -o noatime,compress=zstd,subvol=nix /dev/" + myconfig.rootPartition + " /mnt/nix" +
-				"; mount --mkdir -o noatime,compress=zstd,subvol=snapshots /dev/" + myconfig.rootPartition + " /mnt/.snapshots" +
-				"; mount --mkdir -o noatime,compress=zstd,subvol=var_log /dev/" + myconfig.rootPartition + " /mnt/var/log" +
-				"; echo 'mount and create swap-partition and file'" +
-				"; mount --mkdir -o noatime,compress=zstd,subvol=swap /dev/" + myconfig.rootPartition + " /mnt/swap" +
-				"; btrfs filesystem mkswapfile --size 4g --uuid clear /mnt/swap/swapfile" +
-				"; swapon /mnt/swap/swapfile" +
-				"; mount --mkdir /dev/" + myconfig.efiPartition + " /mnt/boot/efi"
-
-
-				return t, tea.ExecProcess(exec.Command("bash", "-c", command),nil)	
+		case "p":
+			command := ""
+			if myconfig.formatEfiPartition || myconfig.createNewGPT {
+				command += "; echo 'Format EFI partition'" +
+				"; mkfs.vfat -F 32 /dev/" + myconfig.efiPartition
 			}
+
+			if myconfig.formatRootPartition || myconfig.createNewGPT {
+				command += "; echo 'Format root partition'" +
+				"; mkfs.btrfs /dev/" + myconfig.rootPartition
+			}
+
+			command += "; echo 'mount installDrive to /mnt'" +
+			"; mount -o noatime,compress=zstd /dev/" + myconfig.installDrive + " /mnt"
+
+			command += "echo 'create subvolumes'" +
+			"; btrfs subvolume create /mnt/root" +
+			"; btrfs subvolume create /mnt/home" +
+			"; btrfs subvolume create /mnt/nix" +
+			"; btrfs subvolume create /mnt/snapshots" +
+			"; btrfs subvolume create /mnt/var_log" +
+			"; btrfs subvolume create /mnt/swap" +
+			"; echo 'unmount installDrive'" +
+			"; umount /mnt" +
+			"; echo 'mount subvolumes'" +
+			"; mount -o noatime,compress=zstd,subvol=root /dev/" + myconfig.rootPartition + " /mnt" +
+			"; mount --mkdir -o noatime,compress=zstd,subvol=home /dev/" + myconfig.rootPartition + " /mnt/home" +
+			"; mount --mkdir -o noatime,compress=zstd,subvol=nix /dev/" + myconfig.rootPartition + " /mnt/nix" +
+			"; mount --mkdir -o noatime,compress=zstd,subvol=snapshots /dev/" + myconfig.rootPartition + " /mnt/.snapshots" +
+			"; mount --mkdir -o noatime,compress=zstd,subvol=var_log /dev/" + myconfig.rootPartition + " /mnt/var/log" +
+			"; echo 'mount and create swap-partition and file'" +
+			"; mount --mkdir -o noatime,compress=zstd,subvol=swap /dev/" + myconfig.rootPartition + " /mnt/swap" +
+			"; btrfs filesystem mkswapfile --size 4g --uuid clear /mnt/swap/swapfile" +
+			"; swapon /mnt/swap/swapfile" +
+			"; mount --mkdir /dev/" + myconfig.efiPartition + " /mnt/boot/efi"
+
+			return t, tea.ExecProcess(exec.Command("bash", "-c", command),nil)
 		}
+	}
 	
 	
 	// Return the updated model to the Bubble Tea runtime for processing.
@@ -356,6 +351,9 @@ func main()  {
 	m.username = "simonheise"
 
 	TuiState = 1
+	myconfig.createNewGPT = false
+	myconfig.formatEfiPartition = false
+	myconfig.formatRootPartition = false
 
 	for {
 		if TuiState == 1 {
