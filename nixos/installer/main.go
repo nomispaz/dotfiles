@@ -147,7 +147,7 @@ func (t *Tui) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 						"; echo 'Create partitions'" +
 						"; parted /dev/" + myconfig.installDrive + " mkpart primary fat32 3MB 515MB" +
 						"; parted /dev/" + myconfig.installDrive + " mkpart primary btrfs 515MB 100%"
-					exec.Command("bash", "-c", command)
+					exec.Command("bash", "-c", command).Run()
 
 					return t, tea.Cmd(func() tea.Msg {
 						return updateMsg {
