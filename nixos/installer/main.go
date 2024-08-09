@@ -147,15 +147,16 @@ func (t *Tui) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 						"; echo 'Create partitions'" +
 						"; parted /dev/" + myconfig.installDrive + " mkpart primary fat32 3MB 515MB" +
 						"; parted /dev/" + myconfig.installDrive + " mkpart primary btrfs 515MB 100%"
-					return t, tea.ExecProcess(exec.Command("bash", "-c", command),nil)
-					//return t, tea.Cmd(func() tea.Msg {
-					//	return updateMsg {
-					//		header: "\nFormat partitions\n\n",
-					//		listitems: []string{"efi", "root"},
-					//		selected:  make(map[int]string),
-					//		cursor: 0,
-					//	}
-					//})
+					exec.Command("bash", "-c", command)
+
+					return t, tea.Cmd(func() tea.Msg {
+						return updateMsg {
+							header: "\nFormat partitions\n\n",
+							listitems: []string{"efi", "root"},
+							selected:  make(map[int]string),
+							cursor: 0,
+						}
+					})
 				} else {
 					myconfig.createNewGPT = false
 					return t, tea.Cmd(func() tea.Msg {
@@ -267,11 +268,17 @@ func (t *Tui) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 
 			if myconfig.formatRootPartition || myconfig.createNewGPT {
-				command += "; echo 'Format root partition'" +
+				if command == "" {
+					command += "; "
+				}
+				command += "echo 'Format root partition'" +
 				"; mkfs.btrfs /dev/" + myconfig.rootPartition
 			}
 
-			command += "; echo 'mount installDrive to /mnt'" +
+			if command == "" {
+				command += "; "
+			}
+			command += "echo 'mount installDrive to /mnt'" +
 			"; mount -o noatime,compress=zstd /dev/" + myconfig.installDrive + " /mnt"
 
 			command += "echo 'create subvolumes'" +
