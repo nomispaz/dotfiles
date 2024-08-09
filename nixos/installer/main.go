@@ -158,23 +158,20 @@ func (t *Tui) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 							cursor: 0,
 						}
 					} else {
-						command := ""
-						if myconfig.createNewGPT {
-							command += "echo 'Create partition table (only do this if no partition table exists!)'" +
-							"; parted /dev/" + myconfig.installDrive + " mklabel gpt" +
-							"; echo 'Create partitions'" +
-							"; parted /dev/" + myconfig.installDrive + " mkpart primary fat32 3MB 515MB" +
-							"; parted /dev/" + myconfig.installDrive + " mkpart primary btrfs 515MB 100%"
-									}
-									tea.ExecProcess(exec.Command("bash", "-c", command),nil)
-									return updateMsg {
-										header: "\nFormat partitions\n\n",
-										listitems: []string{"efi", "root"},
-										selected:  make(map[int]string),
-										cursor: 0,
-									}
-								}
-							})
+						command := "echo 'Create partition table (only do this if no partition table exists!)'" +
+						"; parted /dev/" + myconfig.installDrive + " mklabel gpt" +
+						"; echo 'Create partitions'" +
+						"; parted /dev/" + myconfig.installDrive + " mkpart primary fat32 3MB 515MB" +
+						"; parted /dev/" + myconfig.installDrive + " mkpart primary btrfs 515MB 100%"
+						tea.ExecProcess(exec.Command("bash", "-c", command),nil)
+						return updateMsg {
+							header: "\nFormat partitions\n\n",
+							listitems: []string{"efi", "root"},
+							selected:  make(map[int]string),
+							cursor: 0,
+						}
+					}
+				})
 			}
 			
 			if t.header == "\nSelect install drive\n\n" {
@@ -266,7 +263,7 @@ func (t *Tui) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "p":
 			command := ""
 			if myconfig.formatEfiPartition || myconfig.createNewGPT {
-				command += "; echo 'Format EFI partition'" +
+				command += "echo 'Format EFI partition'" +
 				"; mkfs.vfat -F 32 /dev/" + myconfig.efiPartition
 			}
 
