@@ -147,15 +147,15 @@ func (t *Tui) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 						"; echo 'Create partitions'" +
 						"; parted /dev/" + myconfig.installDrive + " mkpart primary fat32 3MB 515MB" +
 						"; parted /dev/" + myconfig.installDrive + " mkpart primary btrfs 515MB 100%"
-						tea.ExecProcess(exec.Command("bash", "-c", command),nil)
-						return t, tea.Cmd(func() tea.Msg {
-							return updateMsg {
-								header: "\nFormat partitions\n\n",
-								listitems: []string{"efi", "root"},
-								selected:  make(map[int]string),
-								cursor: 0,
-							}
-						})
+					tea.ExecProcess(exec.Command("bash", "-c", command),nil)
+					//return t, tea.Cmd(func() tea.Msg {
+					//	return updateMsg {
+					//		header: "\nFormat partitions\n\n",
+					//		listitems: []string{"efi", "root"},
+					//		selected:  make(map[int]string),
+					//		cursor: 0,
+					//	}
+					//})
 				} else {
 					myconfig.createNewGPT = false
 					return t, tea.Cmd(func() tea.Msg {
