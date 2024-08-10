@@ -26,6 +26,7 @@ type configSettings struct {
 	rootPartition string
 	formatEfiPartition bool
 	formatRootPartition bool
+	mode string
 }
 
 var myconfig configSettings;
@@ -126,6 +127,7 @@ func (t *Tui) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// enter --> perform action according to selected entries
 		case "enter":
 			if t.selected[0] == "prepare volumes and partitions" {
+				myconfig.mode = "installDrive"
 				return t, tea.Cmd(func() tea.Msg {
 					cmd, _ := exec.Command("bash", "-c", "lsblk -l").Output()
 					// convert result byte to string and split at newline
@@ -140,15 +142,16 @@ func (t *Tui) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				})
 			}
 			if t.header == "\nGenerate new GPT partition table?\n\n" {
+				myconfig.mode = "efiPartition"
 				if t.selected[0] == "Yes" {
 					myconfig.createNewGPT = true
 					command := "echo 'Create partition table (only do this if no partition table exists!)'" +
 						"; parted /dev/" + myconfig.installDrive + " mklabel gpt" +
 						"; echo 'Create partitions'" +
-						"; parted /dev/" + myconfig.installDrive + " mkpart primary fat32 3MB 515MB" +
-						"; parted /dev/" + myconfig.installDrive + " mkpart primary btrfs 515MB 100%"
+						"; parted /dev/" + myconfig.installDrive + " mkpart 'EFInix' fat32 3MB 515MB" +
+						"; parted /dev/" + myconfig.installDrive + " mkpart 'rootnix' btrfs 515MB 100%"
 					exec.Command("bash", "-c", command).Run()
-
+					
 					return t, tea.Cmd(func() tea.Msg {
 						cmd, _ := exec.Command("bash", "-c", "lsblk -l").Output()
 						// convert result byte to string and split at newline
@@ -156,7 +159,7 @@ func (t *Tui) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 						result_split := strings.Split(result, "\n")
 						return updateMsg {
 							header: "\nEFI and root partition need to be formatted.\n" +
-								"Select efi parition\n\n",
+								"Select efi partition\n\n",
 							listitems: result_split,
 							selected:  make(map[int]string),
 							cursor: 0,
@@ -193,7 +196,7 @@ func (t *Tui) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				})
 				
 			}
-			if t.header == "\nSelect efi partition\n\n" {
+			if myconfig.mode =="efiPartition" {
 				for i := range t.selected {
 					myconfig.efiPartition = strings.Split(t.selected[i], " ")[0]
 				}
