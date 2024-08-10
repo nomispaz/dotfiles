@@ -150,7 +150,8 @@ func (t *Tui) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 						"; echo 'Create partitions'" +
 						"; parted /dev/" + myconfig.installDrive + " mkpart 'EFInix' fat32 3MB 515MB" +
 						"; parted /dev/" + myconfig.installDrive + " mkpart 'rootnix' btrfs 515MB 100%"
-					exec.Command("bash", "-c", command).Run()
+						cmd := exec.Command("bash", "-c", command)
+						cmd.Run()
 					
 					return t, tea.Cmd(func() tea.Msg {
 						cmd, _ := exec.Command("bash", "-c", "lsblk -l").Output()
