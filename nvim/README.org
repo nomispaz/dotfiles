@@ -205,10 +205,13 @@ wk.add({
     { "<leader>sl", '<cmd>lua require("persistence").load({ last = true })<cr>', desc = "Restore last session" },
     { "<leader>ss", '<cmd>lua require("persistence").load()<cr>', desc = "Restore Session for current directory" },
     { "<leader>t", group = "Telescope search functions" },
-    { "<leader>td", "<cmd>Telescope diagnostics<cr>", desc = "LSP Errors/Warnings" },
+    { "<leader>td", '<cmd>lua require("telescope.builtin").diagnostics({wrap_results=true, line_width="full"})<cr>', desc = "LSP Errors/Warnings" },
     { "<leader>tf", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Fuzzy find in buffer" },
     { "<leader>tk", "<cmd>Telescope keymaps<cr>", desc = "Display keymaps" },
-    { "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", desc = "Go to function definition", nowait = true, remap = false },
+    { "<leader>g", group = "LSP functions" },
+    { "<leader>gd", "<cmd>lua vim.lsp.buf.definition()<cr>", desc = "Go to function definition", nowait = true, remap = false },
+    { "<leader>grn", "<cmd>lua vim.lsp.buf.rename()<cr>", desc = "Rename all references in buffer", nowait = true, remap = false },
+
 })
 
 wk.setup(setup)
