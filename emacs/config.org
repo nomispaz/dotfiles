@@ -1,40 +1,12 @@
-* General notes
-* General setup
+* General Setup
 ** Backups
 
 By default, Emacs creates automatic backups of files in their original directories. Instead, emacs should save in specific backup directory.
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
 (setq backup-directory-alist '((".*" . "~/.local/share/emacs/backups")))
 #+end_src
-
-** Remap old major node names with new ones with tree-sitter
-
-#+begin_src emacs-lisp :tangle yes
-  (setq major-mode-remap-alist
-              '((bash-mode . bash-ts-mode)
-                (python-mode . python-ts-mode)))
-
-#+end_src
-  
-#+end_src
-** Initialize use-package on non-Linux platforms
-
-#+begin_src emacs-lisp :tangle yes
-  (unless (package-installed-p 'use-package)
-     (package-install 'use-package))
-#+end_src
-
-** activate use-package and add package sources
-
-#+begin_src emacs-lisp :tangle yes
-  (require 'package)
-
-  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-  (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
-#+end_src
-
-** activate integration of wl-copy
-#+begin_src emacs-lisp :tangle yes
+** integration of wl-copy
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
 (when (getenv "WAYLAND_DISPLAY")
 (setq wl-copy-process nil)
   (defun wl-copy (text)
@@ -53,319 +25,91 @@ By default, Emacs creates automatic backups of files in their original directori
 (setq interprogram-paste-function 'wl-paste))
 #+end_src
 
-** Ui
-*** Theming
+** Initialize use-package on non-Linux platforms
 
-- Install Spacemacs theme and load it afterwards
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
+  (unless (package-installed-p 'use-package)
+     (package-install 'use-package))
+#+end_src
+** Activate use-package and add package sources
+
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
+  (require 'package)
+
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+  (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
+#+end_src
+** Autoclose brackets
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
+  (electric-pair-mode 1)
+#+end_src
+
+** UI
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
   (use-package spacemacs-theme
       :ensure t
       :config
       (load-theme 'spacemacs-dark t)
       )
 #+end_src
-
-*** Nerd-Icons
-#+begin_src emacs-lisp :tangle yes
-(use-package nerd-icons
-  :ensure t)
-#+end_src
-
 *** Startup screen
 - disable emacs welcome screen
-  #+begin_src emacs-lisp :tangle yes
+  #+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
     (setq inhibit-startup-screen t)
   #+end_src
 
 *** Toolbar, Menubar, Scrollbar
 - Disable the toolbar
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
   (tool-bar-mode -1)	          ;; Disable the toolbar
 #+end_src
 
 -Disable the menubar
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
   (menu-bar-mode -1)            ;; Disable the menu bar
 #+end_src
 
 - Disable the scrollbar
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
   (scroll-bar-mode -1)          ;; Disable visible scrollbar
 #+end_src
 
-*** Column and line numbers
-- always show column numbers
-#+begin_src emacs-lisp :tangle yes
-    (column-number-mode 1)
-#+end_src
-
- - Always show line numbers but not in org, termin, shell and eshell mode
-   Don't show line numbers in image, doc and pdf mode
-#+begin_src emacs-lisp :tangle yes 
-     (unless (derived-mode-p 'image-mode 'doc-view-mode 'pdf-view-mode)
-      (global-display-line-numbers-mode 1)
-      )
-#+end_src
-
-- disable line numbers in org, term, shell and eshell mode via hook
-#+begin_src emacs-lisp :tangle yes
-    (dolist (mode '(org-mode-hook
-		    term-mode-hook
-		    shell-mode-hook
-		    eshell-mode-hook))
-      (add-hook mode (lambda() (display-line-numbers-mode 0))))
-#+end_src
-
-*** Autoclose brackets
-#+begin_src emacs-lisp :tangle yes
-  (electric-pair-mode 1)
-#+end_src
-
 *** Fonts
-** Defaults
-#+begin_src emacs-lisp :tangle yes
-    (delete-selection-mode 1)    ;; You can select text and delete it by typing.
-    (electric-indent-mode -1)    ;; Turn off automatic indenting.
-    ;; The following prevents <> from auto-pairing when electric-pair-mode is on.
-    ;; Otherwise, org-tempo is broken when you try to <s TAB...
-    (add-hook 'org-mode-hook (lambda ()
-               (setq-local electric-pair-inhibit-predicate
-                       `(lambda (c)
-                      (if (char-equal c ?<) t (,electric-pair-inhibit-predicate c))))))
-  (setq org-edit-src-content-indentation 0) ;; Set src block automatic indent to 0 instead of 2.
-  (setq use-dialog-box nil)    ;; No dialog box
-(setq pop-up-windows nil)    ;; No popup windows
-#+end_src
-
-- default font  
- #+begin_src emacs-lisp :tangle yes
+ #+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
    (set-face-attribute 'default nil :font "DejaVu Sans Mono" :height 180)
 #+end_src
  
 - mono font for console and programming
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
   (set-face-attribute 'fixed-pitch nil :font "DejaVu Sans Mono" :height 180)
 #+end_src
 
 - variable font for e.g. org-mode
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
   (set-face-attribute 'variable-pitch nil :font "DejaVu Sans" :height 180)
 #+end_src
 
-Zooming in/out
-#+begin_src emacs-lisp :tangle yes
+*** Zoom in and out
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
 (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
 #+end_src
 
-** Autosuggestions
-#+begin_src emacs-lisp :tangle yes
-  (use-package company
-    :ensure t
-    :custom
-    (company-idle-delay .1)
-    (company-minimum-prefix-length 2)
-    (company-show-numbers t)
-    (company-tooltip-align-annotations 't)
-    (global-company-mode t)
-   )
+*** Nerd-Icons
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
+(use-package nerd-icons
+  :ensure t)
 #+end_src
-
-* Packages for the minibuffer
-** Additional information for commands
-#+begin_src emacs-lisp :tangle yes
-(use-package marginalia
-  :ensure t
-  :config
-  (marginalia-mode 1)
-  )
-#+end_src
-
-** Vertical layout of the minibuffer
-#+begin_src emacs-lisp :tangle yes
-(use-package vertico
-  :ensure t
-  :config
-  (setq vertico-cycle t)
-  (setq vertico-resize nil)
-  (vertico-mode 1)
-  )
-#+end_src
-
-** Pattern matching algorithm for minibuffer
-#+begin_src emacs-lisp :tangle yes
-(use-package orderless
-  :ensure t
-  :config
-  (setq completion-styles '(orderless basic))
-  )
-#+end_src
-
-** Enhanced preview and search capabilites
-- filtering of results is possible. Use consult-narrow-help from within the buffer
-#+begin_src emacs-lisp :tangle yes
-(use-package consult
-  :ensure t
-  :config
-  (recentf-mode 1)
-)
-#+end_src
-* Mode line
-** custom variables
-Icon that shows if buffer was changed.
-Requires nerd-fonts.
-#+begin_src emacs-lisp :tangle yes 
-(defvar-local my-modeline-file-status
-    '(:eval
-      ;; insert save icon from nerd-fonts when buffer was changed
-      (if (buffer-modified-p) 
-	 (propertize (format " %s" (nerd-icons-mdicon "nf-md-content_save_edit")))
-      )
-      )
-  )
-#+end_src
-
-Read file name and format according to loaded theme with face mode-line-buffer-id
-#+begin_src emacs-lisp :tangle yes
-(defvar-local my-modeline-buffer-name
-    '(:eval
-     (propertize (format " %s " (buffer-name)) 'face 'mode-line-buffer-id)
-     )
-  )
-#+end_src
-
-Option: Display complete file path. Will not be exported currently. Don't us together with last code block.
-#+begin_src emacs-lisp :tangle no
-(defvar-local my-modeline-buffer-name
-    '(:eval
-     (propertize (format " %s " (buffer-file-name)) 'face 'mode-line-buffer-id)
-     )
-  )
-#+end_src
-
-Display klickable major-mode with keybindings
-#+begin_src emacs-lisp :tangle yes
-(defvar-local my-modeline-mode-name
-    '(:eval
-        (propertize 
-	 (format-mode-line mode-name)
-	 'help-echo "Major mode\n\
-mouse-1: Display major mode menu\n\
-mouse-2: Show help for major mode\n\
-mouse-3: Toggle minor modes"
-	 'mouse-face 'spacemacs-theme-custom-colors
-	 'local-map mode-line-major-mode-keymap)
-	)
-  )
-#+end_src
-
-State of evil-mode in flycheck-mode
-#+begin_src emacs-lisp :tangle yes
-(defvar-local my-modeline-evil-state
-    '(:eval (cond
-       (( eq evil-state 'visual) "V")
-       (( eq evil-state 'normal) "N")
-       (( eq evil-state 'insert) "I")
-       (t "*")))
-    )
-#+end_src
-
-*** Minor mode Flycheck
-Show minor mode flycheck. Is necessary since in my config, minor modes are not automatically shown.
-I use the check for "Bound-and-true-p flycheck-mode" since flycheck-mode is started only in spefic major modes. This garantees that the minor mode is not shown in other major modes.
-#+begin_src emacs-lisp :tangle yes
-(defvar-local my-modeline-flycheck
-   '(:eval
-     (when (and (bound-and-true-p flycheck-mode)
-              (or flycheck-current-errors
-                  (eq 'running flycheck-last-status-change)))
-	 ;;(bound-and-true-p t)
-	   (propertize (format " FlyC " )
-	    'help-echo "Flycheck "
-	    'mouse-face 'spacemacs-theme-comment-bg
-                       'local-map (let ((map (make-sparse-keymap)))
-                                    (define-key map [mode-line down-mouse-1]
-                                      flycheck-mode-menu-map)
-                                    (define-key map [mode-line mouse-2]
-                                      (lambda ()
-                                        (interactive)
-                                        (describe-function 'flycheck-mode)))
-                                    map))
-       ))
-   )
-#+end_src
-
-Add error and warning number to flycheck minor mode
-#+begin_src emacs-lisp :tangle yes
-(defun my/flycheck-lighter (state)
-  "Return flycheck information for the given error type STATE."
-  (let* ((counts (flycheck-count-errors flycheck-current-errors))
-         (errorp (flycheck-has-current-errors-p state))
-         (err (or (cdr (assq state counts)) "?"))
-         (running (eq 'running flycheck-last-status-change)))
-    (if (or errorp running) (format "•%s" err))))
-
-(defvar-local my-modeline-flycheck-errors
-'(:eval
-   (when (and (bound-and-true-p flycheck-mode)
-              (or flycheck-current-errors
-                  (eq 'running flycheck-last-status-change)))
-     (concat
-      (cl-loop for state in '((error . "#e0211d")
-                              (warning . "#dc752f")
-                              (info . "#83A598"))
-
-               as lighter = (my/flycheck-lighter (car state))
-               when lighter
-               concat (propertize
-                       lighter
-                       'face `(:foreground ,(cdr state))))
-      " "))))
-#+end_src
-
-** Combine variables to modeline
-Create list of all custom mode-line variables.
-Without setting them to risky mode, they will not work.
-#+begin_src emacs-lisp :tangle yes
-(dolist (construct '(my-modeline-buffer-name
-		     my-modeline-file-status
-		     my-modeline-mode-name
-		     my-modeline-flycheck
-		     my-modeline-flycheck-errors
-		     my-modeline-evil-state
-                     ))
-  (put construct 'risky-local-variable t))
-#+end_src
-
-Setq-default to effect all mode-lines and not only the local one
-#+begin_src emacs-lisp :tangle yes
-(setq-default mode-line-format
-	      '(;; error-message
-		"%e"			
-		mode-line-front-space
-		my-modeline-evil-state
-		" "
-		;; display save icon if buffer was changed
-		my-modeline-file-status
-		;; display buffer name
-		my-modeline-buffer-name
-		;; display row and column numbers
-		mode-line-position-column-line-format
-		" "
-	        my-modeline-mode-name
-		my-modeline-flycheck
-		my-modeline-flycheck-errors
-		;; show git status
-		vc-mode
-		" "
-		mode-line-end-spaces
-		)
-	      )
-#+end_src
-* Desktop package to be able to save last session
-#+begin_src emacs-lisp :tangle yes
+*** Doom-modeline
+#+BEGIN_SRC emacs-lisp 
+(use-package doom-modeline
+	:ensure t
+	:init (doom-modeline-mode 1))
+#+END_SRC
+** Desktop package to save last session
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
 (use-package desktop
   :init (desktop-save-mode 1)
   :config
@@ -381,8 +125,76 @@ Setq-default to effect all mode-lines and not only the local one
    )
 #+end_src
 
-* Show all keybindings in minibuffer
-#+begin_src emacs-lisp :tangle yes
+** Evil-mode
+Use evil collection for better integration of vim keybindings in various modes.
+
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
+  (use-package evil
+    :ensure t
+    :init
+    (setq evil-want-integration t)
+    (setq evil-want-keybinding nil)
+    :config
+    (evil-mode 1)
+    )
+
+  (use-package evil-collection
+    :after evil
+    :ensure t
+    :config
+    (evil-collection-init))
+
+;; Using RETURN to follow links in Org/Evil 
+;; Unmap keys in 'evil-maps if not done, (setq org-return-follows-link t) will not work
+(with-eval-after-load 'evil-maps
+  (define-key evil-motion-state-map (kbd "SPC") nil)
+  (define-key evil-motion-state-map (kbd "RET") nil)
+  (define-key evil-motion-state-map (kbd "TAB") nil))
+;; Setting RETURN key in org-mode to follow links
+  (setq org-return-follows-link  t)
+#+end_src
+
+** Additional evil keybindings
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
+   ;; set leader key in all states
+   (evil-set-leader nil (kbd "SPC"))
+
+   ;; set local leader
+   (evil-set-leader 'normal "," t)
+
+  ;; files
+   (define-key evil-normal-state-map (kbd "<leader> f f") '("Search files" . consult-find))
+   (define-key evil-normal-state-map (kbd "<leader> f r") '("Recent files" . consult-recent-file))
+   (define-key evil-normal-state-map (kbd "<leader> f g") '("Search files (grep)" . consult-grep))
+   (define-key evil-normal-state-map (kbd "<leader> f n") '("New file" . evil-buffer-new))
+
+   ;; buffers
+   (define-key evil-normal-state-map (kbd "<leader> b b") '("Switch to buffer" . consult-buffer))
+   (define-key evil-normal-state-map (kbd "<leader> b k") '("Kill current buffer" . kill-current-buffer))
+   (define-key evil-normal-state-map (kbd "<leader> b r") '("Rename buffer" . rename-buffer))
+   (define-key evil-normal-state-map (kbd "<leader> b s") '("Save buffer" . basic-save-buffer))
+
+   ;; tabs
+   (define-key evil-normal-state-map (kbd "<leader> t t") '("Switch to tab" . tab-switch))
+
+   ;; search
+   (define-key evil-normal-state-map (kbd "<leader> s o") '("Search heading" - consult-outline))
+   (define-key evil-normal-state-map (kbd "<leader> s l") '("Search line" . consult-line))
+
+   ;; org-mode
+   (define-key evil-normal-state-map (kbd "<leader> o e") '("Export org file" . org-export-dispatch))
+    (define-key evil-normal-state-map (kbd "<leader> o a") '("Open org agenda" . org-agenda))
+   (define-key evil-normal-state-map (kbd "<leader> o t") '("Export code blocks" . org-babel-tangle))
+   (define-key evil-normal-state-map (kbd "<leader> o i s") '("Insert scheduled date" . org-schedule))
+
+   ;; flycheck
+   (define-key evil-normal-state-map (kbd "<leader> l l") '("Show list of flycheck errors" . flymake-show-buffer-diagnostics))
+   (define-key evil-normal-state-map (kbd "<leader> l n") '("Next flycheck error" . flycheck-next-error))
+   (define-key evil-normal-state-map (kbd "<leader> l p") '("Previous flycheck error" . flycheck-previous-error))
+   (define-key evil-normal-state-map (kbd "<leader> g r n") '("Rename variable or function" . lsp-rename))
+#+end_src
+** Whichkey
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
   (use-package which-key
     :ensure t
     :init
@@ -394,13 +206,111 @@ Setq-default to effect all mode-lines and not only the local one
     )
 #+end_src
 
+* Setup LSP
+** LSP-mode
+#+BEGIN_SRC emacs-lisp :tangle ~/.config/emacs/config.el
+(use-package lsp-mode
+	:ensure t
+)
+
+(use-package lsp-ui
+  :ensure t
+  :hook (lsp-mode . lsp-ui-mode)
+)
+#+END_SRC
+* Setup language specifics
+#+BEGIN_SRC emacs-lisp :tangle ~/.config/emacs/config.el
+; Enable lsp-mode for Go and Rust modes
+(use-package go-mode
+  :ensure t
+  :after lsp-mode
+  :init
+  (add-hook 'go-mode-hook #'lsp)
+  (setq indent-tabs-mode nil)
+  (setq go-announce-deprecations t)
+  (setq go-mode-treesitter-derive t))
+
+(add-hook 'go-mode-hook 'yas-minor-mode)
+
+(use-package rust-mode
+  :ensure t
+  :after lsp-mode
+  :init
+  (add-hook 'rust-mode-hook #'lsp)
+  (setq indent-tabs-mode nil)
+  (setq rust-mode-treesitter-derive t))
+
+(add-hook 'rust-mode-hook
+          (lambda () (setq indent-tabs-mode nil)))
+(add-hook 'rust-mode-hook 'yas-minor-mode)
+(setq rust-format-on-save t)
+
+#+END_SRC
+* Snippets
+#+BEGIN_SRC emacs-lisp :tangle  ~/.config/emacs/config.el
+(use-package yasnippet
+  :ensure t
+  :hook ((lsp-mode . yas-minor-mode)))
+(add-hook 'elisp-mode-hook 'yas-minor-mode)
+(add-hook 'org-mode-hook 'yas-minor-mode)
+(add-hook 'org-mode-hook 'org-superstar-mode)
+
+#+END_SRC
+* Company
+#+BEGIN_SRC emacs-lisp :tangle ~/.config/emacs/config.el
+; Enable company-mode with language server support
+(use-package company
+  :ensure t
+  :custom
+  (company-minimum-prefix-length 2)
+)
+#+END_SRC
+* Minibuffer
+** Enhanced preview and search capabilites
+- filtering of results is possible. Use consult-narrow-help from within the buffer
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
+(use-package consult
+  :ensure t
+  :config
+  (recentf-mode 1)
+)
+#+end_src
+** Additional information for commands
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
+(use-package marginalia
+  :ensure t
+  :config
+  (marginalia-mode 1)
+  )
+#+end_src
+
+** Vertical layout of the minibuffer
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
+(use-package vertico
+  :ensure t
+  :config
+  (setq vertico-cycle t)
+  (setq vertico-resize nil)
+  (vertico-mode 1)
+  )
+#+end_src
+
+** Pattern matching algorithm for minibuffer
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
+(use-package orderless
+  :ensure t
+  :config
+  (setq completion-styles '(orderless basic))
+  )
+#+end_src
+
 * Org mode
 ** Helper functions
 Set options for every Orgfile. Like
 - automatic indentation
 - set variable font size for better readable text
 - automatically perform line wrap
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
     (defun my/org-mode-setup()
       ;; active automatic indentation
       (org-indent-mode)
@@ -437,7 +347,7 @@ Set options for every Orgfile. Like
 #+end_src
 
 ** Activate org mode
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
 (use-package org
   :hook (org-mode . my/org-mode-setup)
   :config
@@ -452,7 +362,7 @@ Set options for every Orgfile. Like
   ;; RETURN will follow links in org-mode files
   (setq org-return-follows-link  t)  
   ;; (setq org-agenda-files
-  ;; 	'("/data/orgmode/")
+  ;; 	'("/mnt/nvme2/orgmode/")
   ;; 	)
   (my/org-font-setup)
   :bind (;;copy link anker to clipboard, insert with C-c C-l
@@ -462,7 +372,7 @@ Set options for every Orgfile. Like
 #+end_src
 
 ** Improve org mode bullets and headers
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
 (use-package org-superstar
   :ensure t
  )
@@ -470,217 +380,10 @@ Set options for every Orgfile. Like
 
 ** Org Agenda
 Define folder for org agenda files.
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
 (use-package org-agenda
   :config
-    (setq org-agenda-files (directory-files-recursively "/data/orgmode/" "\\.org$"))
+    (setq org-agenda-files (directory-files-recursively "/mnt/nvme2/data/orgmode" "\\.org$"))
     )
 #+end_src
 
-* Evil mode
-
-Use evil collection for better integration of vim keybindings in various modes.
-
-#+begin_src emacs-lisp :tangle yes
-  (use-package evil
-    :ensure t
-    :init
-    (setq evil-want-integration t)
-    (setq evil-want-keybinding nil)
-    :config
-    (evil-mode 1)
-    )
-
-  (use-package evil-collection
-    :after evil
-    :ensure t
-    :config
-    (evil-collection-init))
-
-;; Using RETURN to follow links in Org/Evil 
-;; Unmap keys in 'evil-maps if not done, (setq org-return-follows-link t) will not work
-(with-eval-after-load 'evil-maps
-  (define-key evil-motion-state-map (kbd "SPC") nil)
-  (define-key evil-motion-state-map (kbd "RET") nil)
-  (define-key evil-motion-state-map (kbd "TAB") nil))
-;; Setting RETURN key in org-mode to follow links
-  (setq org-return-follows-link  t)
-#+end_src
-
-** Additional evil keybindings
-#+begin_src emacs-lisp :tangle yes
-   ;; set leader key in all states
-   (evil-set-leader nil (kbd "SPC"))
-
-   ;; set local leader
-   (evil-set-leader 'normal "," t)
-
-  ;; files
-   (define-key evil-normal-state-map (kbd "<leader> f f") '("Search files" . consult-find))
-   (define-key evil-normal-state-map (kbd "<leader> f r") '("Recent files" . consult-recent-file))
-   (define-key evil-normal-state-map (kbd "<leader> f g") '("Search files (grep)" . consult-grep))
-   (define-key evil-normal-state-map (kbd "<leader> f n") '("New file" . evil-buffer-new))
-
-   ;; buffers
-   (define-key evil-normal-state-map (kbd "<leader> b b") '("Switch to buffer" . consult-buffer))
-   (define-key evil-normal-state-map (kbd "<leader> b k") '("Kill current buffer" . kill-current-buffer))
-   (define-key evil-normal-state-map (kbd "<leader> b r") '("Rename buffer" . rename-buffer))
-   (define-key evil-normal-state-map (kbd "<leader> b s") '("Save buffer" . basic-save-buffer))
-
-   ;; tabs
-   (define-key evil-normal-state-map (kbd "<leader> t t") '("Switch to tab" . tab-switch))
-
-   ;; search
-   (define-key evil-normal-state-map (kbd "<leader> s o") '("Search heading" - consult-outline))
-   (define-key evil-normal-state-map (kbd "<leader> s l") '("Search line" . consult-line))
-
-   ;; org-mode
-   (define-key evil-normal-state-map (kbd "<leader> o e") '("Export org file" . org-export-dispatch))
-    (define-key evil-normal-state-map (kbd "<leader> o a") '("Open org agenda" . org-agenda))
-   (define-key evil-normal-state-map (kbd "<leader> o t") '("Export code blocks" . org-babel-tangle))
-   (define-key evil-normal-state-map (kbd "<leader> o i s") '("Insert scheduled date" . org-schedule))
-
-   ;; flycheck
-   (define-key evil-normal-state-map (kbd "<leader> l l") '("Show list of flycheck errors" . flycheck-list-errors))
-   (define-key evil-normal-state-map (kbd "<leader> l n") '("Next flycheck error" . flycheck-next-error))
-   (define-key evil-normal-state-map (kbd "<leader> l p") '("Previous flycheck error" . flycheck-previous-error))
-#+end_src
-
-* LSP
-
-** Treesitter
-
-Setup treesitter languages.
-#+begin_src emacs-lisp :tangle yes
-(setq treesit-language-source-alist
-	  '((bash "https://github.com/tree-sitter/tree-sitter-bash")
-	    (python "https://github.com/tree-sitter/tree-sitter-python")
-	    (go "https://github.com/tree-sitter/tree-sitter-go")
-	    )
-	  )
-
-#+end_src
-
-Function to install all languages for treesitter that were added to the treesit language list.
-#+begin_src emacs-lisp :tangle yes
-(defun my/install-treesit_languages()
- (interactive)
- (mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
- )
-#+end_src
-
-
-** Setup modes
-
-Automatically start python mode, wenn opening py-files.
-#+begin_src emacs-lisp :tangle yes
-(use-package python-ts-mode
-  :mode "\\.py\\'"
-  )
-#+end_src
-
-** Snippets for autosuggestions
-#+begin_src emacs-lisp :tangle yes
-(use-package yasnippet
-  :ensure t
-  )
-
-;; load prepared snippets
-(use-package yasnippet-snippets
-  :ensure t
-  )
-#+end_src
-
-** LSP-Clients
-*** Eglot
-
-Currently acticated since it is included in emacs
-#+begin_src emacs-lisp :tangle yes
-(use-package eglot
-   :ensure t
-   :hook
-   (python-ts-mode . eglot-ensure)
-   (go-mode . eglot-ensure)
-  )
-#+end_src
-
-*** LSP-Mode
-
-Currently disabled in favour of eglot.
-Enable which-key integration.
-lsp-ui to enable inline check messages and flyby function.
-#+begin_src emacs-lisp
-(use-package lsp-mode
-  :ensure t
-  :commands lsp lsp-deferred
-  :hook ((python-ts-mode . lsp-deferred))
-  :config
-  (lsp-enable-which-key-integration t)
-  (setq-default lsp-pylsp-plugins-flake8-max-line-length 200)
-  (setq-default lsp-pylsp-plugins-pycodestyle-max-line-length 200)
-  )
-
-(use-package lsp-ui
-  :ensure t
-  :hook (lsp-mode . lsp-ui-mode)
-  )
-#+end_src
-
-Use flycheck instead of flymake since more information is shown with lsp-mode as well as eglot.
-#+begin_src emacs-lisp :tangle yes
-  (use-package flycheck
-    :ensure t
-    :config
-    (setq-default flycheck-flake8-maximum-line-length 200))
-#+end_src
-
-
-** LSP-Server
-*** Pyright
-
-Not used at the moment since pylsp has more functions and checkups.
-#+begin_src 
-(use-package lsp-pyright
-   :ensure t)
-#+end_src
-
-*** Pylsp
-Pylsp is installed in the distro by dev-python/lsp-language-server.
-
-** Golang
-#+begin_src emacs-lisp :tangle yes
-(use-package go-mode
-     :ensure t
-     :hook (
-	    (go-mode . electric-indent-mode)
-)) 
-#+end_src
-
-* Hooks
-
-Reload yas-snippets.
-#+begin_src emacs-lisp :tangle yes
-(yas-reload-all)
-#+end_src
-
-Hooks per Major mode.
-Python-mode
-#+begin_src emacs-lisp :tangle yes
-(add-hook 'python-mode-hook 'yas-minor-mode)
-#+end_src
-
-Go-mode
-#+begin_src emacs-lisp :tangle yes
-(add-hook 'go-mode-hook 'yas-minor-mode)
-#+end_src
-
-Elisp-mode
-#+begin_src emacs-lisp :tangle yes
-(add-hook 'elisp-mode-hook 'yas-minor-mode)
-#+end_src
-
-Org-mode
-#+begin_src emacs-lisp :tangle yes
-(add-hook 'org-mode-hook 'yas-minor-mode)
-(add-hook 'org-mode-hook 'org-superstar-mode)
-#+end_src

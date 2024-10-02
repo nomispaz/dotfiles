@@ -1,10 +1,11 @@
 {
   "name": "Declarative pacman config",
   "build_dir": "/var/tmp/nompac_rs",
-  "patch_dir": "/home/simonheise/git_repos/nompac_rs/patches",
-  "overlay_dir": "/home/simonheise/git_repos/nompac_rs/overlays",
-  "local_repo_dir": "/home/simonheise/git_repos/arch_localrepo/nomispaz",
-  "pacconfig": "$HOME/git_repos/nompac_rs/configs/pacman.conf",
+  "patch_dir": "$HOME/git_repos/nompac_rs/patches",
+  "overlay_dir": "$HOME/git_repos/nompac_rs/overlays",
+  "local_repo": "$HOME/git_repos/arch_localrepo/nomispaz/nomispaz.db.tar.zst",
+  "pacconfig": "$HOME/.config/nompac_rs/configs/pacman.conf",
+  "mirrorlist": "$HOME/.config/nompac_rs/configs/mirrorlist",
   "packagegroups": "all",
   "snapshot": "2024_09_16",
   "packages": [
@@ -53,6 +54,7 @@
 		"htop",
 		"kate",
 		"konsole",
+		"less",
 		"libliftoff",
 		"lib32-gnutls",
 		"lib32-vulkan-icd-loader",

@@ -225,9 +225,9 @@ return {
     },
 }
 #+END_SRC
-* Luasnip
+* Snippets
 Snippets to use for autocomplete
-#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/luasnip.lua
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/snippets.lua
 return {
     { 
         "L3MON4D3/LuaSnip", event = "VeryLazy",
@@ -241,6 +241,56 @@ return {
         },
     },
 }
+#+END_SRC
+
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/config/snippets.lua
+local ls = require "luasnip"
+
+vim.snippet.expand = ls.lsp_expand
+
+---@diagnostic disable-next-line: duplicate-set-field
+vim.snippet.active = function(filter)
+  filter = filter or {}
+  filter.direction = filter.direction or 1
+
+  if filter.direction == 1 then
+    return ls.expand_or_jumpable()
+  else
+    return ls.jumpable(filter.direction)
+  end
+end
+
+---@diagnostic disable-next-line: duplicate-set-field
+vim.snippet.jump = function(direction)
+  if direction == 1 then
+    if ls.expandable() then
+      return ls.expand_or_jump()
+    else
+      return ls.jumpable(1) and ls.jump(1)
+    end
+  else
+    return ls.jumpable(-1) and ls.jump(-1)
+  end
+end
+
+vim.snippet.stop = ls.unlink_current
+
+-- ================================================
+--      My Configuration
+-- ================================================
+ls.config.set_config {
+  history = true,
+  updateevents = "TextChanged,TextChangedI",
+  override_builtin = true,
+}
+
+vim.keymap.set({ "i", "s" }, "<c-k>", function()
+  return vim.snippet.active { direction = 1 } and vim.snippet.jump(1)
+end, { silent = true })
+
+vim.keymap.set({ "i", "s" }, "<c-j>", function()
+  return vim.snippet.active { direction = -1 } and vim.snippet.jump(-1)
+end, { silent = true })
 #+END_SRC
 * Mini pairs
 Autoclose brackets
@@ -406,34 +456,46 @@ return {
 }
 #+END_SRC
 ** Autocomplete
-#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/nvimcmp.lua
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/completion.lua
 return {
+  {
     "hrsh7th/nvim-cmp",
-    version = false,
     dependencies = {
-        "hrsh7th/cmp-nvim-lsp",
-        "hrsh7th/cmp-buffer",
-        "hrsh7th/cmp-path",
-        "L3MON4D3/LuaSnip",
-        "saadparwaiz1/cmp_luasnip",
+      "onsails/lspkind.nvim",
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-path",
+      "hrsh7th/cmp-buffer",
+      "L3MON4D3/LuaSnip",
+      "saadparwaiz1/cmp_luasnip",
     },
-    
     config = function()
+      require "config.completion"
+    end,
+  },
+}
+#+END_SRC
 
-	local cmp = require('cmp')
-    local luasnip = require('luasnip')
+Configuration options for the autocompletion:
+#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/config/completion.lua
+require "config.snippets"
 
-    cmp.setup({
-      snippet = {
-        expand = function(args)
-          luasnip.lsp_expand(args.body)
-        end
-      },
-      completion = {
-        --autocomplete = false
-		completeopt = 'menu,menuone,noinsert'
-      },
-       mapping = cmp.mapping.preset.insert ({
+vim.opt.completeopt = { "menu", "menuone", "noselect" }
+
+local lspkind = require "lspkind"
+lspkind.init {}
+
+local cmp = require("cmp")
+local luasnip = require("luasnip")
+
+cmp.setup {
+  sources = {
+    { name = "nvim_lsp" },
+    { name = "luasnip" },
+    { name = "path" },
+    { name = "buffer" },
+    { name = "orgmode" },
+  },
+  mapping = cmp.mapping.preset.insert ({
            ["<Tab>"] = cmp.mapping(function(fallback)
            if luasnip.expand_or_jumpable() then
              luasnip.expand_or_jump()
@@ -444,16 +506,8 @@ return {
          ["<c-e>"] = cmp.mapping.abort(),
          ["<CR>"] = cmp.mapping.confirm({ select=true }),
         }),
-      sources = {
-        { name = "nvim_lsp" },
-        { name = "luasnip" },
-        { name = "buffer" },
-        { name = "path" },
-        { name = "orgmode" },
-      }
-    })
-  end
 }
+
 #+END_SRC
 ** LSP-Config
 Currently only python with lsp pylsp and go with gopls are configured
@@ -472,7 +526,7 @@ return {
     local mason_lspconfig = require 'mason-lspconfig'
     mason_lspconfig.setup {
         --ensure_installed = { "pyright", "marksman" }
-       ensure_installed = { "pylsp", "marksman" }
+       ensure_installed = { "pylsp", "marksman", "gopls", "rust_analyzer" }
 
     }
     --require("lspconfig").pyright.setup {
@@ -534,9 +588,12 @@ return {
 	  },
     },
     }
-}
+    }
 
     require("lspconfig").marksman.setup {
+        capabilities = capabilities,
+    }
+    require("lspconfig").rust_analyzer.setup {
         capabilities = capabilities,
     }
   end
@@ -556,7 +613,7 @@ return {
 }
 #+END_SRC
 * Load Modules
-Load custom configs and functions
+Load config configs and functions
 #+BEGIN_SRC lua :tangle ~/.config/nvim/init.lua
 require("mini.pairs").setup()
 require("config.whichkey")
