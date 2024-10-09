@@ -17,10 +17,10 @@ cmp.setup {
     { name = "orgmode" },
   },
   mapping = cmp.mapping.preset.insert ({
-           ["<Tab>"] = cmp.mapping(function(fallback)
+           ["<c-k>"] = cmp.mapping(function(fallback)
            if luasnip.expand_or_jumpable() then
              luasnip.expand_or_jump()
-          else
+           else
              fallback()
            end
          end, { "i", "s" }),

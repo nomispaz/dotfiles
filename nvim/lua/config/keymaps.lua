@@ -4,9 +4,6 @@ local keymap = vim.api.nvim_set_keymap
 keymap("n", "<C-tab>", "<cmd>Telescope buffers<cr>", { desc = "Switch Tab" })
 keymap("n", "<C-w>", "<cmd>bd<cr>", { desc = "Close Tab" })
 
---Neotree
-keymap("n", "<leader>e", "<cmd>Neotree toggle<cr>", { desc = "Toggle Neotree (root dir)" })
-
 --session management
 -- restore the session for the current directory
 keymap("n", "<leader>ls", [[<cmd>lua require("persistence").load()<cr>]], {desc = "Restore Session for current directory"} )

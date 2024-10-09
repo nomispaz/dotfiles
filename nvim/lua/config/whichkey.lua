@@ -26,7 +26,6 @@ wk.add({
     { "<leader>b<Right>", "<cmd>:BufferLineCycleNext<cr>", desc = "Switch to right buffer" },
     { "<leader>bb", "<cmd>Telescope buffers<cr>", desc = "Switch to buffer" },
     { "<leader>bk", "<cmd>bd<cr>", desc = "Close buffer" },
-    { "<leader>e", "<cmd>Neotree toggle<cr>", desc = "Toggle Neotree" },
     { "<leader>f", group = "Open files" },
     { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find File" },
     { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Search files (grep)" },

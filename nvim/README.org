@@ -123,21 +123,6 @@ return {
     },
 }
 #+END_SRC
-* Neovim tree
-#+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/neotree.lua
-return {
-    {
-        "nvim-neo-tree/neo-tree.nvim",
-        branch = "v3.x",
-        dependencies = {
-        "nvim-lua/plenary.nvim",
-        "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
-        "MunifTanjim/nui.nvim",
-        -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
-        },
-   },
-}
-#+END_SRC
 * Which-key
 ** Install
 #+BEGIN_SRC lua :tangle ~/.config/nvim/lua/plugins/whichkey.lua
@@ -180,7 +165,6 @@ wk.add({
     { "<leader>b<Right>", "<cmd>:BufferLineCycleNext<cr>", desc = "Switch to right buffer" },
     { "<leader>bb", "<cmd>Telescope buffers<cr>", desc = "Switch to buffer" },
     { "<leader>bk", "<cmd>bd<cr>", desc = "Close buffer" },
-    { "<leader>e", "<cmd>Neotree toggle<cr>", desc = "Toggle Neotree" },
     { "<leader>f", group = "Open files" },
     { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find File" },
     { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Search files (grep)" },
@@ -496,10 +480,10 @@ cmp.setup {
     { name = "orgmode" },
   },
   mapping = cmp.mapping.preset.insert ({
-           ["<Tab>"] = cmp.mapping(function(fallback)
+           ["<c-k>"] = cmp.mapping(function(fallback)
            if luasnip.expand_or_jumpable() then
              luasnip.expand_or_jump()
-          else
+           else
              fallback()
            end
          end, { "i", "s" }),
@@ -517,6 +501,9 @@ return {
     dependencies = {
         "williamboman/mason.nvim",
         "williamboman/mason-lspconfig.nvim"
+    },
+    opts = {
+		inlay_hints = { enabled = true },
     },
   config = function()
     local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -634,9 +621,6 @@ local keymap = vim.api.nvim_set_keymap
 --work with tabs (nvim buffers)
 keymap("n", "<C-tab>", "<cmd>Telescope buffers<cr>", { desc = "Switch Tab" })
 keymap("n", "<C-w>", "<cmd>bd<cr>", { desc = "Close Tab" })
-
---Neotree
-keymap("n", "<leader>e", "<cmd>Neotree toggle<cr>", { desc = "Toggle Neotree (root dir)" })
 
 --session management
 -- restore the session for the current directory

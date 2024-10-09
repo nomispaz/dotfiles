@@ -6,11 +6,11 @@ exec hash dbus-update-activation-environment 2>/dev/null && \
 # start authentication agent
 exec /usr/lib64/polkit-kde-authentication-agent-1
 
-exec kwalletd6
+#exec kwalletd6
 exec --no-startup-id /usr/lib/pam_kwallet_init 
 
 # enable kwallet-pam and autologin (on NixOS)
-exec --no-startup-id /run/current-system/sw/libexec/pam_kwallet_init
+#exec --no-startup-id /run/current-system/sw/libexec/pam_kwallet_init
 
 # start networkmanager applet
 exec nm-applet --indicator
