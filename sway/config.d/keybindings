@@ -20,7 +20,7 @@ set $mod Mod4
 set $terminal alacritty
 set $browser firefox
 set $files dolphin
-set $editor emacsclient -nc
+set $editor code
 
 # set default start menu to rofi
 set $menu rofi -show drun
