@@ -1,27 +1,35 @@
 {
-    "zenMode.centerLayout": false,
-    "zenMode.hideLineNumbers": false,
-    "zenMode.showTabs": "single",
-    "extensions.experimental.affinity": {
-        "asvetliakov.vscode-neovim": 1
-    },
+    // editor configs
     "editor.minimap.enabled": false,
-    "workbench.activityBar.location": "bottom",
     "editor.wordWrap": "on",
     "editor.cursorBlinking": "solid",
     "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.linkedEditing": true,
     "editor.cursorSurroundingLines": 4,
-    "diffEditor.experimental.showMoves": true,
-    "workbench.editor.showTabs": "none",
     "editor.lineNumbers": "relative",
+    "diffEditor.experimental.showMoves": true,
+    // zen-Mode settings
+    "zenMode.centerLayout": false,
+    "zenMode.hideLineNumbers": false,
+    "zenMode.showTabs": "single",
+    // workbench settings
+    "workbench.activityBar.location": "bottom",
+    "workbench.editor.showTabs": "none",
+    "workbench.colorTheme": "Catppuccin Mocha",
+    "workbench.statusBar.visible": true,
+    // bar visibilities
     "window.menuBarVisibility": "toggle",
-
+    // vim settings
+    "extensions.experimental.affinity": {
+        "asvetliakov.vscode-neovim": 1
+    },
+    "vim.leader": "<Space>",
     "vim.easymotion": true,
     "vim.incsearch": true,
     "vim.useSystemClipboard": true,
     "vim.useCtrlKeys": true,
     "vim.hlsearch": true,
-
     "vim.handleKeys": {
         "<C-w>": true,
         "<C-p>": false,
@@ -32,16 +40,26 @@
         "<C-d>": false,
         "<C-t>": false
     },
-
-    "vim.normalModeKeyBindings": [
+    "vim.normalModeKeyBindingsNonRecursive": [
         {
-          "before": ["g", "p", "d"],
-          "commands": ["editor.action.peekDefinition"]
+            "before": [
+                "g",
+                "p",
+                "d"
+            ],
+            "commands": [
+                "editor.action.peekDefinition"
+            ]
+        },
+        {
+            "before": [
+                "leader",
+                "f"
+            ],
+            "commands": [
+                "workbench.action.quickOpen"
+            ]
         },
     ],
-
-
-    "workbench.colorTheme": "Catppuccin Mocha",
     "errorLens.enabled": true
-
 }
