@@ -1,6 +1,5 @@
 * General Setup
 ** Backups
-
 By default, Emacs creates automatic backups of files in their original directories. Instead, emacs should save in specific backup directory.
 #+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
 (setq backup-directory-alist '((".*" . "~/.local/share/emacs/backups")))
@@ -129,29 +128,31 @@ By default, Emacs creates automatic backups of files in their original directori
 Use evil collection for better integration of vim keybindings in various modes.
 
 #+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
-  (use-package evil
-    :ensure t
-    :init
-    (setq evil-want-integration t)
-    (setq evil-want-keybinding nil)
-    :config
-    (evil-mode 1)
-    )
+    (use-package evil
+      :ensure t
+      :init
+      (setq evil-want-integration t)
+      (setq evil-want-keybinding nil)
+      :config
+      (evil-mode 1)
+      )
 
-  (use-package evil-collection
-    :after evil
-    :ensure t
-    :config
-    (evil-collection-init))
+  (evil-set-undo-system 'undo-redo)
 
-;; Using RETURN to follow links in Org/Evil 
-;; Unmap keys in 'evil-maps if not done, (setq org-return-follows-link t) will not work
-(with-eval-after-load 'evil-maps
-  (define-key evil-motion-state-map (kbd "SPC") nil)
-  (define-key evil-motion-state-map (kbd "RET") nil)
-  (define-key evil-motion-state-map (kbd "TAB") nil))
-;; Setting RETURN key in org-mode to follow links
-  (setq org-return-follows-link  t)
+    (use-package evil-collection
+      :after evil
+      :ensure t
+      :config
+      (evil-collection-init))
+
+  ;; Using RETURN to follow links in Org/Evil 
+  ;; Unmap keys in 'evil-maps if not done, (setq org-return-follows-link t) will not work
+  (with-eval-after-load 'evil-maps
+    (define-key evil-motion-state-map (kbd "SPC") nil)
+    (define-key evil-motion-state-map (kbd "RET") nil)
+    (define-key evil-motion-state-map (kbd "TAB") nil))
+  ;; Setting RETURN key in org-mode to follow links
+    (setq org-return-follows-link  t)
 #+end_src
 
 ** Additional evil keybindings
@@ -191,7 +192,13 @@ Use evil collection for better integration of vim keybindings in various modes.
    (define-key evil-normal-state-map (kbd "<leader> l l") '("Show list of flycheck errors" . flymake-show-buffer-diagnostics))
    (define-key evil-normal-state-map (kbd "<leader> l n") '("Next flycheck error" . flycheck-next-error))
    (define-key evil-normal-state-map (kbd "<leader> l p") '("Previous flycheck error" . flycheck-previous-error))
+
+  ;; lsp
    (define-key evil-normal-state-map (kbd "<leader> g r n") '("Rename variable or function" . lsp-rename))
+(define-key evil-normal-state-map (kbd "<leader> g d") '("LSP goto definition" . lsp-find-declaration))
+(define-key evil-normal-state-map (kbd "<leader> g D") '("LSP Find references" . lsp-find-references))
+(define-key evil-normal-state-map (kbd "<leader> l d") '("LSP show doc in popup" . lsp-ui-doc-glance))
+
 #+end_src
 ** Whichkey
 #+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
@@ -248,22 +255,27 @@ Use evil collection for better integration of vim keybindings in various modes.
 #+END_SRC
 * Snippets
 #+BEGIN_SRC emacs-lisp :tangle  ~/.config/emacs/config.el
-(use-package yasnippet
-  :ensure t
-  :hook ((lsp-mode . yas-minor-mode)))
-(add-hook 'elisp-mode-hook 'yas-minor-mode)
-(add-hook 'org-mode-hook 'yas-minor-mode)
-(add-hook 'org-mode-hook 'org-superstar-mode)
+      (use-package yasnippet
+        :ensure t
+        :hook ((lsp-mode . yas-minor-mode)))
+    (use-package yasnippet-snippets
+      :ensure t)
+    (yas-global-mode 1)
+      (add-hook 'elisp-mode-hook 'yas-minor-mode)
+      (add-hook 'org-mode-hook 'yas-minor-mode)
+      (add-hook 'org-mode-hook 'org-superstar-mode)
 
 #+END_SRC
 * Company
 #+BEGIN_SRC emacs-lisp :tangle ~/.config/emacs/config.el
-; Enable company-mode with language server support
-(use-package company
-  :ensure t
-  :custom
-  (company-minimum-prefix-length 2)
-)
+        ; Enable company-mode with language server support
+        (use-package company
+          :ensure t
+          :custom
+          (company-minimum-prefix-length 2)
+        )
+        (add-hook 'after-init-hook 'global-company-mode)
+    (add-to-list 'company-backends '(company-capf company-yasnippet :with company-dabbrev-code))
 #+END_SRC
 * Minibuffer
 ** Enhanced preview and search capabilites
@@ -386,4 +398,3 @@ Define folder for org agenda files.
     (setq org-agenda-files (directory-files-recursively "/mnt/nvme2/data/orgmode" "\\.org$"))
     )
 #+end_src
-

@@ -52,23 +52,10 @@ wk.add({
     { "<leader>t", group = "Telescope search functions" },
     { "<leader>td", '<cmd>lua require("telescope.builtin").diagnostics({wrap_results=true, line_width="full"})<cr>', desc = "LSP Errors/Warnings" },
     { "<leader>tf", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Fuzzy find in buffer" },
-    { "<leader>tr", "<cmd>Telescope lsp_references<cr>", desc = "Show references" },
     { "<leader>tk", "<cmd>Telescope keymaps<cr>", desc = "Display keymaps" },
     { "<leader>g", group = "LSP functions" },
     { "<leader>gd", "<cmd>lua vim.lsp.buf.definition()<cr>", desc = "Go to function definition", nowait = true, remap = false },
-    { "<leader>gD", "<cmd>lua vim.lsp.buf.references()<cr>", desc = "Show function references", nowait = true, remap = false },
     { "<leader>grn", "<cmd>lua vim.lsp.buf.rename()<cr>", desc = "Rename all references in buffer", nowait = true, remap = false },
-    { "<C-s>", "<cmd>lua vim.lsp.buf.signature_help()<cr>", desc = "Show variable signatures", nowait = true, remap = false , mode = "i"},
-    { "<C-d>", "<cmd>lua vim.diagnostic.setloclist()<cr>", desc = "Open buffer in split window with diagnostics", nowait = true, remap = false},
-    { "<A-k>", "<cmd>m .-2<cr>", desc = "Move row one row up", nowait = true, remap = false },
-    { "<A-j>", "<cmd>m .+1<cr>", desc = "Move row one row down", nowait = true, remap = false },
-    { "<leader>db", "<cmd>lua require'dap'.toggle_breakpoint()<cr>", desc = "Dap add breakpoint", nowait = true, remap = false },
-    { "<leader>dr", "<cmd>lua require'dap'.continue()<cr>", desc = "Dap resume", nowait = true, remap = false },
-    { "<leader>dis", "<cmd>lua vim.diagnostic.config({ virtual_text = true })<cr>", desc = "Enable inline diagnostics", nowait = true, remap = false },
-    { "<leader>did", "<cmd>lua vim.diagnostic.config({ virtual_text = false })<cr>", desc = "Disable inline diagnostics", nowait = true, remap = false },
-
-
-
 
 })
 
