@@ -27,11 +27,10 @@
 
 (electric-pair-mode 1)
 
-(use-package spacemacs-theme
-    :ensure t
-    :config
-    (load-theme 'spacemacs-dark t)
-    )
+(use-package catppuccin-theme
+:ensure t
+:config
+(load-theme 'catppuccin :no-confirm))
 
 (setq inhibit-startup-screen t)
 
@@ -54,6 +53,10 @@
 
 (use-package nerd-icons
   :ensure t)
+
+(use-package doom-modeline
+      :ensure t
+      :init (doom-modeline-mode 1))
 
 (use-package desktop
   :init (desktop-save-mode 1)
@@ -133,9 +136,10 @@
 
   ;; lsp
    (define-key evil-normal-state-map (kbd "<leader> g r n") '("Rename variable or function" . lsp-rename))
-(define-key evil-normal-state-map (kbd "<leader> g d") '("LSP goto definition" . lsp-find-declaration))
+(define-key evil-normal-state-map (kbd "<leader> g d") '("LSP goto definition" . lsp-find-definition))
 (define-key evil-normal-state-map (kbd "<leader> g D") '("LSP Find references" . lsp-find-references))
-(define-key evil-normal-state-map (kbd "<leader> l d") '("LSP show doc in popup" . lsp-ui-doc-glance))
+(define-key evil-normal-state-map (kbd "<leader> g s") '("LSP show doc in popup" . lsp-ui-doc-glance))
+(define-key evil-normal-state-map (kbd "C-.") '("LSP execute code action" . lsp-execute-code-action))
 
 (use-package which-key
   :ensure t
@@ -198,7 +202,7 @@
       (company-minimum-prefix-length 2)
     )
     (add-hook 'after-init-hook 'global-company-mode)
-(add-to-list 'company-backends '(company-capf company-yasnippet :with company-dabbrev-code))
+(add-to-list 'company-backends '(company-capf company-yasnippet))
 
 (use-package consult
   :ensure t

@@ -44,13 +44,22 @@ By default, Emacs creates automatic backups of files in their original directori
 #+end_src
 
 ** UI
-#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
+#+begin_src emacs-lisp
   (use-package spacemacs-theme
       :ensure t
       :config
       (load-theme 'spacemacs-dark t)
       )
 #+end_src
+*** Catppuccin
+#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
+     (use-package catppuccin-theme
+    :ensure t
+    :config
+    (load-theme 'catppuccin :no-confirm)) 
+#+end_src
+
+
 *** Startup screen
 - disable emacs welcome screen
   #+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
@@ -97,15 +106,16 @@ By default, Emacs creates automatic backups of files in their original directori
 #+end_src
 
 *** Nerd-Icons
+To actually install the fonts, M-x nerd-icons-install-fonts needs to be run
 #+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
 (use-package nerd-icons
   :ensure t)
 #+end_src
 *** Doom-modeline
-#+BEGIN_SRC emacs-lisp 
-(use-package doom-modeline
-	:ensure t
-	:init (doom-modeline-mode 1))
+#+BEGIN_SRC emacs-lisp :tangle ~/.config/emacs/config.el
+      (use-package doom-modeline
+            :ensure t
+            :init (doom-modeline-mode 1))
 #+END_SRC
 ** Desktop package to save last session
 #+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
@@ -157,47 +167,48 @@ Use evil collection for better integration of vim keybindings in various modes.
 
 ** Additional evil keybindings
 #+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
-   ;; set leader key in all states
-   (evil-set-leader nil (kbd "SPC"))
+     ;; set leader key in all states
+     (evil-set-leader nil (kbd "SPC"))
 
-   ;; set local leader
-   (evil-set-leader 'normal "," t)
+     ;; set local leader
+     (evil-set-leader 'normal "," t)
 
-  ;; files
-   (define-key evil-normal-state-map (kbd "<leader> f f") '("Search files" . consult-find))
-   (define-key evil-normal-state-map (kbd "<leader> f r") '("Recent files" . consult-recent-file))
-   (define-key evil-normal-state-map (kbd "<leader> f g") '("Search files (grep)" . consult-grep))
-   (define-key evil-normal-state-map (kbd "<leader> f n") '("New file" . evil-buffer-new))
+    ;; files
+     (define-key evil-normal-state-map (kbd "<leader> f f") '("Search files" . consult-find))
+     (define-key evil-normal-state-map (kbd "<leader> f r") '("Recent files" . consult-recent-file))
+     (define-key evil-normal-state-map (kbd "<leader> f g") '("Search files (grep)" . consult-grep))
+     (define-key evil-normal-state-map (kbd "<leader> f n") '("New file" . evil-buffer-new))
 
-   ;; buffers
-   (define-key evil-normal-state-map (kbd "<leader> b b") '("Switch to buffer" . consult-buffer))
-   (define-key evil-normal-state-map (kbd "<leader> b k") '("Kill current buffer" . kill-current-buffer))
-   (define-key evil-normal-state-map (kbd "<leader> b r") '("Rename buffer" . rename-buffer))
-   (define-key evil-normal-state-map (kbd "<leader> b s") '("Save buffer" . basic-save-buffer))
+     ;; buffers
+     (define-key evil-normal-state-map (kbd "<leader> b b") '("Switch to buffer" . consult-buffer))
+     (define-key evil-normal-state-map (kbd "<leader> b k") '("Kill current buffer" . kill-current-buffer))
+     (define-key evil-normal-state-map (kbd "<leader> b r") '("Rename buffer" . rename-buffer))
+     (define-key evil-normal-state-map (kbd "<leader> b s") '("Save buffer" . basic-save-buffer))
 
-   ;; tabs
-   (define-key evil-normal-state-map (kbd "<leader> t t") '("Switch to tab" . tab-switch))
+     ;; tabs
+     (define-key evil-normal-state-map (kbd "<leader> t t") '("Switch to tab" . tab-switch))
 
-   ;; search
-   (define-key evil-normal-state-map (kbd "<leader> s o") '("Search heading" - consult-outline))
-   (define-key evil-normal-state-map (kbd "<leader> s l") '("Search line" . consult-line))
+     ;; search
+     (define-key evil-normal-state-map (kbd "<leader> s o") '("Search heading" - consult-outline))
+     (define-key evil-normal-state-map (kbd "<leader> s l") '("Search line" . consult-line))
 
-   ;; org-mode
-   (define-key evil-normal-state-map (kbd "<leader> o e") '("Export org file" . org-export-dispatch))
-    (define-key evil-normal-state-map (kbd "<leader> o a") '("Open org agenda" . org-agenda))
-   (define-key evil-normal-state-map (kbd "<leader> o t") '("Export code blocks" . org-babel-tangle))
-   (define-key evil-normal-state-map (kbd "<leader> o i s") '("Insert scheduled date" . org-schedule))
+     ;; org-mode
+     (define-key evil-normal-state-map (kbd "<leader> o e") '("Export org file" . org-export-dispatch))
+      (define-key evil-normal-state-map (kbd "<leader> o a") '("Open org agenda" . org-agenda))
+     (define-key evil-normal-state-map (kbd "<leader> o t") '("Export code blocks" . org-babel-tangle))
+     (define-key evil-normal-state-map (kbd "<leader> o i s") '("Insert scheduled date" . org-schedule))
 
-   ;; flycheck
-   (define-key evil-normal-state-map (kbd "<leader> l l") '("Show list of flycheck errors" . flymake-show-buffer-diagnostics))
-   (define-key evil-normal-state-map (kbd "<leader> l n") '("Next flycheck error" . flycheck-next-error))
-   (define-key evil-normal-state-map (kbd "<leader> l p") '("Previous flycheck error" . flycheck-previous-error))
+     ;; flycheck
+     (define-key evil-normal-state-map (kbd "<leader> l l") '("Show list of flycheck errors" . flymake-show-buffer-diagnostics))
+     (define-key evil-normal-state-map (kbd "<leader> l n") '("Next flycheck error" . flycheck-next-error))
+     (define-key evil-normal-state-map (kbd "<leader> l p") '("Previous flycheck error" . flycheck-previous-error))
 
-  ;; lsp
-   (define-key evil-normal-state-map (kbd "<leader> g r n") '("Rename variable or function" . lsp-rename))
-(define-key evil-normal-state-map (kbd "<leader> g d") '("LSP goto definition" . lsp-find-declaration))
-(define-key evil-normal-state-map (kbd "<leader> g D") '("LSP Find references" . lsp-find-references))
-(define-key evil-normal-state-map (kbd "<leader> l d") '("LSP show doc in popup" . lsp-ui-doc-glance))
+    ;; lsp
+     (define-key evil-normal-state-map (kbd "<leader> g r n") '("Rename variable or function" . lsp-rename))
+  (define-key evil-normal-state-map (kbd "<leader> g d") '("LSP goto definition" . lsp-find-definition))
+  (define-key evil-normal-state-map (kbd "<leader> g D") '("LSP Find references" . lsp-find-references))
+  (define-key evil-normal-state-map (kbd "<leader> g s") '("LSP show doc in popup" . lsp-ui-doc-glance))
+  (define-key evil-normal-state-map (kbd "C-.") '("LSP execute code action" . lsp-execute-code-action))
 
 #+end_src
 ** Whichkey
@@ -275,7 +286,7 @@ Use evil collection for better integration of vim keybindings in various modes.
           (company-minimum-prefix-length 2)
         )
         (add-hook 'after-init-hook 'global-company-mode)
-    (add-to-list 'company-backends '(company-capf company-yasnippet :with company-dabbrev-code))
+    (add-to-list 'company-backends '(company-capf company-yasnippet))
 #+END_SRC
 * Minibuffer
 ** Enhanced preview and search capabilites
