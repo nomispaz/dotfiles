@@ -69,7 +69,7 @@ By default, Emacs creates automatic backups of files in their original directori
 #+end_src
 
 - Disable the scrollbar
-#+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
+#+begin_src emacs-lisp
   (scroll-bar-mode -1)          ;; Disable visible scrollbar
 #+end_src
 
@@ -239,13 +239,13 @@ Use evil collection for better integration of vim keybindings in various modes.
 
 (add-hook 'go-mode-hook 'yas-minor-mode)
 
-(use-package rust-mode
-  :ensure t
-  :after lsp-mode
-  :init
-  (add-hook 'rust-mode-hook #'lsp)
-  (setq indent-tabs-mode nil)
-  (setq rust-mode-treesitter-derive t))
+;;(use-package rust-mode
+;;  :ensure t
+;;  :after lsp-mode
+;;  :init
+;;  (add-hook 'rust-mode-hook #'lsp)
+;;  (setq indent-tabs-mode nil)
+;;  (setq rust-mode-treesitter-derive t))
 
 (add-hook 'rust-mode-hook
           (lambda () (setq indent-tabs-mode nil)))
@@ -374,7 +374,7 @@ Set options for every Orgfile. Like
   ;; RETURN will follow links in org-mode files
   (setq org-return-follows-link  t)  
   ;; (setq org-agenda-files
-  ;; 	'("/mnt/nvme2/orgmode/")
+  ;; 	'("/mnt/d/WSL/orgmode/")
   ;; 	)
   (my/org-font-setup)
   :bind (;;copy link anker to clipboard, insert with C-c C-l
@@ -395,6 +395,6 @@ Define folder for org agenda files.
 #+begin_src emacs-lisp :tangle ~/.config/emacs/config.el
 (use-package org-agenda
   :config
-    (setq org-agenda-files (directory-files-recursively "/mnt/nvme2/data/orgmode" "\\.org$"))
+    (setq org-agenda-files (directory-files-recursively "/mnt/d/WSL/orgmode" "\\.org$"))
     )
 #+end_src

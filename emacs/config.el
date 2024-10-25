@@ -28,17 +28,16 @@
 (electric-pair-mode 1)
 
 (use-package spacemacs-theme
-:ensure t
-:config
-(load-theme 'spacemacs-dark :no-confirm))
+    :ensure t
+    :config
+    (load-theme 'spacemacs-dark t)
+    )
 
 (setq inhibit-startup-screen t)
 
 (tool-bar-mode -1)	          ;; Disable the toolbar
 
 (menu-bar-mode -1)            ;; Disable the menu bar
-
-;;(scroll-bar-mode -1)          ;; Disable visible scrollbar
 
 (set-face-attribute 'default nil :font "DejaVu Sans Mono" :height 180)
 
@@ -50,6 +49,9 @@
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
 (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+
+(use-package nerd-icons
+  :ensure t)
 
 (use-package desktop
   :init (desktop-save-mode 1)
@@ -129,7 +131,7 @@
 
   ;; lsp
    (define-key evil-normal-state-map (kbd "<leader> g r n") '("Rename variable or function" . lsp-rename))
-(define-key evil-normal-state-map (kbd "<leader> g d") '("LSP goto definition" . lsp-find-definition))
+(define-key evil-normal-state-map (kbd "<leader> g d") '("LSP goto definition" . lsp-find-declaration))
 (define-key evil-normal-state-map (kbd "<leader> g D") '("LSP Find references" . lsp-find-references))
 (define-key evil-normal-state-map (kbd "<leader> l d") '("LSP show doc in popup" . lsp-ui-doc-glance))
 
@@ -164,14 +166,13 @@
 
 (add-hook 'go-mode-hook 'yas-minor-mode)
 
-(use-package rust-mode
-  :ensure t
-  :after lsp-mode
-  :init
-  (add-hook 'rust-mode-hook #'lsp)
-  (setq indent-tabs-mode nil)
-;;  (setq rust-mode-treesitter-derive t)
-  )
+;;(use-package rust-mode
+;;  :ensure t
+;;  :after lsp-mode
+;;  :init
+;;  (add-hook 'rust-mode-hook #'lsp)
+;;  (setq indent-tabs-mode nil)
+;;  (setq rust-mode-treesitter-derive t))
 
 (add-hook 'rust-mode-hook
           (lambda () (setq indent-tabs-mode nil)))
@@ -285,5 +286,5 @@
 
 (use-package org-agenda
   :config
-    (setq org-agenda-files (directory-files-recursively "/mnt/d/WSL/orgmode/" "\\.org$"))
+    (setq org-agenda-files (directory-files-recursively "/mnt/d/WSL/orgmode" "\\.org$"))
     )
