@@ -17,43 +17,39 @@
 (setq interprogram-cut-function 'wl-copy)
 (setq interprogram-paste-function 'wl-paste))
 
-  (unless (package-installed-p 'use-package)
-     (package-install 'use-package))
+(unless (package-installed-p 'use-package)
+   (package-install 'use-package))
 
-  (require 'package)
+(require 'package)
 
-  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-  (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
 
-  (electric-pair-mode 1)
+(electric-pair-mode 1)
 
-  (use-package spacemacs-theme
-      :ensure t
-      :config
-      (load-theme 'spacemacs-dark t)
-      )
+(use-package spacemacs-theme
+:ensure t
+:config
+(load-theme 'spacemacs-dark :no-confirm))
 
-  (setq inhibit-startup-screen t)
+(setq inhibit-startup-screen t)
 
-  (tool-bar-mode -1)	          ;; Disable the toolbar
+(tool-bar-mode -1)	          ;; Disable the toolbar
 
-  (menu-bar-mode -1)            ;; Disable the menu bar
+(menu-bar-mode -1)            ;; Disable the menu bar
 
-  (scroll-bar-mode -1)          ;; Disable visible scrollbar
+;;(scroll-bar-mode -1)          ;; Disable visible scrollbar
 
-  (set-face-attribute 'default nil :font "DejaVu Sans Mono" :height 180)
+(set-face-attribute 'default nil :font "DejaVu Sans Mono" :height 180)
 
-  (set-face-attribute 'fixed-pitch nil :font "DejaVu Sans Mono" :height 180)
+(set-face-attribute 'fixed-pitch nil :font "DejaVu Sans Mono" :height 180)
 
-  (set-face-attribute 'variable-pitch nil :font "DejaVu Sans" :height 180)
+(set-face-attribute 'variable-pitch nil :font "DejaVu Sans" :height 180)
 
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
 (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
-
-(use-package nerd-icons
-  :ensure t)
 
 (use-package desktop
   :init (desktop-save-mode 1)
@@ -69,7 +65,7 @@
    desktop-base-lock-name "desktop.lock"
    )
 
-  (use-package evil
+(use-package evil
     :ensure t
     :init
     (setq evil-want-integration t)
@@ -77,6 +73,8 @@
     :config
     (evil-mode 1)
     )
+
+(evil-set-undo-system 'undo-redo)
 
   (use-package evil-collection
     :after evil
@@ -93,7 +91,7 @@
 ;; Setting RETURN key in org-mode to follow links
   (setq org-return-follows-link  t)
 
-   ;; set leader key in all states
+;; set leader key in all states
    (evil-set-leader nil (kbd "SPC"))
 
    ;; set local leader
@@ -128,17 +126,22 @@
    (define-key evil-normal-state-map (kbd "<leader> l l") '("Show list of flycheck errors" . flymake-show-buffer-diagnostics))
    (define-key evil-normal-state-map (kbd "<leader> l n") '("Next flycheck error" . flycheck-next-error))
    (define-key evil-normal-state-map (kbd "<leader> l p") '("Previous flycheck error" . flycheck-previous-error))
-   (define-key evil-normal-state-map (kbd "<leader> g r n") '("Rename variable or function" . lsp-rename))
 
-  (use-package which-key
-    :ensure t
-    :init
-    (which-key-mode 1)
-    :diminish which-key-mode
-    :config
-    (setq which-key-idle-delay 0.3)
-    (setq which-key-allow-evil-operators t)
-    )
+  ;; lsp
+   (define-key evil-normal-state-map (kbd "<leader> g r n") '("Rename variable or function" . lsp-rename))
+(define-key evil-normal-state-map (kbd "<leader> g d") '("LSP goto definition" . lsp-find-definition))
+(define-key evil-normal-state-map (kbd "<leader> g D") '("LSP Find references" . lsp-find-references))
+(define-key evil-normal-state-map (kbd "<leader> l d") '("LSP show doc in popup" . lsp-ui-doc-glance))
+
+(use-package which-key
+  :ensure t
+  :init
+  (which-key-mode 1)
+  :diminish which-key-mode
+  :config
+  (setq which-key-idle-delay 0.3)
+  (setq which-key-allow-evil-operators t)
+  )
 
 (use-package lsp-mode
 	:ensure t
@@ -167,28 +170,32 @@
   :init
   (add-hook 'rust-mode-hook #'lsp)
   (setq indent-tabs-mode nil)
-  (setq rust-mode-treesitter-derive t))
+;;  (setq rust-mode-treesitter-derive t)
+  )
 
 (add-hook 'rust-mode-hook
           (lambda () (setq indent-tabs-mode nil)))
 (add-hook 'rust-mode-hook 'yas-minor-mode)
 (setq rust-format-on-save t)
 
-
 (use-package yasnippet
-  :ensure t
-  :hook ((lsp-mode . yas-minor-mode)))
-(add-hook 'elisp-mode-hook 'yas-minor-mode)
-(add-hook 'org-mode-hook 'yas-minor-mode)
-(add-hook 'org-mode-hook 'org-superstar-mode)
-
+    :ensure t
+    :hook ((lsp-mode . yas-minor-mode)))
+(use-package yasnippet-snippets
+  :ensure t)
+(yas-global-mode 1)
+  (add-hook 'elisp-mode-hook 'yas-minor-mode)
+  (add-hook 'org-mode-hook 'yas-minor-mode)
+  (add-hook 'org-mode-hook 'org-superstar-mode)
 
 ; Enable company-mode with language server support
-(use-package company
-  :ensure t
-  :custom
-  (company-minimum-prefix-length 2)
-)
+    (use-package company
+      :ensure t
+      :custom
+      (company-minimum-prefix-length 2)
+    )
+    (add-hook 'after-init-hook 'global-company-mode)
+(add-to-list 'company-backends '(company-capf company-yasnippet :with company-dabbrev-code))
 
 (use-package consult
   :ensure t
@@ -216,39 +223,39 @@
   (setq completion-styles '(orderless basic))
   )
 
-    (defun my/org-mode-setup()
-      ;; active automatic indentation
-      (org-indent-mode)
-      ;; proportially resize font
-      (variable-pitch-mode 1)
-      ;; automatically perform line wrap
-      (visual-line-mode 1)
-      )
-  (defun my/org-font-setup()
-    ;; Replace list hyphen with dot
-    (font-lock-add-keywords 'org-mode
-                            '(("^ *\\([-]\\) "
-                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+(defun my/org-mode-setup()
+    ;; active automatic indentation
+    (org-indent-mode)
+    ;; proportially resize font
+    (variable-pitch-mode 1)
+    ;; automatically perform line wrap
+    (visual-line-mode 1)
+    )
+(defun my/org-font-setup()
+  ;; Replace list hyphen with dot
+  (font-lock-add-keywords 'org-mode
+                          '(("^ *\\([-]\\) "
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
-    ;;Set faces for heading levels.
-    (dolist (face '((org-level-1 . 1.2)
-                    (org-level-2 . 1.1)
-                    (org-level-3 . 1.05)
-                    (org-level-4 . 1.0)
-                    (org-level-5 . 1.1)
-                    (org-level-6 . 1.1)
-                    (org-level-7 . 1.1)
-                    (org-level-8 . 1.1)))
-      (set-face-attribute (car face) nil :font "DejaVu Sans" :weight 'regular :height (cdr face)))
-  ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-  (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-table nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
-  )
+  ;;Set faces for heading levels.
+  (dolist (face '((org-level-1 . 1.2)
+                  (org-level-2 . 1.1)
+                  (org-level-3 . 1.05)
+                  (org-level-4 . 1.0)
+                  (org-level-5 . 1.1)
+                  (org-level-6 . 1.1)
+                  (org-level-7 . 1.1)
+                  (org-level-8 . 1.1)))
+    (set-face-attribute (car face) nil :font "DejaVu Sans" :weight 'regular :height (cdr face)))
+;; Ensure that anything that should be fixed-pitch in Org files appears that way
+(set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+(set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-table nil :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+)
 
 (use-package org
   :hook (org-mode . my/org-mode-setup)
@@ -264,7 +271,7 @@
   ;; RETURN will follow links in org-mode files
   (setq org-return-follows-link  t)  
   ;; (setq org-agenda-files
-  ;; 	'("/mnt/nvme2/orgmode/")
+  ;; 	'("/mnt/d/WSL/orgmode/")
   ;; 	)
   (my/org-font-setup)
   :bind (;;copy link anker to clipboard, insert with C-c C-l
@@ -278,5 +285,5 @@
 
 (use-package org-agenda
   :config
-    (setq org-agenda-files (directory-files-recursively "/mnt/nvme2/data/orgmode" "\\.org$"))
+    (setq org-agenda-files (directory-files-recursively "/mnt/d/WSL/orgmode/" "\\.org$"))
     )
