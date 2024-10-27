@@ -1,5 +1,5 @@
 # ignore everything in emacs but init.el
-.*
+*
 !init.el
 !config.org
 !config.el
