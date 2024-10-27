@@ -1,6 +1,5 @@
-live_config_reload = true
 
-[shell]
+[terminal.shell]
 program = "fish"
 
 [font]
@@ -21,4 +20,9 @@ style = "Italic"
 [font.normal]
 family = "DejaVu Sans Mono"
 style = "Regular"
+
+[general]
+live_config_reload = true
+
+[terminal]
 
