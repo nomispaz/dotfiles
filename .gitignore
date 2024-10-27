@@ -1,7 +1,0 @@
-# ignore everything in emacs but init.el
-emacs/*
-!emacs/init.el
-!emacs/config.org
-!emacs/config.el
-!emacs/config.org*
-!emacs/site-lisp/*
