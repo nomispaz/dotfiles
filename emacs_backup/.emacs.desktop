@@ -1,0 +1,451 @@
+;; -*- mode: emacs-lisp; lexical-binding:t; coding: utf-8-emacs; -*-
+;; --------------------------------------------------------------------------
+;; Desktop File for Emacs
+;; --------------------------------------------------------------------------
+;; Created Mon Oct 28 07:52:34 2024
+;; Desktop file format version 208
+;; Emacs version 29.4
+
+;; Global section:
+(setq desktop-saved-frameset [frameset 1 (26399 13490 84962 882000) (desktop . "208") "simonheise@ANB22571" nil nil ((((minibuffer . t) (tty-type . "xterm-256color") (tty . "/dev/tty") (display-type . color) (background-mode . dark) (scroll-bar-foreground) (scroll-bar-background) (background-color . "#262626") (foreground-color . "#b2b2b2") (tool-bar-lines . 0) (menu-bar-lines . 0) (height . 53) (width . 223) (modeline . t) (unsplittable) (tab-bar-lines . 0) (tabs (current-tab (name . "bookmarks.org") (explicit-name))) (frameset--id . "6931-307E-ABC4-5A13") (frameset--mini t) (font . "tty")) ((min-height . 4) (min-width . 10) (min-height-ignore . 2) (min-width-ignore . 2) (min-height-safe . 1) (min-width-safe . 2) (min-pixel-height . 4) (min-pixel-width . 10) (min-pixel-height-ignore . 2) (min-pixel-width-ignore . 2) (min-pixel-height-safe . 1) (min-pixel-width-safe . 2)) leaf (pixel-width . 223) (pixel-height . 52) (total-width . 223) (total-height . 52) (normal-height . 1.0) (normal-width . 1.0) (buffer "bookmarks.org" (selected . t) (hscroll . 0) (fringes 0 0 nil nil) (margins nil) (scroll-bars nil 0 t nil 0 t nil) (vscroll . 0) (dedicated) (point . 119) (start . 1)) (prev-buffers ("todo.org" 9622 14707) ("notes.org" 1 1) ("kvg_patris_kontenabgleich.org" 1 1) ("kvg_fleet.org" 1 1) ("jira_admin_schulung.org" 1 1) ("ivudata.org" 1 1) ("heag_update_bonvg.org" 1 1) ("eswe_testsystem_install.org" 1 1) ("eswe_g5.org" 1 1) ("einarbeitung.org" 1 1) ("bsm.org" 1 1) ("brainstorming.org" 1 1) ("bozint-131.org" 1 1) ("bozen_trans402.org" 1 1) ("bozen_probebetrieb.org" 1 1) ("bookmarks.org" 1 1) ("aseag_validatoren.org" 1 1) ("arbeitsgruppe_effizienz.org" 1 1) ("vdvka.org" 1 1) ("ticketbox.org" 1 1) ("fleet_data.org" 1 1) ("fleet.org" 1 1) ("fare.org" 1 1) ("database.org" 1 1) ("wupsi.org" 1 1) ("revg.org" 1 1) ("oam.org" 1 1) ("wupsi_vdvka.org" 1 1) ("wupsi_g5_gui3++.org" 1 1) ("wupsi_fare_migration.org" 1 1) ("wupsi_bms.org" 1 1) ("vms_demostellung.org" 1 1) ("transdev_koblenz_lsa.org" 1 1) ("tools.org" 1 1) ("regiobus.org" 1 1) ("refile.org" 1 1) ("*scratch*" 1 1))))])
+(setq desktop-missing-file-warning nil)
+(setq tags-file-name nil)
+(setq tags-table-list nil)
+(setq search-ring nil)
+(setq regexp-search-ring '(#("rust" 0 4 (isearch-case-fold-search t)) #("mnt" 0 3 (isearch-case-fold-search t)) #("scroll" 0 6 (isearch-case-fold-search t)) #("space" 0 5 (isearch-case-fold-search t)) #("doom" 0 4 (isearch-case-fold-search t)) #("catpp" 0 5 (isearch-case-fold-search t)) #("spacema" 0 7 (isearch-case-fold-search t))))
+(setq register-alist '((48 . #(" (load-theme 'spacemacs-dark t)\n" 0 1 (face font-lock-comment-delimiter-face fontified t) 1 30 (face font-lock-comment-face fontified t) 30 31 (face font-lock-comment-face fontified t) 31 32 (face font-lock-comment-face fontified t)))))
+(setq file-name-history '("~/git_repos/dotfiles/emacs/" "~/dotfiles_tmp/emacs/config.el" "~/git_repos/dotfiles/emacs/config.el" "/home/simonheise/git_repos/dotfiles/emacs/config.el" "~/dotfiles_tmp/emacs/config.el" "~/git_repos/dotfiles/emacs/" "/mnt/d/WSL/orgmode/" "~/git_repos/dotfiles/emacs/config.el" "~/git_repos/dotfiles/emacs/init.el"))
+
+;; Buffer section -- buffers listed in same order as in buffer list:
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/bookmarks.org"
+  "bookmarks.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  119
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26399 13488 930733 504000) (buffer-file-coding-system . undecided-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/todo.org"
+  "todo.org"
+  'org-mode
+  '(yas-minor-mode evil-local-mode evil-collection-unimpaired-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  14707
+  '(14707 nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26399 11484 685234 123000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring (11023 14707 7469 7469 7469 14682 9622 11558 11551 1 1 14477 14477 12989 14671 14671))))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/notes.org"
+  "notes.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(1 nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 54419 275703 154000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/refile.org"
+  "refile.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(1 nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 54100 334062 31000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/regiobus.org"
+  "regiobus.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(1 nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 52525 853023 732000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/tools.org"
+  "tools.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 52686 32919 62000) (buffer-file-coding-system . undecided-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/transdev_koblenz_lsa.org"
+  "transdev_koblenz_lsa.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 52428 805654 271000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/vms_demostellung.org"
+  "vms_demostellung.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(1 nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 52368 917651 551000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/wupsi_bms.org"
+  "wupsi_bms.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 52330 443679 949000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/wupsi_fare_migration.org"
+  "wupsi_fare_migration.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(1 nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 52231 848625 180000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/wupsi_g5_gui3++.org"
+  "wupsi_g5_gui3++.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(1 nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 52220 584889 829000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/wupsi_vdvka.org"
+  "wupsi_vdvka.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(1 nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 51620 983748 314000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/projekte/oam.org"
+  "oam.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23528 935343 553000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/projekte/revg.org"
+  "revg.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23533 294207 369000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/projekte/wupsi.org"
+  "wupsi.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23538 159207 653000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/wiki/database.org"
+  "database.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23543 970461 16000) (buffer-file-coding-system . undecided-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/wiki/fare.org"
+  "fare.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23548 75787 327000) (buffer-file-coding-system . undecided-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/wiki/fleet.org"
+  "fleet.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23552 244835 659000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/wiki/fleet_data.org"
+  "fleet_data.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23556 427908 598000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/wiki/ticketbox.org"
+  "ticketbox.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23560 632014 684000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/wiki/vdvka.org"
+  "vdvka.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23564 767712 369000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/arbeitsgruppe_effizienz.org"
+  "arbeitsgruppe_effizienz.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23568 36505 429000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/aseag_validatoren.org"
+  "aseag_validatoren.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23571 287316 23000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/bozen_probebetrieb.org"
+  "bozen_probebetrieb.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23578 36793 644000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/bozen_trans402.org"
+  "bozen_trans402.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23581 709998 719000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/bozint-131.org"
+  "bozint-131.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23585 596884 109000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/brainstorming.org"
+  "brainstorming.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23588 712611 339000) (buffer-file-coding-system . undecided-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/bsm.org"
+  "bsm.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23591 932556 136000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/einarbeitung.org"
+  "einarbeitung.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23595 229827 170000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/eswe_g5.org"
+  "eswe_g5.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23598 829616 683000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/eswe_testsystem_install.org"
+  "eswe_testsystem_install.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23602 359524 201000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/heag_update_bonvg.org"
+  "heag_update_bonvg.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23605 673259 206000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/ivudata.org"
+  "ivudata.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23609 262729 276000) (buffer-file-coding-system . undecided-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/jira_admin_schulung.org"
+  "jira_admin_schulung.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23612 636560 145000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/kvg_fleet.org"
+  "kvg_fleet.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23616 552798 688000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/mnt/d/WSL/orgmode/kvg_patris_kontenabgleich.org"
+  "kvg_patris_kontenabgleich.org"
+  'org-mode
+  '(evil-local-mode evil-collection-unimpaired-mode yas-minor-mode org-superstar-mode visual-line-mode buffer-face-mode font-lock-mode org-indent-mode company-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 26398 23620 140909 896000) (buffer-file-coding-system . utf-8-unix) (overwrite-mode) (truncate-lines))
+  '((mark-ring nil)))
+
