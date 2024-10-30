@@ -2,7 +2,6 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.keymap.set({"n","v"}, "<Space>", "<Nop>", { silent = true })
 
-
 local opt = vim.opt
 
 vim.g.autoformat = true
@@ -34,7 +33,7 @@ opt.wrap = true -- line wrap
 opt.conceallevel = 2 --conceal links
 opt.concealcursor = 'nc'
 opt.completeopt = {'menu', 'menuone', 'noselect'} --autocomplete selection
-
+vim.wo.relativenumber = true
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -62,9 +61,7 @@ require("lazy").setup({
         }
 })
 
-
-vim.cmd.colorscheme "tokyonight-night"
-
+vim.cmd.colorscheme "catppuccin-mocha"
 
 require("mini.pairs").setup()
 require("config.whichkey")

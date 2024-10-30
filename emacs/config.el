@@ -43,10 +43,11 @@
 (require 'doom-modeline)
   (doom-modeline-mode 1)
 
+(require 'spacemacs-dark-theme)
+
 (require 'catppuccin-theme)
-    (load-theme 'catppuccin :no-confirm)
-  (catppuccin-load-flavor 'mocha)
-(catppuccin-reload)
+  (load-theme 'catppuccin :no-confirm)
+(catppuccin-load-flavor 'mocha)
 
 (recentf-mode 1)
 
@@ -54,6 +55,8 @@
 (savehist-mode 1)
 
 (save-place-mode 1)
+
+(menu-bar--display-line-numbers-mode-relative)
 
 (require 'desktop)
 (desktop-save-mode 1)
@@ -195,46 +198,50 @@
   )
 
 (require 'org)
-(add-hook 'org-mode 'my/org-mode-setup)
-   ;; replace "..." at the end of collapsed headlines
-    (setq org-ellipsis " ▾"
-          ;; remove special characters used for bold, kursiv etc.
-          org-hide-emphasis-markers t)
+  (add-hook 'org-mode 'my/org-mode-setup)
+     ;; replace "..." at the end of collapsed headlines
+      (setq org-ellipsis " ▾"
+            ;; remove special characters used for bold, kursiv etc.
+            org-hide-emphasis-markers t)
 
-    (setq org-agenda-start-with-log-mode t)
-    (setq org-log-done 'time)
-    (setq org-log-into-drawer t)
-    ;; RETURN will follow links in org-mode files
-    (setq org-return-follows-link  t)  
-    ;; (setq org-agenda-files
-    ;; 	'("/mnt/nvme2/orgmode/")
-    ;; 	)
-    (font-lock-add-keywords 'org-mode
-                            '(("^ *\\([-]\\) "
-                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+      (setq org-agenda-start-with-log-mode t)
+      (setq org-log-done 'time)
+      (setq org-log-into-drawer t)
+      ;; RETURN will follow links in org-mode files
+      (setq org-return-follows-link  t)  
+      ;; (setq org-agenda-files
+      ;; 	'("/mnt/nvme2/orgmode/")
+      ;; 	)
+      (font-lock-add-keywords 'org-mode
+                              '(("^ *\\([-]\\) "
+                                 (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
-    ;;Set faces for heading levels.
-    (dolist (face '((org-level-1 . 1.2)
-                    (org-level-2 . 1.1)
-                    (org-level-3 . 1.05)
-                    (org-level-4 . 1.0)
-                    (org-level-5 . 1.1)
-                    (org-level-6 . 1.1)
-                    (org-level-7 . 1.1)
-                    (org-level-8 . 1.1)))
-      (set-face-attribute (car face) nil :font "DejaVu Sans" :weight 'regular :height (cdr face)))
-  ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-  (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-table nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
-    ;;:bind (;;copy link anker to clipboard, insert with C-c C-l
-      ;;     ("C-c l" . org-stored-links))
+      ;;Set faces for heading levels.
+      (dolist (face '((org-level-1 . 1.2)
+                      (org-level-2 . 1.1)
+                      (org-level-3 . 1.05)
+                      (org-level-4 . 1.0)
+                      (org-level-5 . 1.1)
+                      (org-level-6 . 1.1)
+                      (org-level-7 . 1.1)
+                      (org-level-8 . 1.1)))
+        (set-face-attribute (car face) nil :font "DejaVu Sans" :weight 'regular :height (cdr face)))
+    ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+    (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-table nil :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+    (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+    (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+      ;;:bind (;;copy link anker to clipboard, insert with C-c C-l
+        ;;     ("C-c l" . org-stored-links))
+(define-key org-mode-map (kbd "C-c s") 'org-store-link)
 
 (require 'org-superstar)
 
 (require 'org-agenda)
-    (setq org-agenda-files (directory-files-recursively "/mnt/nvme2/data/orgmode" "\\.org$"))
+      (setq org-agenda-files (directory-files-recursively "/mnt/nvme2/data/orgmode" "\\.org$"))
+
+;; reload at the end to apply changes after all other changes to the "ui"
+(catppuccin-reload)

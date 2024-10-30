@@ -1,4 +1,3 @@
-
 return {
     {
     'nvim-orgmode/orgmode',

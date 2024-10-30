@@ -1,7 +1,15 @@
-
+--return {
+--    {
+--      "folke/tokyonight.nvim",
+--      lazy = false,
+--      priority = 1000,
+--      opts = {},
+--    },
+--}
 return {
     {
-      "folke/tokyonight.nvim",
+      "catppuccin/nvim",
+	name = "catppuccin",
       lazy = false,
       priority = 1000,
       opts = {},
