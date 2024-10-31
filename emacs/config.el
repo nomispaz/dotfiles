@@ -27,7 +27,7 @@
 
 (menu-bar-mode -1)            ;; Disable the menu bar
 
-;;(scroll-bar-mode -1)          ;; Disable visible scrollbar
+;;  (scroll-bar-mode -1)          ;; Disable visible scrollbar
 
 (set-face-attribute 'default nil :font "DejaVu Sans Mono" :height 180)
 
@@ -35,16 +35,15 @@
 
 (set-face-attribute 'variable-pitch nil :font "DejaVu Sans" :height 180)
 
+(global-set-key (kbd "C-x C-g") 'rgrep)
+
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
 (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
 
-;;(require 'doom-modeline)
-;;  (doom-modeline-mode 1)
-
 (require 'spacemacs-theme)
-    (load-theme 'spacemacs-dark :no-confirm)
+(load-theme 'spacemacs-dark :no-confirm)
 
 (recentf-mode 1)
 
@@ -52,8 +51,6 @@
 (savehist-mode 1)
 
 (save-place-mode 1)
-
-(menu-bar--display-line-numbers-mode-relative)
 
 (require 'desktop)
 (desktop-save-mode 1)
@@ -67,123 +64,10 @@
    desktop-base-file-name "desktop"
    desktop-base-lock-name "desktop.lock"
 
-(setq evil-want-keybinding nil)
-(require 'evil)
-(require 'evil-collection)
-     (setq evil-want-integration t)
-    (evil-mode 1) 
-  (evil-set-undo-system 'undo-redo)
-  (evil-collection-init)
-;; Using RETURN to follow links in Org/Evil 
-  ;; Unmap keys in 'evil-maps if not done, (setq org-return-follows-link t) will not work
-  (with-eval-after-load 'evil-maps
-    (define-key evil-motion-state-map (kbd "SPC") nil)
-    (define-key evil-motion-state-map (kbd "RET") nil)
-    (define-key evil-motion-state-map (kbd "TAB") nil))
-  ;; Setting RETURN key in org-mode to follow links
-    (setq org-return-follows-link  t)
-
-;; set leader key in all states
-   (evil-set-leader nil (kbd "SPC"))
-
-   ;; set local leader
-   (evil-set-leader 'normal "," t)
-
-  ;; files
-   (define-key evil-normal-state-map (kbd "<leader> f f") '("Search files" . consult-find))
-   (define-key evil-normal-state-map (kbd "<leader> f r") '("Recent files" . consult-recent-file))
-   (define-key evil-normal-state-map (kbd "<leader> f g") '("Search files (grep)" . consult-grep))
-   (define-key evil-normal-state-map (kbd "<leader> f n") '("New file" . evil-buffer-new))
-
-   ;; buffers
-   (define-key evil-normal-state-map (kbd "<leader> b b") '("Switch to buffer" . consult-buffer))
-   (define-key evil-normal-state-map (kbd "<leader> b k") '("Kill current buffer" . kill-current-buffer))
-   (define-key evil-normal-state-map (kbd "<leader> b r") '("Rename buffer" . rename-buffer))
-   (define-key evil-normal-state-map (kbd "<leader> b s") '("Save buffer" . basic-save-buffer))
-
-   ;; tabs
-   (define-key evil-normal-state-map (kbd "<leader> t t") '("Switch to tab" . tab-switch))
-
-   ;; search
-   (define-key evil-normal-state-map (kbd "<leader> s o") '("Search heading" - consult-outline))
-   (define-key evil-normal-state-map (kbd "<leader> s l") '("Search line" . consult-line))
-
-   ;; org-mode
-   (define-key evil-normal-state-map (kbd "<leader> o e") '("Export org file" . org-export-dispatch))
-    (define-key evil-normal-state-map (kbd "<leader> o a") '("Open org agenda" . org-agenda))
-   (define-key evil-normal-state-map (kbd "<leader> o t") '("Export code blocks" . org-babel-tangle))
-   (define-key evil-normal-state-map (kbd "<leader> o i s") '("Insert scheduled date" . org-schedule))
-
-   ;; flycheck
-   (define-key evil-normal-state-map (kbd "<leader> l l") '("Show list of flycheck errors" . flymake-show-buffer-diagnostics))
-   (define-key evil-normal-state-map (kbd "<leader> l n") '("Next flycheck error" . flymake-goto-next-error))
-   (define-key evil-normal-state-map (kbd "<leader> l p") '("Previous flycheck error" . flymake-goto-previous-error))
-
-  ;; lsp
-   (define-key evil-normal-state-map (kbd "<leader> g r n") '("Rename variable or function" . eglot-rename))
-(define-key evil-normal-state-map (kbd "<leader> g d") '("LSP goto definition" . xref-find-definitions))
-(define-key evil-normal-state-map (kbd "<leader> g D") '("LSP Find references" . xref-find-references))
-(define-key evil-normal-state-map (kbd "<leader> g s") '("LSP show doc in buffer" . eldoc))
-(define-key evil-normal-state-map (kbd "C-.") '("LSP execute code action" . eglot-code-actions))
-
 (require 'which-key)
 (which-key-mode 1)
    (setq which-key-idle-delay 0.3)
   (setq which-key-allow-evil-operators t)
-
-(require 'eglot)
-
-; Enable eglot for Go and Rust modes
-(require 'go-mode)
- (setq indent-tabs-mode nil)
-  (setq go-announce-deprecations t)
- (setq go-mode-treesitter-derive t)
-
-(add-hook 'go-mode-hook 'eglot-ensure)
-(add-hook 'go-mode-hook 'yas-minor-mode)
-
-(require 'rust-mode)
-  (setq indent-tabs-mode nil)
-  ;;(setq rust-mode-treesitter-derive t)
-
-
-(add-hook 'rust-mode-hook 'eglot-ensure)
-(add-hook 'rust-mode-hook
-          (lambda () (setq indent-tabs-mode nil)))
-(add-hook 'rust-mode-hook 'yas-minor-mode)
-(setq rust-format-on-save t)
-
-(require 'yasnippet)
-  (require 'yasnippet-snippets)
-(yas-global-mode 1)
-        (add-hook 'elisp-mode-hook 'yas-minor-mode)
-        (add-hook 'org-mode-hook 'yas-minor-mode)
-        (add-hook 'org-mode-hook 'org-superstar-mode)
-
-; Enable company-mode with language server support
-      (require 'company)
-                (setq company-minimum-prefix-length 2)
-      
-      (add-hook 'after-init-hook 'global-company-mode)
-  (add-to-list 'company-backends '(company-capf company-yasnippet company-files))
- (add-hook 'eglot-managed-mode-hook (lambda ()
-
-(add-to-list 'company-backends
-'(company-capf :with company-yasnippet))))
-
-(require 'consult)
-    (recentf-mode 1)
-
-(require 'marginalia)
-    (marginalia-mode 1)
-
-(require 'vertico)
-    (setq vertico-cycle t)
-  (setq vertico-resize nil)
-  (vertico-mode 1)
-
-(require 'orderless)
-    (setq completion-styles '(orderless basic))
 
 (defun my/org-mode-setup()
   ;; active automatic indentation
@@ -234,7 +118,5 @@
     ;;:bind (;;copy link anker to clipboard, insert with C-c C-l
       ;;     ("C-c l" . org-stored-links))
 
-(require 'org-superstar)
-
 (require 'org-agenda)
-    (setq org-agenda-files (directory-files-recursively "/mnt/d/WSL/orgmode/" "\\.org$"))
+    (setq org-agenda-files (directory-files-recursively "/mnt/d/WSL/orgmode" "\\.org$"))
