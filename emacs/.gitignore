@@ -3,6 +3,7 @@
 /*/
 !init.el
 !config.org
+!README.org
 !config.el
 !config.org*
 !/site-lisp
