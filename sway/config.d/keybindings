@@ -7,8 +7,11 @@ input type:touchpad {
       natural_scroll disabled
 }
 
-# set keyboard input to german
-input type:keyboard xkb_layout "de"
+# set keyboard input to german and remap caps-lock to ctrl
+input type:keyboard {
+  xkb_layout "de"
+  xkb_options caps:ctrl_modifier
+}
 
 # activate numpad on startup
 input type:keyboard xkb_numlock enabled
