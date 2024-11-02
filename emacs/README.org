@@ -365,6 +365,9 @@ Set options for every Orgfile. Like
 * Evil-mode
 Use evil collection for better integration of vim keybindings in various modes.
 Evil-collection is disabled for now since it is not available in ELPA.
+
+Instead of evil-mode maybe use viper mode that alread emulates vi-keybindings.
+
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
     (use-package evil
       :ensure t
