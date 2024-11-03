@@ -62,6 +62,10 @@ The following packages need to be enabled so that evil-collection can be install
     (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 #+end_src
 
+#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
+  (add-to-list 'load-path "~/.config/emacs/site-lisp/")
+#+end_src
+
 * General setup
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
   (setq inhibit-startup-screen t)   ;; Disable the welcome screen
@@ -84,6 +88,10 @@ The following packages need to be enabled so that evil-collection can be install
 
   ;; automatically close brackets
   (electric-pair-mode 1)
+#+end_src
+** My custom functions
+#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
+ ;; (require 'nomispaz)
 #+end_src
 * Keybindings
 ** General keybindings
@@ -151,8 +159,11 @@ The following packages need to be enabled so that evil-collection can be install
 ** Modeline
 *** Custom modeline
 #+begin_src emacs-lisp :tangle no
-  
-
+  (setq-default mode-line-format
+    '("%b "
+      "L%l "
+      mode-line-modes
+      ))
 #+end_src
 *** Doom-modeline
 Nice modeline with integration of eglot, flymake and most modes. Currently disabled in favor of my custom modeline
@@ -265,8 +276,10 @@ Currently, I try to work with those functions, so consult is disabled.
 #+end_src
 * LSP
 ** eglot
+Enable breadcrumb from site-lisp folder to enable the breadcrumb feature
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
   (require 'eglot)
+  (require 'breadcrumb)
 #+end_src
 ** Language specifics
 *** go mode
@@ -283,6 +296,7 @@ Currently, I try to work with those functions, so consult is disabled.
 
   (add-hook 'go-mode-hook 'eglot-ensure)
   (add-hook 'go-mode-hook 'yas-minor-mode)
+  (add-hook 'go-mode-hook 'breadcrumb-local-mode)
 #+END_SRC
 *** rust mode
 #+BEGIN_SRC emacs-lisp :tangle ~/.config/emacs/init.el
@@ -297,6 +311,7 @@ Currently, I try to work with those functions, so consult is disabled.
   (add-hook 'rust-mode-hook
     (lambda () (setq indent-tabs-mode nil)))  
   (add-hook 'rust-mode-hook 'yas-minor-mode)
+  (add-hook 'rust-mode-hook 'breadcrumb-local-mode)
   (setq rust-format-on-save t)
 #+END_SRC
 * Orgmode and org agenda

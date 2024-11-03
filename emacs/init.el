@@ -2,6 +2,8 @@
 (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
+(add-to-list 'load-path "~/.config/emacs/site-lisp/")
+
 (setq inhibit-startup-screen t)   ;; Disable the welcome screen
 (tool-bar-mode -1)   	            ;; Disable the toolbar
 (menu-bar-mode -1)                ;; Disable the menu bar
@@ -22,6 +24,8 @@
 
 ;; automatically close brackets
 (electric-pair-mode 1)
+
+;; (require 'nomispaz)
 
 (global-set-key (kbd "C-+") 'text-scale-increase)                ;; zoom in
   (global-set-key (kbd "C--") 'text-scale-decrease)                ;; zoom out
@@ -112,6 +116,7 @@
 )
 
 (require 'eglot)
+(require 'breadcrumb)
 
 ; Enable lsp-mode for Go and Rust modes
 (use-package go-mode
@@ -125,6 +130,7 @@
 
 (add-hook 'go-mode-hook 'eglot-ensure)
 (add-hook 'go-mode-hook 'yas-minor-mode)
+(add-hook 'go-mode-hook 'breadcrumb-local-mode)
 
 (use-package rust-mode
   :ensure t
@@ -137,6 +143,7 @@
 (add-hook 'rust-mode-hook
   (lambda () (setq indent-tabs-mode nil)))  
 (add-hook 'rust-mode-hook 'yas-minor-mode)
+(add-hook 'rust-mode-hook 'breadcrumb-local-mode)
 (setq rust-format-on-save t)
 
 (require 'org)
