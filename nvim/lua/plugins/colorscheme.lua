@@ -1,12 +1,10 @@
---return {
---    {
---      "folke/tokyonight.nvim",
---      lazy = false,
---      priority = 1000,
---      opts = {},
---    },
---}
 return {
+    {
+      "folke/tokyonight.nvim",
+      lazy = false,
+      priority = 1000,
+      opts = {},
+    },
     {
       "catppuccin/nvim",
 	name = "catppuccin",
@@ -14,4 +12,5 @@ return {
       priority = 1000,
       opts = {},
     },
+
 }

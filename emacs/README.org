@@ -47,8 +47,8 @@
   - [X] company
   - [X] consult --> disabled
   - [ ] org-superstar? --> don't use for now
-  - [X] which-key
-    
+  - [X] which-key --> disabled
+  
 * Introduction and remarks
 To further reduce the used plugins, disable marginalia, vertico and orderless but enable the pluginless minibuffer block.
 Which-key is only required if keyboard shortcuts should be shown while typing.
@@ -63,8 +63,15 @@ The following packages need to be enabled so that evil-collection can be install
 #+end_src
 
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
-  (add-to-list 'load-path "~/.config/emacs/site-lisp/")
+  (add-to-list 'load-path "/usr/share/emacs/site-lisp")
+  (add-to-list 'load-path "~/.config/emacs/site-lisp")
 #+end_src
+
+** Interesting functions in emacs
+- compile: enter a function like go test, cargo build etc., view the result in a new buffer and jump to error is one was found --> no lsp necessary ?!
+- duplicate-line: copy the current line to the next line.
+- M-DEL: delete previous word
+- M-d: delete next word
 
 * General setup
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
@@ -102,9 +109,15 @@ The following packages need to be enabled so that evil-collection can be install
     (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)     ;; zoom out with mouse wheel
   ;;copy link anker to clipboard, insert with C-c C-l
   (global-set-key (kbd "C-c l") 'org-store-link)
+  ;; duplicate current line
+ ;; first unbind the C-, map in orgmode, then redefine the keymap
+  (with-eval-after-load 'org
+     (define-key org-mode-map (kbd "C-,") nil))
+
+  (global-set-key (kbd "C-,") 'duplicate-line)
 #+end_src
 ** Whichkey
-#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
+#+begin_src emacs-lisp :tangle no
   (use-package which-key
     :ensure t
     :init
@@ -143,31 +156,143 @@ The following packages need to be enabled so that evil-collection can be install
 #+end_src
 *** Catppuccin
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
-(use-package catppuccin-theme
-    :ensure t
-    :config
-    (load-theme 'catppuccin :no-confirm)) 
+  (require 'catppuccin-theme)
+ (load-theme 'catppuccin :no-confirm)
 #+end_src
 *** Spacemacs
 #+begin_src emacs-lisp :tangle no
-  (use-package spacemacs-theme
-        :ensure t
-        :config
-        (load-theme 'spacemacs-dark t)
-        )
+  (require 'spacemacs-theme)
+ (load-theme 'spacemacs-dark :no-confirm)
 #+end_src
 ** Modeline
-*** Custom modeline
+*** Custom modeline v1
 #+begin_src emacs-lisp :tangle no
-  (setq-default mode-line-format
-    '("%b "
-      "L%l "
-      mode-line-modes
-      ))
+ (defun custom-evil-mode-indicator ()
+  "Display a single-letter Evil mode indicator, or 'E' if Evil mode is inactive."
+  (if (bound-and-true-p evil-local-mode)
+      (let ((state (substring (symbol-name evil-state) 0 1)))
+        (capitalize state))
+    "E")) ;; "E" for Emacs mode when Evil is inactive
+
+(defun custom-buffer-name ()
+  "Display the name of the current buffer."
+  (buffer-name))
+
+(defun custom-line-number ()
+  "Display the current line number."
+  (format "L%d" (line-number-at-pos)))
+
+(defun custom-mode-indicators ()
+  "Display the major mode and selected minor modes in the mode line, each with a custom click function."
+  (let* ((modes
+          `((major-mode ,(format-mode-line mode-name) ignore)
+            (yas-minor-mode "Yasnippet" yas-global-mode)
+            (flymake-mode "Flymake" flymake-show-diagnostics-buffer)
+            (go-mode "Go Mode" go-mode)
+            (rust-mode "Rust Mode" rust-mode)
+            (python-mode "Python Mode" python-mode)))
+         (active-modes
+          (delq nil
+                (mapcar (lambda (mode)
+                          (let ((mode-var (car mode))
+                                (mode-name (cadr mode))
+                                (mode-fn (nth 2 mode)))
+                            (when (and (boundp mode-var) (symbol-value mode-var))
+                              (propertize mode-name
+                                          'mouse-face 'mode-line-highlight
+                                          'help-echo (format "Click to configure %s" mode-name)
+                                          'local-map (let ((map (make-sparse-keymap)))
+                                                       (define-key map [mode-line down-mouse-1]
+                                                         `(lambda () (interactive)
+                                                            (call-interactively ',mode-fn)))
+                                                       map)))))
+                        modes))))
+    (if active-modes
+        (string-join active-modes " | ")
+      "No active modes")))
+
+(setq-default mode-line-format
+              '((:eval (custom-evil-mode-indicator))
+                " | "
+                (:eval (custom-buffer-name))
+                " | "
+                (:eval (custom-line-number))
+                " | "
+                (:eval (custom-mode-indicators))))
+#+end_src
+** Custom modeline
+#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
+;; Define a helper function to display a popup menu with all commands for a mode
+(defun my/display-mode-menu (mode)
+  "Display a popup menu with all commands available for MODE."
+  (let ((mode-map (symbol-function mode)))
+    (if (keymapp mode-map)
+        (popup-menu
+         (easy-menu-create-menu
+          (symbol-name mode)
+          (cl-loop for key in (cdr mode-map)
+                   for binding = (cdr key)
+                   when (commandp binding)
+                   collect (vector (symbol-name binding) binding))))
+      (message "No command menu available for %s" (symbol-name mode)))))
+
+;; Helper function to make clickable modeline text with a popup menu
+(defun my/modeline-menu-clickable (text mode)
+  "Return TEXT with MODE set as a clickable action to show the mode's commands in the mode line."
+  (propertize text 'mouse-face 'mode-line-highlight
+              'help-echo (concat "Click to see commands for " (symbol-name mode))
+              'local-map (let ((map (make-sparse-keymap)))
+                           ;; Use a dynamically created function to avoid lexical binding
+                           (define-key map [mode-line mouse-1]
+                             `(lambda () (interactive) (my/display-mode-menu ',mode)))
+                           map)))
+
+;; Define a custom modeline
+(defun my/custom-evil-mode-line-indicator ()
+  "Return a string for the current Evil mode state."
+  (cond
+   ((evil-normal-state-p) "N")
+   ((evil-visual-state-p) "V")
+   ((evil-insert-state-p) "I")
+   (t "-")))
+
+(setq-default mode-line-format
+              '((:eval (concat
+                        " "
+                        ;; Evil mode indicator
+                        (my/custom-evil-mode-line-indicator)
+                        " "
+
+                        ;; Buffer name
+                        "%b "
+                        
+                        ;; Line number
+                        "L%l "
+                        
+                        ;; Yasnippet
+                        (when (bound-and-true-p yas-minor-mode)
+                          (my/modeline-menu-clickable " Yas " 'yas-minor-mode))
+                        
+                        ;; Flymake
+                        (when (bound-and-true-p flymake-mode)
+                          (my/modeline-menu-clickable " Flymake " 'flymake-mode))
+
+                        ;; Go mode
+                        (when (derived-mode-p 'go-mode)
+                          (my/modeline-menu-clickable " Go " 'go-mode))
+
+                        ;; Rust mode
+                        (when (derived-mode-p 'rust-mode)
+                          (my/modeline-menu-clickable " Rust " 'rust-mode))
+
+                        ;; Python mode
+                        (when (derived-mode-p 'python-mode)
+                          (my/modeline-menu-clickable " Python " 'python-mode))))))
+
 #+end_src
 *** Doom-modeline
 Nice modeline with integration of eglot, flymake and most modes. Currently disabled in favor of my custom modeline
-#+BEGIN_SRC emacs-lisp :tangle ~/.config/emacs/init.el
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package doom-modeline
         :ensure t
         :init (doom-modeline-mode 1))
@@ -182,8 +307,8 @@ To actually install the fonts, M-x nerd-icons-install-fonts needs to be run
 * Completion
 ** Minibuffer
 *** Without plugins
-These settings are available in vanilla emacs and are alike plugins vertico+orderless (orderless would add regex autosuggestions in minibuffer). Use for work.
-#+begin_src emacs-lisp :tangle no
+These settings are available in vanilla emacs and are alike plugins vertico+orderless (orderless would add regex autosuggestions in minibuffer).
+#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
   ;; display completions in one column in minibuffer
   (setq completions-format 'one-column)
   ;; disable header for completions (shown number of possible completions)
@@ -196,15 +321,15 @@ These settings are available in vanilla emacs and are alike plugins vertico+orde
   (setq completion-auto-wrap t
       completion-auto-help nil
       completions-max-height 15
-      completion-styles '(flex)
+      completion-styles '(basic flex)
       icomplete-in-buffer t
       max-mini-window-height 10)
   
   (fido-vertical-mode 1)
 #+end_src
 *** Vertico
-If the standard display should not be enough, vertico could be used instead (vertical layout of suggestions). Currently disabled.
-#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
+If the standard display should not be enough, vertico could be used instead (vertical layout of suggestions). 
+#+begin_src emacs-lisp :tangle no
   (use-package vertico
     :ensure t
     :config
@@ -214,8 +339,8 @@ If the standard display should not be enough, vertico could be used instead (ver
   )
 #+end_src
 *** Orderless
-Adds an orderless completion style (regex) if flex style should not be enough. Currently disabled.
-#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
+Adds an orderless completion style (regex) if flex style should not be enough.
+#+begin_src emacs-lisp :tangle no
   (use-package orderless
     :ensure t
     :config
@@ -223,8 +348,8 @@ Adds an orderless completion style (regex) if flex style should not be enough. C
   )
 #+end_src
 *** Marginalia
-Adds doc string to functions displayed in the minibuffer. No alternative in standard available. Currently disabled.
-#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
+Adds doc string to functions displayed in the minibuffer. No alternative in standard available.
+#+begin_src emacs-lisp :tangle no
   (use-package marginalia
     :ensure t
     :config
@@ -234,29 +359,19 @@ Adds doc string to functions displayed in the minibuffer. No alternative in stan
 ** Autosuggestions
 *** yasnippets
 #+BEGIN_SRC emacs-lisp :tangle ~/.config/emacs/init.el
-  (use-package yasnippet
-    :ensure t
-  )
-  (use-package yasnippet-snippets
-    :ensure t)
+  (require 'yasnippet)
+  (require 'yasnippet-snippets)
   (yas-global-mode 1)
 #+END_SRC
 ** Company
 Enable integration of snippets with suggestions as popup in text instead of completion at point.
 Without this function, for snippet expansion, TAB can be used and for symbol completion M-C-i with M-arrow and M-Enter to go through suggestions and select one
 #+BEGIN_SRC emacs-lisp :tangle ~/.config/emacs/init.el
-          ; Enable company-mode with language server support
-          (use-package company
-            :ensure t
-            :custom
-            (company-minimum-prefix-length 2)
-          )
-          (add-hook 'after-init-hook 'global-company-mode)
-      (add-to-list 'company-backends '(company-capf company-yasnippet company-files))
-   (add-hook 'eglot-managed-mode-hook (lambda ()
-
-  (add-to-list 'company-backends
-  '(company-capf :with company-yasnippet)))) 
+       ; Enable company-mode with language server support
+       (require 'company)
+         (setq company-minimum-prefix-length 2)
+       (add-hook 'after-init-hook 'global-company-mode)
+   (setq company-backends '(company-capf company-yasnippet company-files))
 #+END_SRC
 * Consult
 Allows searching for files and within files via grep and ripgrep.
@@ -266,33 +381,42 @@ Alternatives are the vanilla functions
 - C-x p g: find via grep in project
 - C-x p p: change project (i.e. change directory)
 - recentf-open-files: open recent files
-Currently, I try to work with those functions, so consult is disabled.
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
-  (use-package consult
-    :ensure t
-    :config
-    (recentf-mode 1)
-  )
+  (require 'consult)
+ (setq recentf-mode 1)
 #+end_src
 * LSP
 ** eglot
-Enable breadcrumb from site-lisp folder to enable the breadcrumb feature
+Enable breadcrumb from site-lisp folder to enable the breadcrumb feature.
+In addition, ensure that yasnippets are used in eglot
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
   (require 'eglot)
   (require 'breadcrumb)
+(defun add-yasnippet
+    ()
+    (setq company-backends '((company-capf :with company-yasnippet))))
+(add-hook 'eglot--managed-mode-hook #'add-yasnippet)
+#+end_src
+** Install treesitter languages
+#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
+  ; tree-sitter setup languages
+    (setq treesit-language-source-alist
+          '((go "https://github.com/tree-sitter/tree-sitter-go")
+            (rust "https://github.com/tree-sitter/tree-sitter-rust"))
+          )
+(defun my/install-treesit_languages()
+ (interactive)
+ (mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
+ )
 #+end_src
 ** Language specifics
 *** go mode
 #+BEGIN_SRC emacs-lisp :tangle ~/.config/emacs/init.el
   ; Enable lsp-mode for Go and Rust modes
-  (use-package go-mode
-    :ensure t
-    :after lsp-mode
-    :init
+  (require 'go-mode)
     (setq indent-tabs-mode nil)
     (setq go-announce-deprecations t)
     (setq go-mode-treesitter-derive t)
-    )
 
   (add-hook 'go-mode-hook 'eglot-ensure)
   (add-hook 'go-mode-hook 'yas-minor-mode)
@@ -300,13 +424,10 @@ Enable breadcrumb from site-lisp folder to enable the breadcrumb feature
 #+END_SRC
 *** rust mode
 #+BEGIN_SRC emacs-lisp :tangle ~/.config/emacs/init.el
-   (use-package rust-mode
-    :ensure t
-   :after lsp-mode
-   :init
-    (setq indent-tabs-mode nil)
-   ;;  (setq rust-mode-treesitter-derive t)
-  )
+   (require 'rust-mode)
+  (setq indent-tabs-mode nil)
+   (setq rust-mode-treesitter-derive t)
+  
   (add-hook 'rust-mode-hook 'eglot-ensure)
   (add-hook 'rust-mode-hook
     (lambda () (setq indent-tabs-mode nil)))  
@@ -384,14 +505,10 @@ Evil-collection is disabled for now since it is not available in ELPA.
 Instead of evil-mode maybe use viper mode that alread emulates vi-keybindings.
 
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
-    (use-package evil
-      :ensure t
-      :init
-      (setq evil-want-integration t)
+    (require 'evil)
+     (setq evil-want-integration t)
       (setq evil-want-keybinding nil)
-      :config
       (evil-mode 1)
-      )
 
   (evil-set-undo-system 'undo-redo)
 
@@ -421,12 +538,12 @@ Instead of evil-mode maybe use viper mode that alread emulates vi-keybindings.
 
     ;; files
      (define-key evil-normal-state-map (kbd "<leader> f f") '("Search files" . consult-find))
-     (define-key evil-normal-state-map (kbd "<leader> f r") '("Recent files" . consult-recent-file))
+     (define-key evil-normal-state-map (kbd "<leader> f r") '("Recent files" . recentf))
      (define-key evil-normal-state-map (kbd "<leader> f g") '("Search files (grep)" . consult-grep))
      (define-key evil-normal-state-map (kbd "<leader> f n") '("New file" . evil-buffer-new))
 
      ;; buffers
-     (define-key evil-normal-state-map (kbd "<leader> b b") '("Switch to buffer" . consult-buffer))
+     (define-key evil-normal-state-map (kbd "<leader> b b") '("Switch to buffer" . switch-to-buffer))
      (define-key evil-normal-state-map (kbd "<leader> b k") '("Kill current buffer" . kill-current-buffer))
      (define-key evil-normal-state-map (kbd "<leader> b r") '("Rename buffer" . rename-buffer))
      (define-key evil-normal-state-map (kbd "<leader> b s") '("Save buffer" . basic-save-buffer))
@@ -453,6 +570,6 @@ Instead of evil-mode maybe use viper mode that alread emulates vi-keybindings.
      (define-key evil-normal-state-map (kbd "<leader> g r n") '("Rename variable or function" . eglot-rename))
   (define-key evil-normal-state-map (kbd "<leader> g d") '("LSP goto definition" . xref-find-definitions))
   (define-key evil-normal-state-map (kbd "<leader> g D") '("LSP Find references" . xref-find-references))
-  (define-key evil-normal-state-map (kbd "<leader> g s") '("LSP show doc in buffer" . eldoc))
+  (define-key evil-normal-state-map (kbd "K") '("LSP show doc in buffer" . eldoc))
   (define-key evil-normal-state-map (kbd "C-.") '("LSP execute code action" . eglot-code-actions))
 #+end_src

@@ -447,6 +447,19 @@
 	      (:authors
 	       ("Campbell Barton" . "ideasman42@gmail.com"))
 	      (:commit . "71336e614e3150c47c58f99f2df10a3af73370ac"))])
+ (dirvish .
+	  [(2 0 53)
+	   ((emacs
+	     (27 1))
+	    (transient
+	     (0 3 7)))
+	   "A modern file manager based on dired mode" tar
+	   ((:url . "https://github.com/alexluigit/dirvish")
+	    (:keywords "files" "convenience")
+	    (:maintainer "Alex Lu" . "https://github.com/alexluigit")
+	    (:authors
+	     ("Alex Lu" . "https://github.com/alexluigit"))
+	    (:commit . "c535e2147171be5506f4ff34e862bacbfb3de768"))])
  (doc-show-inline .
 		  [(0 1)
 		   ((emacs
@@ -486,7 +499,7 @@
 		 ("Arne Jørgensen" . "arne@arnested.dk"))
 		(:commit . "f632fa5f140b04260fa23b15ffccbfe5a787b2e2"))])
  (dslide .
-	 [(0 5 3)
+	 [(0 5 5)
 	  ((emacs
 	    (29 2)))
 	  "Domain Specific sLIDEs. A presentation framework" tar
@@ -495,7 +508,7 @@
 	   (:maintainer "Positron" . "contact@positron.solutions")
 	   (:authors
 	    ("Positron" . "contact@positron.solutions"))
-	   (:commit . "2d8a9ac3e37157ce8b78880ebc1defc61303a44d"))])
+	   (:commit . "0d9a1f6c27e0543e912213d0a5047999f9e5deb5"))])
  (eat .
       [(0 9 4)
        ((emacs
@@ -1032,7 +1045,7 @@
 	       ("Jonas Bernoulli" . "emacs.git-modes@jonas.bernoulli.dev"))
 	      (:commit . "f99010bbeb8b6d8a0819fac0195a2ef0159d08f0"))])
  (gnosis .
-	 [(0 4 6)
+	 [(0 4 8)
 	  ((emacs
 	    (27 2))
 	   (emacsql
@@ -1047,7 +1060,7 @@
 	   (:maintainer "Thanos Apollo" . "public@thanosapollo.org")
 	   (:authors
 	    ("Thanos Apollo" . "public@thanosapollo.org"))
-	   (:commit . "f4050f4f27e1ac0eab25168b0849017afd04aa31"))])
+	   (:commit . "b30a06fc16c18b6de7d5a21facf2b5fd8d90b613"))])
  (gnu-apl-mode .
 	       [(1 5 1)
 		nil "Emacs mode for GNU APL" tar
@@ -1418,13 +1431,13 @@
 	       ((:url . "https://elpa.nongnu.org/nongnu/jinja2-mode.html")
 		(:commit . "a598357069a68b0ac2bf128c19edd8e899084cdc"))])
  (julia-mode .
-	     [(1 0 0)
+	     [(1 0 1)
 	      ((emacs
 		(26 1)))
 	      "Major mode for editing Julia source code" tar
 	      ((:url . "https://github.com/JuliaEditorSupport/julia-emacs")
 	       (:keywords "languages")
-	       (:commit . "ee086a779b80f2fab83db484f453c7d41509e73e"))])
+	       (:commit . "6283427deefa02e6b87b28efa18a66dcbe50317f"))])
  (keycast .
 	  [(1 4 1)
 	   ((emacs
@@ -1498,7 +1511,7 @@
 	       ("Jon Oddie" . "j.j.oddie@gmail.com"))
 	      (:commit . "31d4adcca4f08cfd7a45f85e691aaa7a9316b355"))])
  (magit .
-	[(4 1 1)
+	[(4 1 2)
 	 ((emacs
 	   (26 1))
 	  (compat
@@ -1506,11 +1519,11 @@
 	  (dash
 	   (2 19 1))
 	  (magit-section
-	   (4 1 1))
+	   (4 1 2))
 	  (seq
 	   (2 24))
 	  (transient
-	   (0 7 6))
+	   (0 7 8))
 	  (with-editor
 	   (3 4 2)))
 	 "A Git porcelain inside Emacs" tar
@@ -1522,9 +1535,9 @@
 	  (:authors
 	   ("Marius Vollmer" . "marius.vollmer@gmail.com")
 	   ("Jonas Bernoulli" . "emacs.magit@jonas.bernoulli.dev"))
-	  (:commit . "93e86ceca7bf5b0ff9023d7f138e5f06990fc276"))])
+	  (:commit . "4992c3d1f64e0e983692c7a61d47069f47380dbf"))])
  (magit-section .
-		[(4 1 1)
+		[(4 1 2)
 		 ((emacs
 		   (26 1))
 		  (compat
@@ -1539,7 +1552,7 @@
 		  (:maintainer "Jonas Bernoulli" . "emacs.magit@jonas.bernoulli.dev")
 		  (:authors
 		   ("Jonas Bernoulli" . "emacs.magit@jonas.bernoulli.dev"))
-		  (:commit . "93e86ceca7bf5b0ff9023d7f138e5f06990fc276"))])
+		  (:commit . "4992c3d1f64e0e983692c7a61d47069f47380dbf"))])
  (markdown-mode .
 		[(2 6)
 		 ((emacs
@@ -1552,7 +1565,7 @@
 		   ("Jason R. Blevins" . "jblevins@xbeta.org"))
 		  (:commit . "193b61605f44c85d261b8bd82e0a213fd8f1ff32"))])
  (mastodon .
-	   [(1 1 4)
+	   [(1 1 5)
 	    ((emacs
 	      (28 1))
 	     (request
@@ -1567,7 +1580,7 @@
 	     (:authors
 	      ("Johnson Denen" . "johnson.denen@gmail.com")
 	      ("Marty Hiatt" . "mousebot@disroot.org"))
-	     (:commit . "1e18934c705514dc3aad6170a50cd5875dab86bf"))])
+	     (:commit . "76234781213518efa44b90b09c2792753a555e09"))])
  (material-theme .
 		 [(2015)
 		  ((emacs
@@ -2015,7 +2028,7 @@
 	       ("David Christiansen" . "david@davidchristiansen.dk"))
 	      (:commit . "1edda80e2e32b72e77f4f16ae5b83c312c68ee95"))])
  (racket-mode .
-	      [(1 0 20241031 113937)
+	      [(1 0 20241129 85359)
 	       ((emacs
 		 (25 1)))
 	       "Racket editing, REPL, and more" tar
@@ -2262,14 +2275,14 @@
 		     ("John Olsson" . "john@cryon.se"))
 		    (:commit . "2d5acd143a153e16372d59000e57d76291ab81dd"))])
  (subed .
-	[(1 2 17)
+	[(1 2 21)
 	 ((emacs
 	   (25 1)))
 	 "A major mode for editing subtitles" tar
 	 ((:url . "https://github.com/sachac/subed")
 	  (:keywords "convenience" "files" "hypermedia" "multimedia")
 	  (:maintainer "Sacha Chua" . "sacha@sachachua.com")
-	  (:commit . "87222b0f5622308af6dd04fd09db6c12eddba082"))])
+	  (:commit . "ace4b62fd06554fad1e2ae62339b448c30c9ae70"))])
  (sweeprolog .
 	     [(0 27 6)
 	      ((emacs
@@ -2452,13 +2465,13 @@
 		    (:keywords "typescript" "languages")
 		    (:commit . "2a58631230fe2d176352af262a0efdecc21f90ac"))])
  (ujelly-theme .
-	       [(1 2 9)
+	       [(1 3 6)
 		nil "Ujelly theme for GNU Emacs 24 (deftheme)" tar
 		((:url . "http://github.com/marktran/color-theme-ujelly")
 		 (:maintainer "Mark Tran" . "mark.tran@gmail.com")
 		 (:authors
 		  ("Mark Tran" . "mark.tran@gmail.com"))
-		 (:commit . "2a35e63545132e24becff21a3daa9325126d8504"))])
+		 (:commit . "7345ab821739aafa2ec079a71fa7de350a869f0e"))])
  (undo-fu .
 	  [(0 5)
 	   ((emacs
@@ -2612,19 +2625,19 @@
 		   (:keywords "writing" "weasel-words" "grammar")
 		   (:commit . "d54eadeedb8bf3aa0e0a584c0a7373c69644f4b8"))])
  (ws-butler .
-	    [(0 6)
+	    [(0 7)
 	     nil "Unobtrusively remove trailing whitespace." tar
 	     ((:url . "https://github.com/lewang/ws-butler")
-	      (:commit . "323b651dd70ee40a25accc940b8f80c3a3185205"))])
+	      (:commit . "d3927f6131f215e9cd3e1f747be5a91e5be8ca9a"))])
  (xah-fly-keys .
-	       [(26 6 20241021131107)
+	       [(26 8 20241118173945)
 		((emacs
 		  (27)))
 		"ergonomic modal keybinding minor mode." tar
 		((:url . "http://xahlee.info/emacs/misc/xah-fly-keys.html")
 		 (:keywords "convenience" "vi" "vim" "ergoemacs" "keybinding")
 		 (:maintainer "Xah Lee" . "xah@xahlee.org")
-		 (:commit . "3fb8453d4b4144e5105dd3e65c852be2e6770da8"))])
+		 (:commit . "6ef7d2cc36a3f1a69edda0b431d20d1752b53e95"))])
  (xkcd .
        [(1 1)
 	((json

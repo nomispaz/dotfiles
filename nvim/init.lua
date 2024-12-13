@@ -15,6 +15,7 @@ opt.inccommand = "nosplit" -- preview incremental substitute
 opt.laststatus = 3 -- global statusline
 opt.mouse = "a" -- Enable mouse mode
 opt.number = true -- Print line number
+vim.wo.relativenumber = true
 opt.scrolloff = 4 -- Lines of context
 opt.shiftround = true -- Round indent
 --opt.shiftwidth = 4 -- Size of an indent
@@ -33,43 +34,12 @@ opt.wrap = true -- line wrap
 opt.conceallevel = 2 --conceal links
 opt.concealcursor = 'nc'
 opt.completeopt = {'menu', 'menuone', 'noselect'} --autocomplete selection
-vim.wo.relativenumber = true
 
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
--- bootstrap lazy.nvim
-vim.fn.system({ 
-    "git", 
-    "clone", 
-    "--filter=blob:none", 
-    "https://github.com/folke/lazy.nvim.git", 
-    "--branch=stable",
-    lazypath,
-})
-end
-vim.opt.rtp:prepend(lazypath)
+require("config.autocommands")
+require("config.functions")
+require("config.keymaps")
 
-require("lazy").setup({
-        spec = {
-            { import = "plugins" },
-        },
-        defaults = {
-            -- It's recommended to leave version=false for now, since a lot the plugin that support versioning,
-            -- have outdated releases, which may break your Neovim install.
-            version = false, -- always use the latest git commit
-            -- version = "*", -- try installing the latest stable version for plugins that support semver
-        }
-})
+require("config.lazy")
 
 vim.cmd.colorscheme "catppuccin-mocha"
-
-require("mini.pairs").setup()
-require("config.whichkey")
-require("persistence").setup({opts})
-require("config.orgmode-headlines")
-require("config.autocommands")
-require("null-ls").setup({
-        sources = {
-            require("null-ls").builtins.formatting.shfmt,
-        },
-})
+--vim.cmd.colorscheme "tokyonight-night"

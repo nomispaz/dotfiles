@@ -50,6 +50,8 @@ return {
 		        shadow = true,
 		     },
 		     staticcheck = true,
+                   gofumpt = true,
+                   usePlaceholders = true,
 		    },
 	    },
 	on_attach = on_attach,
