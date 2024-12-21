@@ -47,7 +47,7 @@ class Mic(base._TextBox):
 
     defaults = [
         ("padding", 3, "Padding left and right. Calculated if None."),
-        ("update_interval", 0.2, "Update time in seconds."),
+        ("update_interval", 1.0, "Update time in seconds."),
         ("mute_command", "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle", "Mute command"),
         ("volume_app", "pavucontrol", "App to control volume"),
         (

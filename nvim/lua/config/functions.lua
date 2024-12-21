@@ -73,6 +73,7 @@ function LoadSessionFromQuickfix()
     else
         print("No entry selected.")
     end
+    vim.fn.setqflist({}, 'r', { title = "" })       
 end
 
 

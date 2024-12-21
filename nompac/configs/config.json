@@ -188,6 +188,11 @@
 		"swaybg",
 		"waybar"
 	],
+	"qtile": [
+		"qtile",
+		"python-pywlroots",
+		"qtile-extras"
+	],
 	"tuxedo": [
 		"tuxedo-control-center-bin",
 		"tuxedo-drivers-dkms"
@@ -214,6 +219,7 @@
 	  "emacs-goto-chg-git",
 	  "emacs-evil-git",
 	  "emacs-yasnippet-git",
-	  "emacs-yasnippet-snippets-git"
+	  "emacs-yasnippet-snippets-git",
+	  "qtile-extras"
   ]
 }

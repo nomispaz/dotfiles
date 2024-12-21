@@ -137,6 +137,6 @@ vim.api.nvim_create_autocmd("FileType", {
                 "<Cmd>lua LoadSessionFromQuickfix()<CR>",
                 { noremap = true, silent = true }
             )
-        end
+	end
     end,
 })

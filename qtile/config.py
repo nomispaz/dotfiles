@@ -24,15 +24,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import os, sys
+import os
 import subprocess
 import qtile_extras
 from colors import colors
 from qtile_extras import widget
 from libqtile import bar, layout, qtile
-from libqtile.config import Click, Drag, Group, Key, Match, Screen, ScratchPad, DropDown, KeyChord
+from libqtile.config import Click, Drag, Group, Key, Match, Screen, ScratchPad, DropDown
 from libqtile.lazy import lazy
-from libqtile.utils import guess_terminal
 from libqtile.backend.wayland import InputConfig
 
 from qtile_extras.widget.decorations import PowerLineDecoration, RectDecoration
@@ -41,7 +40,7 @@ import myfunctions
 
 from libqtile import hook
 
-#read current path
+# read current path
 absolute_path = os.path.dirname(__file__)
 
 # environment variables
@@ -49,32 +48,21 @@ os.environ["WLR_NO_HARDWARE_CURSORS"] = "1"
 os.environ["RANGER_LOAD_DEFAULT_RC"] = "false"
 os.environ["XDG_SESSION_TYPE"] = "wayland"
 
+
 # autostart
 @hook.subscribe.startup_once
 def start_once():
     script = os.path.expanduser("~/.config/qtile/autostart.sh")
     subprocess.run([script])
 
-# define custom function with integration with dunst
-@lazy.function
-def mute_microphone(qtile):
-    subprocess.run('dunstify test', shell=True)
-    #check_mute = ""
-    #check_mute = subprocess.run('wpctl get-volume @DEFAULT_AUDIO_SOURCE@', capture_output=True, shell=True, text=True).stdout[10:]
-    #return 'dunstify ' + check_mute
 
-    #if "MUTED" in check_mute:
-    #    return 'dunstify ' + myfunctions.myfunctions.get_icons('nerd_mic_mute')
-    #else:
-    #    return 'dunstify ' + 'test'
-       
 # define input configurations for x11/wayland
 if qtile.core.name == "x11":
     None
 elif qtile.core.name == "wayland":
     wl_input_rules = {
-        "type:touchpad": InputConfig(tap=True,middle_emulation=True),
-        "type:keyboard": InputConfig(kb_layout='de',kb_variant='nodeadkeys')
+        "type:touchpad": InputConfig(tap=True, middle_emulation=True),
+        "type:keyboard": InputConfig(kb_layout='de', kb_variant='nodeadkeys')
     }
 
 # Modkey is windows-key
@@ -114,15 +102,15 @@ keys = [
         lazy.layout.toggle_split(),
         desc="Toggle between split and unsplit sides of stack",
     ),
-    #switch between stacked windows
+    # switch between stacked windows
     Key(
-        #mod1 = RAlt Key
+        # mod1 = RAlt Key
         ["shift", "mod1"],
         "right",
         lazy.layout.up(),
     ),
     Key(
-        #mod1 = Alt Key
+        # mod1 = Alt Key
         ["shift", "mod1"],
         "left",
         lazy.layout.down(),
@@ -143,16 +131,19 @@ keys = [
     # fn keys
     Key([], "XF86MonBrightnessDown", lazy.spawn('brightnessctl set 5%-')),
     Key([], "XF86MonBrightnessUp", lazy.spawn('brightnessctl set 5%+')),
-    Key([], "XF86AudioLowerVolume",
-        lazy.spawn('wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- \
-        & dunstctl close-all \
-        & dunstify $(wpctl get-volume @DEFAULT_AUDIO_SINK@)',
-                   shell=True)),
-    Key([], "XF86AudioRaiseVolume",
-        lazy.spawn('wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ \
-        & dunstctl close-all \
-        & dunstify $(wpctl get-volume @DEFAULT_AUDIO_SINK@)',
-                   shell=True)),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn('wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+')),
+    Key([], "XF86AudioLowerVolume", lazy.spawn('wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-')),
+
+    # Key([], "XF86AudioLowerVolume",
+    #     lazy.spawn('wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- \
+    #     & dunstctl close-all \
+    #     & dunstify $(wpctl get-volume @DEFAULT_AUDIO_SINK@)',
+    #                shell=True)),
+    # Key([], "XF86AudioRaiseVolume",
+    #     lazy.spawn('wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ \
+    #     & dunstctl close-all \
+    #     & dunstify $(wpctl get-volume @DEFAULT_AUDIO_SINK@)',
+    #                shell=True)),
     Key([], "XF86AudioMute",
         lazy.spawn('wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle \
         & dunstctl close-all',
@@ -175,14 +166,12 @@ keys = [
         lazy.spawn('dunstify $(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ \
         | awk "/MUTED/{exit 1}" && echo "mic unmuted")',
                    shell=True)),
-#    Key([mod], "y", lazy.spawn("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"), lazy.function(mute_microphone)),
 
- 
     # start programs with shortcuts
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     Key([mod], "b", lazy.spawn('firefox'), desc="Launch firefox"),
     Key([mod], "s", lazy.spawn('prime-run steam'), desc="Launch steam on nvidia"),
-    Key([mod], "r", lazy.spawn('rofi -show drun'), desc="Launch rofi"),
+    Key([mod], "d", lazy.spawn('rofi -show drun'), desc="Launch rofi"),
     Key([mod], "e", lazy.spawn('emacs'), desc="Launch emacs"),
 
     # screenshots
@@ -191,7 +180,7 @@ keys = [
 ]
 
 layouts = [
-    layout.Columns(border_focus_stack=colors['Red'],border_focus=[colors['Rosewater']], border_width=4, insert_position=1),
+    layout.Columns(border_focus_stack=colors['Red'], border_focus=[colors['Rosewater']], border_width=4, insert_position=1),
     # Try more layouts by unleashing below layouts.
     # layout.Matrix(),
     # layout.Max(),
@@ -214,7 +203,7 @@ decoration_group = {
     "padding": 10,
 }
 
-#echo read device name for backlight control 
+# echo read device name for backlight control. Currently only works for internal amdgpu
 vDevBacklightLaptopCmd = subprocess.run('brightnessctl -m | grep amdgpu', capture_output=True, shell=True, text=True).stdout
 vDevBacklightLaptop = str(vDevBacklightLaptopCmd).split(',')[0]
 
@@ -223,25 +212,26 @@ vDevBacklightLaptop = str(vDevBacklightLaptopCmd).split(',')[0]
 widget.modify(myvolume.Volume, **decoration_group)
 widget.modify(mymicrophone.Mic, **decoration_group)
 
-#widgets
-#widget.CurrentLayout(**decoration_group),
-wGroupBox = widget.GroupBox(background=colors['Overlay0'],**decoration_group)
+# widgets
+
+# widget.CurrentLayout(**decoration_group),
+wGroupBox = widget.GroupBox(background=colors['Overlay0'], **decoration_group)
 wWindowName = widget.WindowName(**decoration_group)
 wTextBox = widget.TextBox(width=1000)
-wStatusNotifier = qtile_extras.widget.StatusNotifier(background=colors['Text'],**decoration_group)
-wThermalSensor = widget.ThermalSensor(background=colors['Red'], threshold=100, width=80,**decoration_group, mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('tcc')})
-wBacklight = widget.Backlight(background=colors['Rosewater'],backlight_name=vDevBacklightLaptop,**decoration_group,width=70,format=myfunctions.myfunctions.get_icons('nerd_sun')+" {percent:2.0%}")
-#wVolume = myvolume.Volume(background=colors['Lavender'],**decoration_group)
-#wMic = mymicrophone.Mic(background=colors['Lavender'],**decoration_group)
-wCPU = widget.CPU(background=colors['Sky'],width=180,**decoration_group,mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('htop')})
-wMemory = widget.Memory(background=colors['Sky'],width=120, format="RAM: {MemPercent}%",**decoration_group,mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('htop')})
-wNet = widget.Net(background=colors['Sapphire'],**decoration_group,width=180,format='Net: {down:.0f}{down_suffix} ↓↑ {up:.0f}{up_suffix}')
-wBattery = widget.Battery(background=colors['Sapphire'],width=50,**decoration_group)
-wClock = widget.Clock(background=colors['Blue'],format="%Y-%m-%d %a %H:%M",width=220,**decoration_group,mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('qtcal')})
-            
+wStatusNotifier = qtile_extras.widget.StatusNotifier(background=colors['Text'], **decoration_group)
+wThermalSensor = widget.ThermalSensor(background=colors['Red'], threshold=100, width=80, **decoration_group, mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('tcc')})
+wBacklight = widget.Backlight(background=colors['Rosewater'], backlight_name=vDevBacklightLaptop, **decoration_group, width=70, format=myfunctions.myfunctions.get_icons('nerd_sun')+" {percent:2.0%}")
+wVolume = myvolume.Volume(background=colors['Lavender'], **decoration_group)
+wMic = mymicrophone.Mic(background=colors['Lavender'], **decoration_group)
+wCPU = widget.CPU(background=colors['Sky'], width=180, **decoration_group, mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('htop')})
+wMemory = widget.Memory(background=colors['Sky'], width=120, format="RAM: {MemPercent}%", **decoration_group, mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('htop')})
+wNet = widget.Net(background=colors['Sapphire'], **decoration_group, width=180, format='Net: {down:.0f}{down_suffix} ↓↑ {up:.0f}{up_suffix}')
+wBattery = widget.Battery(background=colors['Sapphire'], width=50, **decoration_group)
+wClock = widget.Clock(background=colors['Blue'], format="%Y-%m-%d %a %H:%M", width=220, **decoration_group, mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('qtcal')})
+
 screens = [
     Screen(
-        # wallpaper='~/Pictures/wallpapers/1920x1080_px_forest-1262037.jpg',
+        wallpaper='~/git_repos/dotfiles/sway/background/wald.jpg',
         wallpaper_mode='fill',
         top=bar.Bar(
             [
@@ -249,10 +239,10 @@ screens = [
                 wWindowName,
                 wTextBox,
                 wStatusNotifier,
-                #wThermalSensor,
+                # wThermalSensor,
                 wBacklight,
-                #wVolume,
-                #wMic,
+                wVolume,
+                wMic,
                 wCPU,
                 wMemory,
                 wClock
@@ -273,10 +263,10 @@ screens = [
                 wGroupBox,
                 wWindowName,
                 wTextBox,
-                #wThermalSensor,
+                # wThermalSensor,
                 wBacklight,
-                #wVolume,
-                #wMic,
+                wVolume,
+                wMic,
                 wCPU,
                 wMemory,
                 wClock
@@ -287,7 +277,6 @@ screens = [
     ),
 ]
 
-#groups = [Group(i) for i in "1234"]
 groups = [
     Group(name="1", screen_affinity=0),
     Group(name="2", screen_affinity=0),
@@ -297,13 +286,14 @@ groups = [
         # define a drop down terminal.
         # it is placed in the upper third of screen by default.
         DropDown("term", terminal, opacity=0.5),
-        DropDown("tcc", "tuxedo-control-center"), 
-        DropDown("wdisplays", "wdisplays"), 
-        DropDown("htop", terminal + " -e htop"), 
+        DropDown("tcc", "tuxedo-control-center"),
+        DropDown("wdisplays", "wdisplays"),
+        DropDown("htop", terminal + " -e htop"),
         DropDown("qtcal", "python " + os.path.join(absolute_path, "myclasses/qtcal/qtcal.py --datadir=/home/simonheise/.local/share/qtcal"), x=0.5, height=0.5, opacity=1),
         ]
     ),
 ]
+
 
 def go_to_group(name: str):
     def _inner(qtile):
@@ -319,6 +309,7 @@ def go_to_group(name: str):
             qtile.groups_map[name].toscreen()
 
     return _inner
+
 
 def go_to_group_and_move_window(name: str):
     def _inner(qtile):
@@ -337,13 +328,14 @@ def go_to_group_and_move_window(name: str):
 
     return _inner
 
+
 for i in groups:
     keys.append(Key([mod], i.name, lazy.function(go_to_group(i.name))))
 
 for i in groups:
     keys.append(Key([mod, "shift"], i.name, lazy.function(go_to_group_and_move_window(i.name))))
 
-#extend keys for scratchpads
+# extend keys for scratchpads
 keys.extend([
     Key(['control'], 'F10', lazy.group['0'].dropdown_toggle('wdisplays')),
     Key(['control'], 'F11', lazy.group['0'].dropdown_toggle('term')),
@@ -373,7 +365,7 @@ floating_layout = layout.Floating(
         Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
-        Match(title="ck3"), #crusader kings 3
+        Match(title="ck3"),  # crusader kings 3
     ]
 )
 auto_fullscreen = True
