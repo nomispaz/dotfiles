@@ -7,7 +7,7 @@
   "pacconfig": "$HOME/.config/nompac/configs/pacman.conf",
   "mirrorlist": "$HOME/.config/nompac/configs/mirrorlist",
   "packagegroups": "all",
-  "snapshot": "2024_09_16",
+  "snapshot": "2024_12_21",
   "packages": [
     {
 	"additionalprograms": [
@@ -221,5 +221,19 @@
 	  "emacs-yasnippet-git",
 	  "emacs-yasnippet-snippets-git",
 	  "qtile-extras"
+  ],
+  "configs": [
+	  {
+		"path": ["~/test.txt"],
+		"config_entry": [
+			"123"
+		]
+	  },
+	  {
+		  "path": ["~/test2.txt"],
+		  "config_entry": [
+			  "124"
+		  ]
+	  }
   ]
 }

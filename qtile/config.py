@@ -62,8 +62,9 @@ if qtile.core.name == "x11":
 elif qtile.core.name == "wayland":
     wl_input_rules = {
         "type:touchpad": InputConfig(tap=True, middle_emulation=True),
-        "type:keyboard": InputConfig(kb_layout='de', kb_variant='nodeadkeys')
+        "type:keyboard": InputConfig(kb_layout='de', kb_variant='nodeadkeys', kb_options='caps:ctrl_modifier', kb_numlock='enabled')
     }
+
 
 # Modkey is windows-key
 mod = "mod4"
