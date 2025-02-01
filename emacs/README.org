@@ -530,46 +530,53 @@ Instead of evil-mode maybe use viper mode that alread emulates vi-keybindings.
 
 ** Additional evil keybindings
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
-     ;; set leader key in all states
-     (evil-set-leader nil (kbd "SPC"))
+       ;; set leader key in all states
+       (evil-set-leader 'normal (kbd "SPC"))
+       (evil-set-leader nil (kbd "SPC"))
 
-     ;; set local leader
-     (evil-set-leader 'normal "," t)
+       ;; set local leader
+       (evil-set-leader 'normal "," t)
 
-    ;; files
-     (define-key evil-normal-state-map (kbd "<leader> f f") '("Search files" . consult-find))
-     (define-key evil-normal-state-map (kbd "<leader> f r") '("Recent files" . recentf))
-     (define-key evil-normal-state-map (kbd "<leader> f g") '("Search files (grep)" . consult-grep))
-     (define-key evil-normal-state-map (kbd "<leader> f n") '("New file" . evil-buffer-new))
+      ;; window navigation
+        (define-key evil-normal-state-map (kbd "C-w <right>") '("Change to right window" . evil-window-right))
+        (define-key evil-normal-state-map (kbd "C-w <left>") '("Change to left window" . evil-window-left))
+       (define-key evil-normal-state-map (kbd "C-w <up>") '("Change to upper window" . evil-window-top))
+       (define-key evil-normal-state-map (kbd "C-w <down>") '("Change to bottom window" . evil-window-down))
+        (define-key evil-normal-state-map (kbd "C-w k") '("Close window" . evil-window-delete)) 
+      ;; files
+       (define-key evil-normal-state-map (kbd "<leader> f f") '("Search files" . consult-find))
+       (define-key evil-normal-state-map (kbd "<leader> f r") '("Recent files" . recentf))
+       (define-key evil-normal-state-map (kbd "<leader> f g") '("Search files (grep)" . consult-grep))
+       (define-key evil-normal-state-map (kbd "<leader> f n") '("New file" . evil-buffer-new))
 
-     ;; buffers
-     (define-key evil-normal-state-map (kbd "<leader> b b") '("Switch to buffer" . switch-to-buffer))
-     (define-key evil-normal-state-map (kbd "<leader> b k") '("Kill current buffer" . kill-current-buffer))
-     (define-key evil-normal-state-map (kbd "<leader> b r") '("Rename buffer" . rename-buffer))
-     (define-key evil-normal-state-map (kbd "<leader> b s") '("Save buffer" . basic-save-buffer))
+       ;; buffers
+       (define-key evil-normal-state-map (kbd "<leader> b b") '("Switch to buffer" . switch-to-buffer))
+       (define-key evil-normal-state-map (kbd "<leader> b k") '("Kill current buffer" . kill-current-buffer))
+       (define-key evil-normal-state-map (kbd "<leader> b r") '("Rename buffer" . rename-buffer))
+       (define-key evil-normal-state-map (kbd "<leader> b s") '("Save buffer" . basic-save-buffer))
 
-     ;; tabs
-     (define-key evil-normal-state-map (kbd "<leader> t t") '("Switch to tab" . tab-switch))
+       ;; tabs
+       (define-key evil-normal-state-map (kbd "<leader> t t") '("Switch to tab" . tab-switch))
 
-     ;; search
-     (define-key evil-normal-state-map (kbd "<leader> s o") '("Search heading" - consult-outline))
-     (define-key evil-normal-state-map (kbd "<leader> s l") '("Search line" . consult-line))
+       ;; search
+       (define-key evil-normal-state-map (kbd "<leader> s o") '("Search heading" - consult-outline))
+       (define-key evil-normal-state-map (kbd "<leader> s l") '("Search line" . consult-line))
 
-     ;; org-mode
-     (define-key evil-normal-state-map (kbd "<leader> o e") '("Export org file" . org-export-dispatch))
-      (define-key evil-normal-state-map (kbd "<leader> o a") '("Open org agenda" . org-agenda))
-     (define-key evil-normal-state-map (kbd "<leader> o t") '("Export code blocks" . org-babel-tangle))
-     (define-key evil-normal-state-map (kbd "<leader> o i s") '("Insert scheduled date" . org-schedule))
+       ;; org-mode
+       (define-key evil-normal-state-map (kbd "<leader> o e") '("Export org file" . org-export-dispatch))
+        (define-key evil-normal-state-map (kbd "<leader> o a") '("Open org agenda" . org-agenda))
+       (define-key evil-normal-state-map (kbd "<leader> o t") '("Export code blocks" . org-babel-tangle))
+       (define-key evil-normal-state-map (kbd "<leader> o i s") '("Insert scheduled date" . org-schedule))
 
-     ;; flycheck
-     (define-key evil-normal-state-map (kbd "<leader> l l") '("Show list of flycheck errors" . flymake-show-buffer-diagnostics))
-     (define-key evil-normal-state-map (kbd "<leader> l n") '("Next flycheck error" . flymake-goto-next-error))
-     (define-key evil-normal-state-map (kbd "<leader> l p") '("Previous flycheck error" . flymake-goto-previous-error))
+       ;; flycheck
+       (define-key evil-normal-state-map (kbd "<leader> l l") '("Show list of flycheck errors" . flymake-show-buffer-diagnostics))
+       (define-key evil-normal-state-map (kbd "<leader> l n") '("Next flycheck error" . flymake-goto-next-error))
+       (define-key evil-normal-state-map (kbd "<leader> l p") '("Previous flycheck error" . flymake-goto-previous-error))
 
-    ;; lsp
-     (define-key evil-normal-state-map (kbd "<leader> g r n") '("Rename variable or function" . eglot-rename))
-  (define-key evil-normal-state-map (kbd "<leader> g d") '("LSP goto definition" . xref-find-definitions))
-  (define-key evil-normal-state-map (kbd "<leader> g D") '("LSP Find references" . xref-find-references))
-  (define-key evil-normal-state-map (kbd "K") '("LSP show doc in buffer" . eldoc))
-  (define-key evil-normal-state-map (kbd "C-.") '("LSP execute code action" . eglot-code-actions))
+      ;; lsp
+       (define-key evil-normal-state-map (kbd "<leader> g r n") '("Rename variable or function" . eglot-rename))
+    (define-key evil-normal-state-map (kbd "<leader> g d") '("LSP goto definition" . xref-find-definitions))
+    (define-key evil-normal-state-map (kbd "<leader> g D") '("LSP Find references" . xref-find-references))
+    (define-key evil-normal-state-map (kbd "K") '("LSP show doc in buffer" . eldoc))
+    (define-key evil-normal-state-map (kbd "C-.") '("LSP execute code action" . eglot-code-actions))
 #+end_src

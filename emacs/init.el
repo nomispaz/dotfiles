@@ -273,11 +273,18 @@ org-hide-emphasis-markers t)
   (setq org-return-follows-link  t)
 
 ;; set leader key in all states
+   (evil-set-leader 'normal (kbd "SPC"))
    (evil-set-leader nil (kbd "SPC"))
 
    ;; set local leader
    (evil-set-leader 'normal "," t)
 
+  ;; window navigation
+    (define-key evil-normal-state-map (kbd "C-w <right>") '("Change to right window" . evil-window-right))
+    (define-key evil-normal-state-map (kbd "C-w <left>") '("Change to left window" . evil-window-left))
+   (define-key evil-normal-state-map (kbd "C-w <up>") '("Change to upper window" . evil-window-top))
+   (define-key evil-normal-state-map (kbd "C-w <down>") '("Change to bottom window" . evil-window-down))
+    (define-key evil-normal-state-map (kbd "C-w k") '("Close window" . evil-window-delete)) 
   ;; files
    (define-key evil-normal-state-map (kbd "<leader> f f") '("Search files" . consult-find))
    (define-key evil-normal-state-map (kbd "<leader> f r") '("Recent files" . recentf))

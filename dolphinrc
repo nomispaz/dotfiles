@@ -1,3 +1,7 @@
+[ExtractDialog]
+2 screens: Window-Maximized=true
+DirHistory[$e]=/mnt/nvme2/data/twbackup/
+
 [General]
 ShowFullPath=true
 Version=202

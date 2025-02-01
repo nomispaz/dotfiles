@@ -14,8 +14,7 @@ return {
     require('mason').setup()
     local mason_lspconfig = require 'mason-lspconfig'
     mason_lspconfig.setup {
-        --ensure_installed = { "pyright", "marksman" }
-       ensure_installed = { "pylsp", "marksman", "gopls", "rust_analyzer" }
+       --ensure_installed = { "pylsp", "marksman", "gopls", "rust_analyzer" }
 
     }
     --require("lspconfig").pyright.setup {

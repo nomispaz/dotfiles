@@ -21,7 +21,7 @@ set $mod Mod4
 
 # assign programs to variables
 set $terminal alacritty
-set $browser firefox
+set $browser firefox-bin
 set $files dolphin
 set $editor emacs
 

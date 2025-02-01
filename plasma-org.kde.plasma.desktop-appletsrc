@@ -70,11 +70,10 @@ SystrayContainmentId=8
 [Containments][2][General]
 AppletOrder=3;4;5;6;7;20;21
 
-[Containments][36]
+[Containments][38]
 ItemGeometries-1707x960=
-ItemGeometries-2560x1440=
 ItemGeometriesHorizontal=
-activityId=7cf909a2-d06a-43e4-a19e-e48cc77bc7c6
+activityId=b543d5c5-65e3-407d-8eef-c46085ba681e
 formfactor=0
 immutability=1
 lastScreen=0
@@ -82,8 +81,8 @@ location=0
 plugin=org.kde.plasma.folder
 wallpaperplugin=org.kde.image
 
-[Containments][37]
-activityId=7cf909a2-d06a-43e4-a19e-e48cc77bc7c6
+[Containments][39]
+activityId=b543d5c5-65e3-407d-8eef-c46085ba681e
 formfactor=0
 immutability=1
 lastScreen=1
@@ -147,7 +146,6 @@ plugin=org.kde.plasma.volume
 PreloadWeight=100
 
 [Containments][8][Applets][17][Configuration][General]
-currentTab=streams
 migrated=true
 
 [Containments][8][Applets][18]

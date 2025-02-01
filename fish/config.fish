@@ -12,15 +12,17 @@ alias emacsd='systemctl --user restart --now emacs'
 alias emergesync='sudo emerge --sync'
 function emergeinstall
     sudo snapper -c root create --description "install package $argv"
-    sudo emerge -ag $argv
+    sudo emerge -avgDN $argv
 end
 function emergeupdate
-    sudo snapper -c root create --description "system update"
-    sudo emerge -avugDN @world
+    sudo snapper -c root create --description "system update" -c number
+    sudo emerge -avugDN --read-news @world
 end
 function emergeclean
     sudo emerge --ask --depclean
     sudo eclean distfiles
+    sudo eclean packages
+    sudo eclean-kernel -n 2
 end
 
 # nixos
