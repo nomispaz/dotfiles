@@ -35,6 +35,7 @@ packages = [
   "linux",
   "linux-firmware",
   "linux-headers",
+  "linux-lts",
   "meld",
   "mpv",
   "neovim",

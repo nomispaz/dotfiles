@@ -5,11 +5,12 @@ overlay_dir = "/mnt/nvme2/git_repos/nompac_rs/overlays"
 local_repo = "/mnt/nvme2/git_repos/nompac_rs/repository/nomispaz.db.tar.zst"
 pacconfig = "$HOME/.config/nompac/configs/pacman.conf"
 mirrorlist = "$HOME/.config/nompac/configs/mirrorlist"
-snapshot = "2025_01_27"
+snapshot = "2025_02_05"
 imports = [
   "$HOME/.config/nompac/configs/modules/basic_programs.toml",
   "$HOME/.config/nompac/configs/modules/amd.toml",
-  "$HOME/.config/nompac/configs/modules/docker.toml",
+  # "$HOME/.config/nompac/configs/modules/docker.toml",
+  "$HOME/.config/nompac/configs/modules/podman.toml",
   "$HOME/.config/nompac/configs/modules/additional_programs.toml",
   "$HOME/.config/nompac/configs/modules/building_dependencies.toml",
   "$HOME/.config/nompac/configs/modules/emacs.toml",
@@ -23,10 +24,14 @@ imports = [
   "$HOME/.config/nompac/configs/modules/kde.toml",
   "$HOME/.config/nompac/configs/modules/sway.toml",
   "$HOME/.config/nompac/configs/modules/qtile.toml",
-  "$HOME/.config/nompac/configs/modules/tuxedo.toml"
+  # "$HOME/.config/nompac/configs/modules/tuxedo.toml"
 ]
-packages = []
-overlays = []
+packages = [
+  "cpupower_go"
+]
+overlays = [
+  "cpupower_go"
+]
 [[patches]]
 
 [[configs]]
@@ -42,6 +47,22 @@ user = "simonheise"
 extra_config = '''
 #group = "libvirt-qemu"
 group = "simonheise"
+'''
+
+# set boot options in grub
+# in CMDLINE_LINUX_DEFAULTS add apparmor, amd-pstate to epp, activate early kernel loading for nvidia-driver
+# use GRUB_TOP_LEVEL to always use the standard linux kernel in first boot menu regardless of other installed kernels
+[[configs]]
+path = "/etc/default/grub"
+sudo = true
+[[configs.config_entry]]
+extra_config = '''
+GRUB_DEFAULT=0
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR="Arch"
+GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 mitigations=auto security=apparmor amd_pstate=active nvidia_drm.modeset=1 fbdev=1"
+GRUB_CMDLINE_LINUX=""
+GRUB_TOP_LEVEL="/boot/vmlinuz-linux"
 '''
 
 # harden system (KRNL-5820 disable coredumps)
@@ -215,4 +236,86 @@ sudo = true
 [[configs.config_entry]]
 extra_config = '''
 XMGneo15Arch
+'''
+
+# scripts to use with nwg-panel
+
+[[configs]]
+# read average cpu load
+path = "/usr/local/bin/cpu_load.sh"
+sudo = true
+[[configs.config_entry]]
+extra_config = '''
+#!/bin/bash
+
+# Extract CPU frequencies from /proc/cpuinfo
+frequencies=$(cat /proc/cpuinfo | grep "MHz" | cut -d':' -f2)
+
+# Initialize sum and count variables
+sum=0
+count=0
+
+# Loop through each frequency
+for freq in $frequencies; do
+  sum=$(echo "$sum + $freq" | bc)
+  count=$((count + 1))
+done
+
+# Calculate the average in GHz if count is greater than zero
+if [ $count -gt 0 ]; then
+  average_mhz=$(echo "$sum / $count" | bc)
+  average_ghz=$(echo "scale=2; $average_mhz / 1000" | bc)
+  echo " $average_ghz GHz"
+else
+  echo "No frequencies found in /proc/cpuinfo."
+fi
+'''
+
+[[configs]]
+# read average cpu temperature
+path = "/usr/local/bin/cpu_temp.sh"
+sudo = true
+[[configs.config_entry]]
+extra_config = '''
+#!/bin/bash
+echo  $(cat /sys/class/thermal/thermal_zone0/temp | cut -c 1,2)°C
+'''
+
+[[configs]]
+# check if microphone is muted
+path = "/usr/local/bin/mic_check_muted.sh"
+sudo = true
+[[configs.config_entry]]
+extra_config = '''
+#!/bin/bash
+
+# Get the volume information
+volume_info=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@)
+
+# Check if the word "MUTED" is present in the output
+if echo "$volume_info" | grep -q "MUTED"; then
+    echo 
+else
+    echo 
+fi
+'''
+
+[[configs]]
+# check if microphone is muted
+path = "/usr/local/bin/ram_usage.sh"
+sudo = true
+[[configs.config_entry]]
+extra_config = '''
+#!/bin/bash
+awk '/MemTotal/ {total=$2} /MemAvailable/ {available=$2} END {printf " %d%%\n", (total-available)*100/total}' /proc/meminfo
+'''
+
+[[configs]]
+# check if microphone is muted
+path = "/usr/local/bin/ram_usage.sh"
+sudo = true
+[[configs.config_entry]]
+extra_config = '''
+#!/bin/bash
+awk '/MemTotal/ {total=$2} /MemAvailable/ {available=$2} END {printf " %d%%\n", (total-available)*100/total}' /proc/meminfo
 '''

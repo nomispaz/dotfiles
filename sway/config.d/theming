@@ -2,10 +2,10 @@
 #
 # set inner and outer window gaps
 gaps inner 3
-gaps outer 3 
+gaps outer 0 
 
 # thin borders and hide titlebar
-default_border pixel 2
+default_border pixel 3
 smart_borders off
 
 # set default font and size
