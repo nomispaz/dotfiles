@@ -1,11 +1,11 @@
 name = "Declarative pacman config"
 build_dir = "/var/tmp/nompac_rs"
-patch_dir = "/mnt/nvme2/git_repos/arch_localrepo/patches"
-overlay_dir = "/mnt/nvme2/git_repos/arch_localrepo/overlays"
-local_repo = "/mnt/nvme2/git_repos/arch_localrepo/repository/nomispaz.db.tar.zst"
+patch_dir = "/mnt/nvme2/git_repos/nompac_rs/patches"
+overlay_dir = "/mnt/nvme2/git_repos/nompac_rs/overlays"
+local_repo = "/mnt/nvme2/git_repos/nompac_rs/repository/nomispaz.db.tar.zst"
 pacconfig = "$HOME/.config/nompac/configs/pacman.conf"
 mirrorlist = "$HOME/.config/nompac/configs/mirrorlist"
-snapshot = "2025_03_12"
+snapshot = "2025_02_05"
 imports = [
   "$HOME/.config/nompac/configs/modules/basic_programs.toml",
   "$HOME/.config/nompac/configs/modules/amd.toml",
@@ -23,79 +23,16 @@ imports = [
   "$HOME/.config/nompac/configs/modules/nvidia.toml",
   "$HOME/.config/nompac/configs/modules/kde.toml",
   "$HOME/.config/nompac/configs/modules/sway.toml",
-  "$HOME/.config/nompac/configs/modules/hyprland.toml",
-  # "$HOME/.config/nompac/configs/modules/tuxedo.toml",
-  "$HOME/.config/nompac/configs/modules/miracle-wm.toml",
-  "$HOME/.config/nompac/configs/modules/brave.toml"
+  "$HOME/.config/nompac/configs/modules/qtile.toml",
+  # "$HOME/.config/nompac/configs/modules/tuxedo.toml"
 ]
 packages = [
-  "cpupower_go",
-  "nompac_rs"
+  "cpupower_go"
 ]
 overlays = [
-  "cpupower_go",
-  "nompac_rs"
+  "cpupower_go"
 ]
-
 [[patches]]
-
-[[configs]]
-# update repositories and mirrorlist that pacman uses
-path = "/etc/pacman.conf"
-sudo = true
-[[configs.config_entry]]
-extra_config = '''
-# Misc options
-#UseSyslog
-Color
-#NoProgressBar
-CheckSpace
-VerbosePkgLists
-ParallelDownloads = 5
-'''
-[[configs.config_entry]]
-extra_config = '''
-# The testing repositories are disabled by default. To enable, uncomment the
-# repo name header and Include lines. You can add preferred servers immediately
-# after the header, and they will be used before the default mirrors.
-
-[nomispaz]
-SigLevel = Optional TrustAll
-Server = file:///mnt/nvme2/git_repos/arch_localrepo/repository/
-
-#[core-testing]
-#Include = /etc/pacman.d/mirrorlist
-
-[core]
-Include = /home/simonheise/.config/nompac/configs/mirrorlist
-#Include =/etc/pacman.d/mirrorlist
-
-#[extra-testing]
-#Include = /etc/pacman.d/mirrorlist
-
-[extra]
-Include = /home/simonheise/.config/nompac/configs/mirrorlist
-#Include = /etc/pacman.d/mirrorlist
-
-# If you want to run 32 bit applications on your x86_64 system,
-# enable the multilib repositories as required here.
-
-#[multilib-testing]
-#Include = /etc/pacman.d/mirrorlist
-
-#[multilib]
-#Include = /etc/pacman.d/mirrorlist
-
-# An example of a custom package repository.  See the pacman manpage for
-# tips on creating your own repositories.
-#[custom]
-#SigLevel = Optional TrustAll
-#Server = file:///home/custompkgs
-[multilib]
-Include = /home/simonheise/.config/nompac/configs/mirrorlist
-#Include = /etc/pacman.d/mirrorlist
-'''
-
 
 [[configs]]
 # change user in qemu so that audio works correctly

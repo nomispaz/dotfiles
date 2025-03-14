@@ -35,8 +35,8 @@ plugin=org.kde.plasma.kickoff
 
 [Containments][2][Applets][3][Configuration]
 PreloadWeight=100
-popupHeight=720
-popupWidth=1440
+popupHeight=724
+popupWidth=1444
 
 [Containments][2][Applets][3][Configuration][General]
 favoritesPortedToKAstats=true
@@ -70,10 +70,11 @@ SystrayContainmentId=8
 [Containments][2][General]
 AppletOrder=3;4;5;6;7;20;21
 
-[Containments][38]
+[Containments][40]
 ItemGeometries-1707x960=
+ItemGeometries-2560x1440=
 ItemGeometriesHorizontal=
-activityId=b543d5c5-65e3-407d-8eef-c46085ba681e
+activityId=7cf909a2-d06a-43e4-a19e-e48cc77bc7c6
 formfactor=0
 immutability=1
 lastScreen=0
@@ -81,14 +82,8 @@ location=0
 plugin=org.kde.plasma.folder
 wallpaperplugin=org.kde.image
 
-[Containments][39]
-activityId=b543d5c5-65e3-407d-8eef-c46085ba681e
-formfactor=0
-immutability=1
-lastScreen=1
-location=0
-plugin=org.kde.plasma.folder
-wallpaperplugin=org.kde.image
+[Containments][40][General]
+positions={"1707x960":[],"2560x1440":[]}
 
 [Containments][8]
 activityId=

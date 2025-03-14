@@ -8,9 +8,9 @@ action_key: meta
 
 # Start waybar and swaybg on startup
 startup_apps:
-  - command: nwg-panel
+  # - command: nwg-panel
   # If true, the application will automatically restart
-    restart_on_death: true
+  #  restart_on_death: true
   - command: swaybg -i /home/simonheise/.config/sway/background/wald.jpg
     restart_on_death: true
     # If true, the application will be started with "systemd-run --user --property Restart=on-failure <COMMAND>"
@@ -50,7 +50,7 @@ default_action_overrides:
     modifiers:
       - primary
     key: KEY_Q
-  - name: quit_compostior
+  - name: quit_compositor
     action: down
     modifiers:
       - primary

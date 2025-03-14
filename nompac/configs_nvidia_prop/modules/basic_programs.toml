@@ -38,7 +38,6 @@ packages = [
   "linux-lts",
   "meld",
   "mpv",
-  "namcap",
   "neovim",
   "okular",
   "openssh",

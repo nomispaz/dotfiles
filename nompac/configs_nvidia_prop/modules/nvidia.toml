@@ -3,8 +3,9 @@ packages = [
 	"nvidia-open-dkms",
 	"nvidia-prime",
 	"nvidia-settings",
-	"nvidia-utils"
-	]
+	"nvidia-utils",
+	"cuda"
+]
 
 [[patches]]
 wlroots = [ "nvidia.patch" ]
@@ -46,19 +47,6 @@ export WLR_NO_HARDWARE_CURSORS=1
 #export XWAYLAND_NO_GLAMOR=1
 
 sway --unsupported-gpu
-'''
-
-[[configs]]
-# set vlc to always run with nvidia to be able to use hardware video acceleration
-path = "/usr/share/applications/vlc.desktop"
-sudo = true
-[[configs.config_entry]]
-extra_config = '''
-Exec=prime-run /usr/bin/vlc --started-from-file %U
-TryExec=/usr/bin/vlc
-Icon=vlc
-Terminal=false
-Type=Application
 '''
 
 [[configs]]
