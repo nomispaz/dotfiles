@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # loop through all folders and files
 for program in $(ls -d  *)
 do
