@@ -1,5 +1,5 @@
 packages = [
-	"flake8",
+	"python-flake8",
 	"go",
 	"gopls",
 	"delve",

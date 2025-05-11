@@ -1,0 +1,34 @@
+{
+    (
+        modifiers: [
+            Super,
+        ],
+        key: "e",
+        description: Some("emacs"),
+    ): Spawn("emacs"),
+    (
+        modifiers: [
+            Super,
+        ],
+        key: "Return",
+    ): Spawn("alacritty"),
+    (
+        modifiers: [
+            Super,
+        ],
+    ): System(Launcher),
+    (
+        modifiers: [
+            Super,
+            Shift,
+        ],
+        key: "Return",
+    ): ToggleStacking,
+    (
+        modifiers: [
+            Super,
+        ],
+        key: "s",
+        description: Some("steam"),
+    ): Spawn("steam"),
+}

@@ -5,7 +5,7 @@ overlay_dir = "/mnt/nvme2/git_repos/arch_localrepo/overlays"
 local_repo = "/mnt/nvme2/git_repos/arch_localrepo/repository/nomispaz.db.tar.zst"
 pacconfig = "$HOME/.config/nompac/configs/pacman.conf"
 mirrorlist = "$HOME/.config/nompac/configs/mirrorlist"
-snapshot = "2025_04_19"
+snapshot = "2025_05_09"
 imports = [
   "$HOME/.config/nompac/configs/modules/basic_programs.toml",
   "$HOME/.config/nompac/configs/modules/amd.toml",
@@ -23,10 +23,11 @@ imports = [
   "$HOME/.config/nompac/configs/modules/nvidia.toml",
   "$HOME/.config/nompac/configs/modules/kde.toml",
   "$HOME/.config/nompac/configs/modules/sway.toml",
-  "$HOME/.config/nompac/configs/modules/hyprland.toml",
+  # "$HOME/.config/nompac/configs/modules/hyprland.toml",
   # "$HOME/.config/nompac/configs/modules/tuxedo.toml",
   "$HOME/.config/nompac/configs/modules/miracle-wm.toml",
-  "$HOME/.config/nompac/configs/modules/brave.toml"
+  "$HOME/.config/nompac/configs/modules/brave.toml",
+  "$HOME/.config/nompac/configs/modules/cosmic-desktop.toml"
 ]
 packages = [
   "cpupower_go",

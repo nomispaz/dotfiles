@@ -35,8 +35,8 @@ exec tuxedo-control-center
 for_window [class="tuxedo-control-center"] move scratchpad
 
 # start statusbar
-#exec waybar
-exec_always nwg-panel
+exec waybar
+#exec_always nwg-panel
 
 # enable autotiling via additional personal script
 exec $HOME/.config/sway/scripts/autotiling/start.sh
