@@ -5,7 +5,7 @@ overlay_dir = "/mnt/nvme2/git_repos/arch_localrepo/overlays"
 local_repo = "/mnt/nvme2/git_repos/arch_localrepo/repository/nomispaz.db.tar.zst"
 pacconfig = "$HOME/.config/nompac/configs/pacman.conf"
 mirrorlist = "$HOME/.config/nompac/configs/mirrorlist"
-snapshot = "2025_05_09"
+snapshot = "2025_05_12"
 imports = [
   "$HOME/.config/nompac/configs/modules/basic_programs.toml",
   "$HOME/.config/nompac/configs/modules/amd.toml",
@@ -194,7 +194,7 @@ Section "InputClass"
         Option "XkbLayout" "de"
         Option "XkbModel" "microsoftpro"
         Option "XkbVariant" "nodeadkeys"
-        Option "XkbOptions" "terminate:ctrl_alt_bksp"
+        Option "XkbOptions" "terminate:ctrl_alt_bksp,caps:ctrl_modifier"  
 EndSection
 '''
 
@@ -290,7 +290,13 @@ path = "/etc/vconsole.conf"
 sudo = true
 [[configs.config_entry]]
 extra_config = '''
-KEYMAP=de-latin1
+# Written by systemd-localed(8) or systemd-firstboot(1), read by systemd-localed
+# and systemd-vconsole-setup(8). Use localectl(1) to update this file.
+KEYMAP=de
+XKBLAYOUT=de
+XKBMODEL=microsoftpro
+XKBVARIANT=nodeadkeys
+XKBOPTIONS=terminate:ctrl_alt_bksp,caps:ctrl_modifier
 '''
 
 [[configs]]

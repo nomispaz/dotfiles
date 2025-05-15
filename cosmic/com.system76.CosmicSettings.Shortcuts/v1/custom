@@ -2,10 +2,10 @@
     (
         modifiers: [
             Super,
+            Shift,
         ],
-        key: "e",
-        description: Some("emacs"),
-    ): Spawn("emacs"),
+        key: "Return",
+    ): ToggleStacking,
     (
         modifiers: [
             Super,
@@ -16,19 +16,31 @@
         modifiers: [
             Super,
         ],
+        key: "s",
+        description: Some("steam"),
+    ): Spawn("steam"),
+    (
+        modifiers: [
+            Super,
+        ],
     ): System(Launcher),
     (
         modifiers: [
             Super,
-            Shift,
         ],
-        key: "Return",
-    ): ToggleStacking,
+        key: "less",
+    ): ToggleTiling,
     (
         modifiers: [
             Super,
         ],
-        key: "s",
-        description: Some("steam"),
-    ): Spawn("steam"),
+        key: "e",
+        description: Some("emacs"),
+    ): Spawn("emacs"),
+    (
+        modifiers: [
+            Super,
+        ],
+        key: "y",
+    ): Spawn("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),
 }
