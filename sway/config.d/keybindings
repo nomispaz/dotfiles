@@ -21,8 +21,8 @@ set $mod Mod4
 
 # assign programs to variables
 set $terminal alacritty
-set $browser brave-bin
-set $files dolphin
+set $browser brave
+set $files nautilus
 set $editor emacs
 
 # set default start menu to rofi
