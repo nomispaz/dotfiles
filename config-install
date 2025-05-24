@@ -3,7 +3,7 @@ function config {
    git --git-dir=$HOME/git_repos/dotfiles/ --work-tree=$HOME $@
 }
 mkdir -p .config-backup
-config checkout -b nixos
+config checkout nixos
 if [ $? = 0 ]; then
   echo "Checked out config.";
   else
