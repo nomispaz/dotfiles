@@ -1,4 +1,3 @@
-
 git clone --bare https://github.com/nomispaz/dotfiles.git $HOME/git_repos/dotfiles
 function config {
    git --git-dir=$HOME/git_repos/dotfiles/ --work-tree=$HOME $@
@@ -11,5 +10,5 @@ if [ $? = 0 ]; then
     echo "Backing up pre-existing dot files.";
     config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .config-backup/{}
 fi;
-config checkout
+config checkout nixos
 config config status.showUntrackedFiles no
