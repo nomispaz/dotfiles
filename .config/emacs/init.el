@@ -60,6 +60,8 @@
 (set-face-attribute 'fixed-pitch nil :font "DejaVu Sans Mono" :height 180)
 (set-face-attribute 'variable-pitch nil :font "DejaVu Sans" :height 180)
 
+(set-face-attribute 'mouse nil :background "white")
+
 (require 'catppuccin-theme)
 (load-theme 'catppuccin :no-confirm)
 
@@ -219,7 +221,7 @@ org-hide-emphasis-markers t)
 (add-hook 'org-mode-hook 'my/org-font-setup())
 
 ;; folder for org-agenda
-;;(setq org-agenda-files (directory-files-recursively "/mnt/nvme2/data/orgmode" "\\.org$"))
+;,(setq org-agenda-files (directory-files-recursively "/mnt/nvme2/data/orgmode" "\\.org$"))
 
 (defun my/org-mode-setup()
   ;; active automatic indentation
