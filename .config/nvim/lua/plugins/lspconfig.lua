@@ -15,7 +15,6 @@ return {
     local mason_lspconfig = require 'mason-lspconfig'
     mason_lspconfig.setup {
        --ensure_installed = { "pylsp", "marksman", "gopls", "rust_analyzer" }
-
     }
     --require("lspconfig").pyright.setup {
     --    capabilities = capabilities,
@@ -56,7 +55,7 @@ return {
 	on_attach = on_attach,
     }
 
-    require'lspconfig'.rust_analyzer.setup {
+    require("lspconfig").rust_analyzer.setup {
     settings = {
         ['rust-analyzer'] = {
         cargo = {
@@ -86,5 +85,12 @@ return {
     require("lspconfig").rust_analyzer.setup {
         capabilities = capabilities,
     }
+
+    require("lspconfig").nixd.setup {
+        capabilities = capabilities,
+    }
+
+
+
   end
 }

@@ -441,9 +441,9 @@ In addition, ensure that yasnippets are used in eglot
   (add-hook 'rust-mode-hook 'breadcrumb-local-mode)
   (setq rust-format-on-save t)
 #+END_SRC
-*** nix mode
+*** nix
 #+BEGIN_SRC emacs-lisp :tangle ~/.config/emacs/init.el
-(require 'nix-mode)
+  (require 'nix-mode)
 #+END_SRC
 * Orgmode and org agenda
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el

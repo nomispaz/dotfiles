@@ -321,7 +321,7 @@ return {
 	on_attach = on_attach,
     }
 
-    require'lspconfig'.rust_analyzer.setup {
+    require("lspconfig").rust_analyzer.setup {
     settings = {
         ['rust-analyzer'] = {
         cargo = {
@@ -349,6 +349,9 @@ return {
         capabilities = capabilities,
     }
     require("lspconfig").rust_analyzer.setup {
+        capabilities = capabilities,
+    }
+    require("lspconfig").nixd.setup {
         capabilities = capabilities,
     }
   end
