@@ -18,10 +18,10 @@ exec "setxkbmap -layout de"
 set $mod Mod4
 
 # assign programs to variables
-set $terminal konsole
+set $terminal alacritty
 set $browser firefox
 set $files dolphin
-set $editor emacsclient -nc
+set $editor emacs
 
 # set default start menu to rofi
 set $menu rofi -show drun
