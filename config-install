@@ -1,4 +1,4 @@
-git clone --bare https://github.com/nomispaz/dotfiles.git $HOME/git_repos/dotfiles
+git clone --bare https://github.com/nomispaz/dotfiles.git $HOME/git_repos/test
 mkdir -p $HOME/test
 function config {
    git --git-dir=$HOME/git_repos/dotfiles/ --work-tree=$HOME/test $@
