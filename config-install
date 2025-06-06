@@ -1,6 +1,7 @@
 git clone --bare https://github.com/nomispaz/dotfiles.git $HOME/git_repos/dotfiles
+mkdir -p $HOME/test
 function config {
-   git --git-dir=$HOME/git_repos/dotfiles/ --work-tree=$HOME $@
+   git --git-dir=$HOME/git_repos/dotfiles/ --work-tree=$HOME/test $@
 }
 mkdir -p .config-backup
 config checkout nixos
