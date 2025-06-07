@@ -26,6 +26,9 @@
 ;; automatically close brackets
 (electric-pair-mode 1)
 
+;; disable sound
+(setq ring-bell-function 'ignore)
+
 ;; (require 'nomispaz)
 
 (global-set-key (kbd "C-+") 'text-scale-increase)                ;; zoom in
@@ -56,6 +59,8 @@
 (set-face-attribute 'default nil :font "DejaVu Sans Mono" :height 180)
 (set-face-attribute 'fixed-pitch nil :font "DejaVu Sans Mono" :height 180)
 (set-face-attribute 'variable-pitch nil :font "DejaVu Sans" :height 180)
+
+(set-face-attribute 'mouse nil :background "white")
 
 (require 'catppuccin-theme)
 (load-theme 'catppuccin :no-confirm)
@@ -196,6 +201,8 @@
 (add-hook 'rust-mode-hook 'breadcrumb-local-mode)
 (setq rust-format-on-save t)
 
+(require 'nix-mode)
+
 (require 'org)
 (require 'org-agenda)
 
@@ -214,7 +221,7 @@ org-hide-emphasis-markers t)
 (add-hook 'org-mode-hook 'my/org-font-setup())
 
 ;; folder for org-agenda
-(setq org-agenda-files (directory-files-recursively "/mnt/nvme2/data/orgmode" "\\.org$"))
+;,(setq org-agenda-files (directory-files-recursively "/mnt/nvme2/data/orgmode" "\\.org$"))
 
 (defun my/org-mode-setup()
   ;; active automatic indentation

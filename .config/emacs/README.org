@@ -95,6 +95,10 @@ The following packages need to be enabled so that evil-collection can be install
 
   ;; automatically close brackets
   (electric-pair-mode 1)
+
+  ;; disable sound
+  (setq ring-bell-function 'ignore)
+  
 #+end_src
 ** My custom functions
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
@@ -148,6 +152,8 @@ The following packages need to be enabled so that evil-collection can be install
   (set-face-attribute 'default nil :font "DejaVu Sans Mono" :height 180)
   (set-face-attribute 'fixed-pitch nil :font "DejaVu Sans Mono" :height 180)
   (set-face-attribute 'variable-pitch nil :font "DejaVu Sans" :height 180)
+
+  (set-face-attribute 'mouse nil :background "white")
 #+end_src
 ** Theme
 *** Wombat
@@ -435,6 +441,10 @@ In addition, ensure that yasnippets are used in eglot
   (add-hook 'rust-mode-hook 'breadcrumb-local-mode)
   (setq rust-format-on-save t)
 #+END_SRC
+*** nix
+#+BEGIN_SRC emacs-lisp :tangle ~/.config/emacs/init.el
+  (require 'nix-mode)
+#+END_SRC
 * Orgmode and org agenda
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
   (require 'org)
@@ -455,7 +465,7 @@ In addition, ensure that yasnippets are used in eglot
   (add-hook 'org-mode-hook 'my/org-font-setup())
 
   ;; folder for org-agenda
-  (setq org-agenda-files (directory-files-recursively "/mnt/nvme2/data/orgmode" "\\.org$"))
+  ;,(setq org-agenda-files (directory-files-recursively "/mnt/nvme2/data/orgmode" "\\.org$"))
 #+end_src
 * Custom functions
 Set options for every Orgfile. Like

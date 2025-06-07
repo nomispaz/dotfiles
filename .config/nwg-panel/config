@@ -230,7 +230,7 @@
     "keyboard-layout": {},
     "random-wallpaper": {},
     "executor-cpu_temp_cust": {
-      "script": "/usr/local/bin/cpu_temp.sh",
+      "script": "/home/simonheise/.config/nwg-panel/scripts/cpu_temp.sh",
       "tooltip-text": "",
       "on-left-click": "",
       "on-middle-click": "",
@@ -247,7 +247,7 @@
       "use-sigrt": false
     },
     "executor-cpu_avg_load": {
-      "script": "/usr/local/bin/cpu_load.sh",
+      "script": "/home/simonheise/.config/nwg-panel/scripts/cpu_load.sh",
       "tooltip-text": "",
       "on-left-click": "",
       "on-middle-click": "",
@@ -264,7 +264,7 @@
       "use-sigrt": false
     },
     "executor-ram_usage_percent": {
-      "script": "/usr/local/bin/ram_usage.sh",
+      "script": "/home/simonheise/.config/nwg-panel/scripts/ram_usage.sh",
       "tooltip-text": "",
       "on-left-click": "",
       "on-middle-click": "",
@@ -281,7 +281,7 @@
       "use-sigrt": false
     },
     "executor-mic_check_mute": {
-      "script": "/usr/local/bin/mic_check_muted.sh",
+      "script": "/home/simonheise/.config/nwg-panel/scripts/mic_check_muted.sh",
       "tooltip-text": "",
       "on-left-click": "",
       "on-middle-click": "",
