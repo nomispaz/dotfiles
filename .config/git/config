@@ -1,5 +1,5 @@
 [credential]
-helper = "git-credential-libsecret";
+helper = "libsecret";
 
 [user]
 email = "nomispaz@example.org"
