@@ -1,0 +1,9 @@
+[credential]
+helper = "libsecret";
+
+[user]
+email = "nomispaz@example.org"
+name = "nomispaz"
+
+[difftool]
+	prompt = false
