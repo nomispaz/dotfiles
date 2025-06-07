@@ -5,7 +5,7 @@ overlay_dir = "/mnt/nvme2/git_repos/arch_localrepo/overlays"
 local_repo = "/mnt/nvme2/git_repos/arch_localrepo/repository/nomispaz.db.tar.zst"
 pacconfig = "$HOME/.config/nompac/configs/pacman.conf"
 mirrorlist = "$HOME/.config/nompac/configs/mirrorlist"
-snapshot = "2025_05_12"
+snapshot = "2025_05_23"
 imports = [
   "$HOME/.config/nompac/configs/modules/basic_programs.toml",
   "$HOME/.config/nompac/configs/modules/amd.toml",

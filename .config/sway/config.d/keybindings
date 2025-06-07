@@ -7,6 +7,9 @@ input type:touchpad {
       natural_scroll disabled
 }
 
+# disable touchpad
+# input 2362:597:UNIW0001:00_093A:0255_Touchpad events disabled
+
 # set keyboard input to german and remap caps-lock to ctrl
 input type:keyboard {
   xkb_layout "de"
