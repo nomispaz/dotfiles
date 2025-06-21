@@ -31,7 +31,11 @@ input {
 
     // Focus windows and outputs automatically when moving the mouse into them.
     // Setting max-scroll-amount="0%" makes it work only on windows already fully on screen.
-    focus-follows-mouse max-scroll-amount="0%"
+    // focus-follows-mouse max-scroll-amount="0%"
+
+    // Define mod-key depending if running within other compositor or standalone
+    mod-key "Super"
+    mod-key-nested "Alt"
 }
 
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Outputs
@@ -91,16 +95,17 @@ layout {
 // Autostart
 // spawn-at-startup "waybar"
 // 
-// enable x11
-spawn-at-startup "xwayland-satellite"
-environment {
-    DISPLAY ":0"
-}
 
 // https://github.com/Drakulix/cosmic-ext-extra-sessions/tree/main/niri
 spawn-at-startup "cosmic-ext-alternative-startup"
 spawn-at-startup "/nix/store/vkijrji2d8qqxf1sb2m1kf2fsw3xkyyr-xdg-desktop-portal-gnome-48.0/libexec/xdg-desktop-portal-gnome"
 spawn-at-startup "/nix/store/hywfmz1fk16gw4bvcvrfzwa1x1bm4852-xdg-desktop-portal-gtk-1.15.3/libexec/xdg-desktop-portal-gtk"
+
+// enable x11
+spawn-at-startup "xwayland-satellite"
+environment {
+    DISPLAY ":0"
+}
 
 // background image
 // spawn-at-startup "swaybg" "-m" "fill" "-i" "/home/simonheise/.config/sway/background/wald.jpg"
