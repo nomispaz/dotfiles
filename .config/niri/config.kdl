@@ -98,8 +98,6 @@ layout {
 
 // https://github.com/Drakulix/cosmic-ext-extra-sessions/tree/main/niri
 spawn-at-startup "cosmic-ext-alternative-startup"
-spawn-at-startup "/nix/store/vkijrji2d8qqxf1sb2m1kf2fsw3xkyyr-xdg-desktop-portal-gnome-48.0/libexec/xdg-desktop-portal-gnome"
-spawn-at-startup "/nix/store/hywfmz1fk16gw4bvcvrfzwa1x1bm4852-xdg-desktop-portal-gtk-1.15.3/libexec/xdg-desktop-portal-gtk"
 
 // enable x11
 spawn-at-startup "xwayland-satellite"
