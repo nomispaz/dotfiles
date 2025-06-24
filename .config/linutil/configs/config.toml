@@ -1,0 +1,19 @@
+title = "Config for linutil"
+
+[user]
+name = "simonheise"
+userhome = "$HOME"
+
+[git]
+gitrepofolder = "/mnt/nvme2/git_repos/"
+
+[dotfiles]
+configsource = "$HOME/git_repos/dotfiles_test"
+configdestination = "$HOME/.config_test/"
+
+[commands]
+[commands.cmd]
+cmd = '''
+"git clone https://github.com/nomispaz/dotfiles %s/test/dotfiles/"'''
+arguments = '''
+${homedir}'''

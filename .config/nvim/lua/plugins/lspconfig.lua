@@ -78,6 +78,19 @@ return {
     },
     }
     }
+    require("lspconfig").nixd.setup({
+       cmd = { "nixd" },
+       settings = {
+          nixd = {
+             nixpkgs = {
+                expr = "import <nixpkgs> { }",
+             },
+             formatting = {
+                command = { "nixfmt" },
+             },
+          },
+       },
+    })
 
     require("lspconfig").marksman.setup {
         capabilities = capabilities,
@@ -87,6 +100,10 @@ return {
     }
 
     require("lspconfig").nixd.setup {
+        capabilities = capabilities,
+    }
+
+    require("lspconfig").gopls.setup {
         capabilities = capabilities,
     }
 

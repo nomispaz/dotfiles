@@ -4,6 +4,7 @@ helper = "libsecret";
 [user]
 email = "nomispaz@example.org"
 name = "nomispaz"
-
+[diff]
+	tool = vimdiff
 [difftool]
 	prompt = false
