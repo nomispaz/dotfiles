@@ -50,33 +50,5 @@ echo $SOURCE_DIR
       echo "Linked: $target_file -> $src_file"
     done
 else
-    echo "No host-specific config found for $custom_config --> using common configs"
-    SOURCE_DIR = "$HOME/.config_common"
-    if [ -d "$SOURCE_DIR" ]; then
-      # Recursively find files (not directories) in source
-      find "$SOURCE_DIR" -type f | while read -r src_file; do
-        # Compute relative path from source dir
-        rel_path="${src_file#$SOURCE_DIR/}"
-
-        # Compute the target path in ~/.config
-        target_file="$TARGET_DIR/$rel_path"
-
-        # Ensure the target directory exists
-        target_dir="$(dirname "$target_file")"
-        mkdir -p "$target_dir"
-
-        # If file already exists, back it up or skip
-        if [ -e "$target_file" ] && [ ! -L "$target_file" ]; then
-            echo "Backing up existing file: $target_file -> $target_file.bak"
-            mv "$target_file" "$target_file.bak"
-        fi
-
-        # Create (or overwrite) the symlink
-        ln -sf "$src_file" "$target_file"
-        echo "Linked: $target_file -> $src_file"
-      done
-
-    else
-	echo "No specific dotfiles found in common."
-    fi
+    echo "No host-specific config found for $custom_config"
 fi
