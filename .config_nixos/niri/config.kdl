@@ -108,8 +108,8 @@ environment {
 // background image
 // spawn-at-startup "swaybg" "-m" "fill" "-i" "/home/simonheise/.config/sway/background/wald.jpg"
 
-spawn-at-startup "/nix/store/f29v7rangfwjs0djcqhp4iq82vn0784j-xdg-desktop-portal-gtk-1.15.3/libexec/xdg-desktop-portal-gtk"
-spawn-at-startup "/nix/store/rzbmkjyqfsicfabqd7xrldk19yqfp9vn-xdg-desktop-portal-wlr-0.7.1/libexec/xdg-desktop-portal-wlr"
+spawn-at-startup "/nix/store/0cpaw5zy00prncilq70vz1gnp6kvz690-xdg-desktop-portal-gtk-1.15.3/libexec/xdg-desktop-portal-gtk"
+spawn-at-startup "/nix/store/q96mf6ldnm7swff6jyc2ii3vzdqr4c8r-xdg-desktop-portal-wlr-0.7.1/libexec/xdg-desktop-portal-wlr"
 
 // ask apps to ignore client side decoration if possible. hides title bars if possible
 prefer-no-csd

@@ -17,3 +17,18 @@ cmd = '''
 "git clone https://github.com/nomispaz/dotfiles %s/test/dotfiles/"'''
 arguments = '''
 ${homedir}'''
+
+
+# replacements currently support replacing a complete line in a config
+# the replacement string is build using the function via bash.
+[[replacements]]
+file = "$HOME/.config/niri/config.kdl"
+searchstring = "xdg-desktop-portal-wlr"
+replacement = ""
+function = '''echo spawn-at-startup \"$(nix path-info nixpkgs#xdg-desktop-portal-wlr)/libexec/xdg-desktop-portal-wlr\"'''
+
+[[replacements]]
+file = "$HOME/.config/niri/config.kdl"
+searchstring = "xdg-desktop-portal-gtk"
+replacement = ""
+function = '''echo spawn-at-startup \"$(nix path-info nixpkgs#xdg-desktop-portal-gtk)/libexec/xdg-desktop-portal-gtk\"'''
