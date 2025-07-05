@@ -18,65 +18,73 @@ config checkout
 # don't show untracked files since all files in $HOME would be shown
 config config status.showUntrackedFiles no
 
-# check for distribution specific settings
-custom_config=$(cat /etc/os-release | grep "^ID=" | cut -d '=' -f 2)
-SOURCE_DIR="$HOME/.config_$custom_config"
+SOURCE_DIR="$HOME/.config_common"
 TARGET_DIR="$HOME/.config"
 echo $SOURCE_DIR
 
-  if [ -d "$SOURCE_DIR" ]; then
-    echo "Using config for distribution: $custom_config"
+# first apply the common configs
+# Recursively find files (not directories) in source
+if [ -d "$SOURCE_DIR" ]; then
+  echo "Applying distro agnostic configs"
 
-    # Recursively find files (not directories) in source
-    find "$SOURCE_DIR" -type f | while read -r src_file; do
-      # Compute relative path from source dir
-      rel_path="${src_file#$SOURCE_DIR/}"
+  find "$SOURCE_DIR" -type f | while read -r src_file; do
+    # Compute relative path from source dir
+    rel_path="${src_file#$SOURCE_DIR/}"
+  
+    # Compute the target path in ~/.config
+    target_file="$TARGET_DIR/$rel_path"
+  
+    # Ensure the target directory exists
+    target_dir="$(dirname "$target_file")"
+    mkdir -p "$target_dir"
+  
+    # If file already exists, back it up or skip
+    if [ -e "$target_file" ] && [ ! -L "$target_file" ]; then
+        echo "Backing up existing file: $target_file -> $target_file.bak"
+        mv "$target_file" "$target_file.bak"
+    fi
+  
+    # Create (or overwrite) the symlink
+    ln -sf "$src_file" "$target_file"
+    echo "Linked: $target_file -> $src_file"
+  done
+  echo "Distro agnostic configs applied"
 
-      # Compute the target path in ~/.config
-      target_file="$TARGET_DIR/$rel_path"
+else
+    echo "No special config found"
+fi
 
-      # Ensure the target directory exists
-      target_dir="$(dirname "$target_file")"
-      mkdir -p "$target_dir"
+# check for distribution specific settings
+custom_config=$(cat /etc/os-release | grep "^ID=" | cut -d '=' -f 2)
+SOURCE_DIR="$HOME/.config_$custom_config"
+echo $SOURCE_DIR
 
-      # If file already exists, back it up or skip
-      if [ -e "$target_file" ] && [ ! -L "$target_file" ]; then
-          echo "Backing up existing file: $target_file -> $target_file.bak"
-          mv "$target_file" "$target_file.bak"
-      fi
+# check if there are distro-specific configs that need to overwrite the common configs
+if [ -d "$SOURCE_DIR" ]; then
+  echo "Using config for distribution: $custom_config"
 
-      # Create (or overwrite) the symlink
-      ln -sf "$src_file" "$target_file"
-      echo "Linked: $target_file -> $src_file"
-    done
+  # Recursively find files (not directories) in source
+  find "$SOURCE_DIR" -type f | while read -r src_file; do
+    # Compute relative path from source dir
+    rel_path="${src_file#$SOURCE_DIR/}"
+
+    # Compute the target path in ~/.config
+    target_file="$TARGET_DIR/$rel_path"
+
+    # Ensure the target directory exists
+    target_dir="$(dirname "$target_file")"
+    mkdir -p "$target_dir"
+
+    # If file already exists, back it up or skip
+    if [ -e "$target_file" ] && [ ! -L "$target_file" ]; then
+        echo "Backing up existing file: $target_file -> $target_file.bak"
+        mv "$target_file" "$target_file.bak_$custom_config"
+    fi
+
+    # Create (or overwrite) the symlink
+    ln -sf "$src_file" "$target_file"
+    echo "Linked: $target_file -> $src_file"
+  done
 else
     echo "No host-specific config found for $custom_config --> using common configs"
-    SOURCE_DIR = "$HOME/.config_common"
-    if [ -d "$SOURCE_DIR" ]; then
-      # Recursively find files (not directories) in source
-      find "$SOURCE_DIR" -type f | while read -r src_file; do
-        # Compute relative path from source dir
-        rel_path="${src_file#$SOURCE_DIR/}"
-
-        # Compute the target path in ~/.config
-        target_file="$TARGET_DIR/$rel_path"
-
-        # Ensure the target directory exists
-        target_dir="$(dirname "$target_file")"
-        mkdir -p "$target_dir"
-
-        # If file already exists, back it up or skip
-        if [ -e "$target_file" ] && [ ! -L "$target_file" ]; then
-            echo "Backing up existing file: $target_file -> $target_file.bak"
-            mv "$target_file" "$target_file.bak"
-        fi
-
-        # Create (or overwrite) the symlink
-        ln -sf "$src_file" "$target_file"
-        echo "Linked: $target_file -> $src_file"
-      done
-
-    else
-	echo "No specific dotfiles found in common."
-    fi
 fi
