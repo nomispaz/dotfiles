@@ -47,3 +47,11 @@ keymap("n", "<leader>ll", "<cmd>lua vim.diagnostic.setloclist()<cr>", { desc = "
 keymap("n", "<A-Up>", "<cmd>m -2<cr>", { desc = "Move row 1 up" })
 keymap("n", "<A-Down>", "<cmd>m +1<cr>", { desc = "Move row 1 down" })
 keymap("x", "<A-Down>", "<cmd>'<,'>move-2<CR>gv=gv<cr>", { desc = "Move row 1 down" })
+
+-- dap commands
+vim.keymap.set("n", "<F5>", function() require("dap").continue() end)
+vim.keymap.set("n", "<F10>", function() require("dap").step_over() end)
+vim.keymap.set("n", "<F11>", function() require("dap").step_into() end)
+vim.keymap.set("n", "<F12>", function() require("dap").step_out() end)
+vim.keymap.set("n", "<Leader>b", function() require("dap").toggle_breakpoint() end)
+vim.keymap.set("n", "<Leader>B", function() require("dap").set_breakpoint(vim.fn.input('Breakpoint condition: ')) end)
