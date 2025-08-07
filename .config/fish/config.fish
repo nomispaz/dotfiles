@@ -21,6 +21,7 @@ function emergeupdate
     sudo emerge -avugDN --read-news @world
 end
 function emergeclean
+    sudo snapper -c root create --description "system cleanup" -c number
     sudo emerge --ask --depclean
     sudo eclean distfiles
     sudo eclean packages

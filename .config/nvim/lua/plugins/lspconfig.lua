@@ -14,7 +14,7 @@ return {
     require('mason').setup()
     local mason_lspconfig = require 'mason-lspconfig'
     mason_lspconfig.setup {
-       --ensure_installed = { "pylsp", "marksman", "gopls", "rust_analyzer" }
+       ensure_installed = { "elixirls" }
     }
     --require("lspconfig").pyright.setup {
     --    capabilities = capabilities,
@@ -78,6 +78,16 @@ return {
     },
     }
     }
+
+    require'lspconfig'.elixirls.setup({
+	on_attach = custom_attach,
+	elixirls = {
+		dialyzerEnabled = true,
+		fetchDeps = false,
+	},
+	
+    })
+
     require("lspconfig").nixd.setup({
        cmd = { "nixd" },
        settings = {
@@ -105,6 +115,10 @@ return {
 
     require("lspconfig").gopls.setup {
         capabilities = capabilities,
+    }
+
+    require'lspconfig'.elixirls.setup {
+	    capabilities = capabilities,
     }
 
 

@@ -28,6 +28,8 @@
 - [[*eglot][eglot]]
 - [[*go mode][go mode]]
 - [[*rust mode][rust mode]]
+- [[*elixir][elixir-mode]]
+[[*Projects][Projects]]
 [[*Orgmode and org agenda][Orgmode and org agenda]]
 [[*Custom functions][Custom functions]]
 [[*Evil-mode][Evil-mode]]
@@ -36,7 +38,7 @@
   - [ ] nerd-icons --> disabled for now
   - [X] eglot
   - [X] vertico --> disabled
-  - [X] marginalia
+  - [X] marginalia --> disabled
   - [X] orderless  --> disabled
   - [X] doom-modeline
     - [X] spacemacs and catppuccin
@@ -59,7 +61,7 @@ The following packages need to be enabled so that evil-collection can be install
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
   (require 'package)
   (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
-    (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 #+end_src
 
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
@@ -94,11 +96,14 @@ The following packages need to be enabled so that evil-collection can be install
   (menu-bar--display-line-numbers-mode-relative)
 
   ;; automatically close brackets
-  (electric-pair-mode 1)
+  ;;(electric-pair-mode 1)
 
   ;; disable sound
   (setq ring-bell-function 'ignore)
-  
+
+  ;; set backup folder
+  (setq backup-directory-alist `(("." . "~/.local/share/emacs/backups")))
+
 #+end_src
 ** My custom functions
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
@@ -119,6 +124,34 @@ The following packages need to be enabled so that evil-collection can be install
      (define-key org-mode-map (kbd "C-,") nil))
 
   (global-set-key (kbd "C-,") 'duplicate-line)
+#+end_src
+** Custom Bindings
+See https://www.emacswiki.org/emacs/MoveLine
+#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
+    (defun move-line-up ()
+    (interactive)
+    (transpose-lines 1)
+    (forward-line -2))
+
+  (defun move-line-down ()
+    (interactive)
+    (forward-line 1)
+    (transpose-lines 1)
+    (forward-line -1))
+
+  (global-set-key (kbd "M-<up>") 'move-line-up)
+  (global-set-key (kbd "M-<down>") 'move-line-down)
+
+  (defun move-line-region-up (&optional start end n)
+  (interactive "r\np")
+  (if (use-region-p) (move-region-up start end n) (move-line-up n)))
+
+(defun move-line-region-down (&optional start end n)
+  (interactive "r\np")
+  (if (use-region-p) (move-region-down start end n) (move-line-down n)))
+
+(global-set-key (kbd "M-p") 'move-line-region-up)
+(global-set-key (kbd "M-n") 'move-line-region-down)
 #+end_src
 ** Whichkey
 #+begin_src emacs-lisp :tangle no
@@ -373,12 +406,22 @@ Adds doc string to functions displayed in the minibuffer. No alternative in stan
 Enable integration of snippets with suggestions as popup in text instead of completion at point.
 Without this function, for snippet expansion, TAB can be used and for symbol completion M-C-i with M-arrow and M-Enter to go through suggestions and select one
 #+BEGIN_SRC emacs-lisp :tangle ~/.config/emacs/init.el
-       ; Enable company-mode with language server support
-       (require 'company)
-         (setq company-minimum-prefix-length 2)
-       (add-hook 'after-init-hook 'global-company-mode)
-   (setq company-backends '(company-capf company-yasnippet company-files))
+      ; Enable company-mode with language server support
+      (require 'company)
+        (setq company-minimum-prefix-length 2)
+      (add-hook 'after-init-hook 'global-company-mode)
+  (setq company-backends '(company-files company-capf company-yasnippet))
+
+  ; activate inline help for autocompletion
+  (require 'company-quickhelp)
+    (company-quickhelp-mode)
 #+END_SRC
+** Markdown
+Better formatting for eldoc buffer
+#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
+  (require 'markdown-mode)
+#+end_src
+>
 * Consult
 Allows searching for files and within files via grep and ripgrep.
 Alternatives are the vanilla functions
@@ -396,24 +439,27 @@ Alternatives are the vanilla functions
 Enable breadcrumb from site-lisp folder to enable the breadcrumb feature.
 In addition, ensure that yasnippets are used in eglot
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
-  (require 'eglot)
-  (require 'breadcrumb)
-(defun add-yasnippet
-    ()
-    (setq company-backends '((company-capf :with company-yasnippet))))
-(add-hook 'eglot--managed-mode-hook #'add-yasnippet)
+    (require 'eglot)
+    (require 'breadcrumb)
+  (defun add-yasnippet
+      ()
+      (setq company-backends '((company-capf :with company-yasnippet))))
+  (add-hook 'eglot--managed-mode-hook #'add-yasnippet)
+  (add-to-list 'eglot-server-programs '(elixir-mode "/usr/share/elixir-ls/language_server.sh"))
 #+end_src
 ** Install treesitter languages
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
-  ; tree-sitter setup languages
-    (setq treesit-language-source-alist
-          '((go "https://github.com/tree-sitter/tree-sitter-go")
-            (rust "https://github.com/tree-sitter/tree-sitter-rust"))
-          )
-(defun my/install-treesit_languages()
- (interactive)
- (mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
- )
+    ; tree-sitter setup languages
+      (setq treesit-language-source-alist
+            '((go "https://github.com/tree-sitter/tree-sitter-go")
+              (rust "https://github.com/tree-sitter/tree-sitter-rust")
+  	    (elixir "https://github.com/elixir-lang/tree-sitter-elixir")
+  	      (heex "https://github.com/tree-sitter/tree-sitter-heex"))
+  	  )
+  (defun my/install-treesit_languages()
+   (interactive)
+   (mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
+   )
 #+end_src
 ** Language specifics
 *** go mode
@@ -442,9 +488,28 @@ In addition, ensure that yasnippets are used in eglot
   (setq rust-format-on-save t)
 #+END_SRC
 *** nix
-#+BEGIN_SRC emacs-lisp :tangle ~/.config/emacs/init.el
-  (require 'nix-mode)
+#+BEGIN_SRC emacs-lisp :tangle no
+ (require 'nix-mode)
 #+END_SRC
+*** elixir
+#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
+  (require 'elixir-mode)
+  (setq indent-tabs-mode nil)
+  (setq elixir-announce-deprecations t)
+    (setq elixir-mode-treesitter-derive t)
+    (add-hook 'elixir-mode-hook'
+            (lambda () (setq indent-tabs-mode nil)))
+  (add-hook 'elixir-mode-hook 'eglot-ensure)
+  (add-hook 'elixir-mode-hook 'yas-minor-mode)
+  (add-hook 'elixir-mode-hook 'breadcrumb-local-mode)
+#+end_src
+* Projects
+This chang allows to manually create empty .project.el file in a directory. This directory will then be recognized as a project directory
+#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
+  (setq project-vc-extra-root-markers '(".project.el"))
+  (require 'project)
+#+end_src
+
 * Orgmode and org agenda
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
   (require 'org)

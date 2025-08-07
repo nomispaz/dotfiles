@@ -93,11 +93,11 @@ layout {
 }
 
 // Autostart
-// spawn-at-startup "waybar"
+spawn-at-startup "waybar"
 // 
 
 // https://github.com/Drakulix/cosmic-ext-extra-sessions/tree/main/niri
-spawn-at-startup "cosmic-ext-alternative-startup"
+// spawn-at-startup "cosmic-ext-alternative-startup"
 
 // enable x11
 spawn-at-startup "xwayland-satellite"
@@ -106,10 +106,10 @@ environment {
 }
 
 // background image
-// spawn-at-startup "swaybg" "-m" "fill" "-i" "/home/simonheise/.config/sway/background/wald.jpg"
+spawn-at-startup "swaybg" "-m" "fill" "-i" "/home/simonheise/.config/sway/background/wald.jpg"
 
-spawn-at-startup "/nix/store/f29v7rangfwjs0djcqhp4iq82vn0784j-xdg-desktop-portal-gtk-1.15.3/libexec/xdg-desktop-portal-gtk"
-spawn-at-startup "/nix/store/rzbmkjyqfsicfabqd7xrldk19yqfp9vn-xdg-desktop-portal-wlr-0.7.1/libexec/xdg-desktop-portal-wlr"
+spawn-at-startup "/usr/libexec/xdg-desktop-portal-gtk"
+spawn-at-startup "/usr/libexec/xdg-desktop-portal-wlr"
 
 // ask apps to ignore client side decoration if possible. hides title bars if possible
 prefer-no-csd
@@ -156,10 +156,10 @@ binds {
     Mod+H { show-hotkey-overlay; }
 
     Mod+Return hotkey-overlay-title="Open a Terminal: alacritty" { spawn "alacritty"; }
-    //Mod+D hotkey-overlay-title="Run an Application: rofi" { spawn "rofi" "-show" "drun"; }
-    Mod+D { spawn "cosmic-launcher"; }
+    Mod+D hotkey-overlay-title="Run an Application: rofi" { spawn "rofi" "-show" "drun"; }
+    //Mod+D { spawn "cosmic-launcher"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
-    Super+B hotkey-overlay-title="Start Browser" { spawn "zen"; }
+    Super+B hotkey-overlay-title="Start Browser" { spawn "brave-bin"; }
     Super+S hotkey-overlay-title="Start steam" { spawn "steam"; }
 
     // The allow-when-locked=true property makes them work even when the session is locked.

@@ -1,6 +1,6 @@
 (require 'package)
 (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
-  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 (add-to-list 'load-path "/usr/share/emacs/site-lisp")
 (add-to-list 'load-path "~/.config/emacs/site-lisp")
@@ -24,10 +24,13 @@
 (menu-bar--display-line-numbers-mode-relative)
 
 ;; automatically close brackets
-(electric-pair-mode 1)
+;;(electric-pair-mode 1)
 
 ;; disable sound
 (setq ring-bell-function 'ignore)
+
+;; set backup folder
+(setq backup-directory-alist `(("." . "~/.local/share/emacs/backups")))
 
 ;; (require 'nomispaz)
 
@@ -43,6 +46,31 @@
     (define-key org-mode-map (kbd "C-,") nil))
 
  (global-set-key (kbd "C-,") 'duplicate-line)
+
+(defun move-line-up ()
+    (interactive)
+    (transpose-lines 1)
+    (forward-line -2))
+
+  (defun move-line-down ()
+    (interactive)
+    (forward-line 1)
+    (transpose-lines 1)
+    (forward-line -1))
+
+  (global-set-key (kbd "M-<up>") 'move-line-up)
+  (global-set-key (kbd "M-<down>") 'move-line-down)
+
+  (defun move-line-region-up (&optional start end n)
+  (interactive "r\np")
+  (if (use-region-p) (move-region-up start end n) (move-line-up n)))
+
+(defun move-line-region-down (&optional start end n)
+  (interactive "r\np")
+  (if (use-region-p) (move-region-down start end n) (move-line-down n)))
+
+(global-set-key (kbd "M-p") 'move-line-region-up)
+(global-set-key (kbd "M-n") 'move-line-region-down)
 
 (require 'desktop)
   (desktop-save-mode 1)
@@ -158,7 +186,13 @@
     (require 'company)
       (setq company-minimum-prefix-length 2)
     (add-hook 'after-init-hook 'global-company-mode)
-(setq company-backends '(company-capf company-yasnippet company-files))
+(setq company-backends '(company-files company-capf company-yasnippet))
+
+; activate inline help for autocompletion
+(require 'company-quickhelp)
+  (company-quickhelp-mode)
+
+(require 'markdown-mode)
 
 (require 'consult)
 (setq recentf-mode 1)
@@ -169,12 +203,15 @@
     ()
     (setq company-backends '((company-capf :with company-yasnippet))))
 (add-hook 'eglot--managed-mode-hook #'add-yasnippet)
+(add-to-list 'eglot-server-programs '(elixir-mode "/usr/share/elixir-ls/language_server.sh"))
 
 ; tree-sitter setup languages
     (setq treesit-language-source-alist
           '((go "https://github.com/tree-sitter/tree-sitter-go")
-            (rust "https://github.com/tree-sitter/tree-sitter-rust"))
-          )
+            (rust "https://github.com/tree-sitter/tree-sitter-rust")
+	    (elixir "https://github.com/elixir-lang/tree-sitter-elixir")
+	      (heex "https://github.com/tree-sitter/tree-sitter-heex"))
+	  )
 (defun my/install-treesit_languages()
  (interactive)
  (mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
@@ -201,7 +238,18 @@
 (add-hook 'rust-mode-hook 'breadcrumb-local-mode)
 (setq rust-format-on-save t)
 
-(require 'nix-mode)
+(require 'elixir-mode)
+(setq indent-tabs-mode nil)
+(setq elixir-announce-deprecations t)
+  (setq elixir-mode-treesitter-derive t)
+  (add-hook 'elixir-mode-hook'
+          (lambda () (setq indent-tabs-mode nil)))
+(add-hook 'elixir-mode-hook 'eglot-ensure)
+(add-hook 'elixir-mode-hook 'yas-minor-mode)
+(add-hook 'elixir-mode-hook 'breadcrumb-local-mode)
+
+(setq project-vc-extra-root-markers '(".project.el"))
+(require 'project)
 
 (require 'org)
 (require 'org-agenda)

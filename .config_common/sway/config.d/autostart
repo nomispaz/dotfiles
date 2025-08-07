@@ -9,6 +9,7 @@ exec /usr/lib64/polkit-kde-authentication-agent-1
 
 # gentoo
 exec /usr/libexec/polkit-kde-authentication-agent-1
+exec /usr/libexec/polkit-gnome-authentication-agent-1
 
 #exec kwalletd6
 # arch
@@ -35,8 +36,8 @@ exec tuxedo-control-center
 for_window [class="tuxedo-control-center"] move scratchpad
 
 # start statusbar
-#exec waybar
-exec_always nwg-panel
+exec waybar
+#exec_always nwg-panel
 
 # enable autotiling via additional personal script
 exec $HOME/.config/sway/scripts/autotiling/start.sh
