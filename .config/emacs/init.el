@@ -9,6 +9,7 @@
 (tool-bar-mode -1)   	            ;; Disable the toolbar
 (menu-bar-mode -1)                ;; Disable the menu bar
 (scroll-bar-mode -1)              ;; Disable visible scrollbar
+(pixel-scroll-precision-mode 1) ;; enable smooth scrolling
 
 ;; Remember recently edited files. Can then be shown with recentf-open-files
 (recentf-mode 1)
@@ -24,13 +25,36 @@
 (menu-bar--display-line-numbers-mode-relative)
 
 ;; automatically close brackets
-;;(electric-pair-mode 1)
+(electric-pair-mode 1)
 
 ;; disable sound
 (setq ring-bell-function 'ignore)
 
-;; set backup folder
-(setq backup-directory-alist `(("." . "~/.local/share/emacs/backups")))
+;; set backup and autosave folders
+(make-directory "~/.local/share/emacs/autosave/" t)
+(make-directory "~/.local/share/emacs/backups/" t)
+(setq auto-save-file-name-transforms '((".*" "~/.local/share/emacs/autosave/" t)))
+(setq backup-directory-alist `(("." . "~/.local/share/emacs/backups/")))
+
+;; copy the current file instead of moving and then copying back
+(setq backup-by-copying t)
+
+;; remove need to set two spaces at the end of sentences
+(setq sentence-end-double-space nil)
+
+;; disable automatic resizing of the frame
+(setq frame-inhibit-implied-resize t)
+
+;; Highlight trailing whitespace.
+(setq-default show-trailing-whitespace t)
+(set-face-background 'trailing-whitespace "yellow")
+
+;; enter y or n instead of yes/no
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+(setq indent-tabs-mode nil) ;; no tab
+
+(setq create-lockfiles nil) ;; no need to create lockfiles
 
 ;; (require 'nomispaz)
 
@@ -40,6 +64,7 @@
    (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)     ;; zoom out with mouse wheel
  ;;copy link anker to clipboard, insert with C-c C-l
  (global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit) ;; escape quits everything
  ;; duplicate current line
 ;; first unbind the C-, map in orgmode, then redefine the keymap
  (with-eval-after-load 'org
@@ -182,15 +207,44 @@
 (require 'yasnippet-snippets)
 (yas-global-mode 1)
 
-; Enable company-mode with language server support
-    (require 'company)
-      (setq company-minimum-prefix-length 2)
-    (add-hook 'after-init-hook 'global-company-mode)
-(setq company-backends '(company-files company-capf company-yasnippet))
+(require 'cape)
+  ;; Bind prefix keymap providing all Cape commands under a mnemonic key.
+  ;; Press C-c p ? to for help.
+  (global-set-key (kbd "C-c p") 'cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
+  ;; Alternatively bind Cape commands individually.
+  ;; :bind (("C-c p d" . cape-dabbrev)
+  ;;        ("C-c p h" . cape-history)
+  ;;        ("C-c p f" . cape-file)
+  ;;        ...)
+  ;; (add-hook 'completion-at-point-functions #'cape-history)
 
-; activate inline help for autocompletion
-(require 'company-quickhelp)
-  (company-quickhelp-mode)
+(setq completion-at-point-functions
+      (list (cape-capf-super
+                       #'cape-keyword
+		       #'cape-file
+                       #'cape-dabbrev
+		      (cape-company-to-capf #'company-yasnippet))
+            completion-at-point-functions))
+
+;;;; Merge Cape with Eglot's completions
+;;(defun my/setup-cape-with-eglot ()
+;;  "Use Cape sources in addition to Eglot completions."
+;;  (setq-local completion-at-point-functions
+;;              (list (cape-capf-super
+;;                     #'eglot-completion-at-point
+;;                     #'cape-keyword
+;;                     #'cape-file
+;;                     #'cape-dabbrev
+;;                     (cape-company-to-capf #'company-yasnippet)))))
+;;
+;;(add-hook 'eglot-managed-mode-hook #'my/setup-cape-with-eglot)
+
+;; Ensure it uses minibuffer completion
+(setq completion-in-region-function
+      (lambda (&rest args)
+        (apply #'consult-completion-in-region args))) ;; if you have consult
+;; Or if you don't have consult:
+;; (setq completion-in-region-function #'completion--in-region)
 
 (require 'markdown-mode)
 
@@ -210,7 +264,7 @@
           '((go "https://github.com/tree-sitter/tree-sitter-go")
             (rust "https://github.com/tree-sitter/tree-sitter-rust")
 	    (elixir "https://github.com/elixir-lang/tree-sitter-elixir")
-	      (heex "https://github.com/tree-sitter/tree-sitter-heex"))
+	      (heex "https://github.com/phoenixframework/tree-sitter-heex"))
 	  )
 (defun my/install-treesit_languages()
  (interactive)
@@ -239,14 +293,14 @@
 (setq rust-format-on-save t)
 
 (require 'elixir-mode)
-(setq indent-tabs-mode nil)
+ (setq indent-tabs-mode nil)
 (setq elixir-announce-deprecations t)
-  (setq elixir-mode-treesitter-derive t)
-  (add-hook 'elixir-mode-hook'
-          (lambda () (setq indent-tabs-mode nil)))
-(add-hook 'elixir-mode-hook 'eglot-ensure)
-(add-hook 'elixir-mode-hook 'yas-minor-mode)
-(add-hook 'elixir-mode-hook 'breadcrumb-local-mode)
+   (setq elixir-mode-treesitter-derive t)
+   (add-hook 'elixir-mode-hook'
+           (lambda () (setq indent-tabs-mode nil)))
+ (add-hook 'elixir-mode-hook 'eglot-ensure)
+ (add-hook 'elixir-mode-hook 'yas-minor-mode)
+ (add-hook 'elixir-mode-hook 'breadcrumb-local-mode)
 
 (setq project-vc-extra-root-markers '(".project.el"))
 (require 'project)
@@ -263,7 +317,7 @@ org-hide-emphasis-markers t)
 (setq org-log-done 'time)
 (setq org-log-into-drawer t)
 ;; RETURN will follow links in org-mode files
-(setq org-return-follows-link  t)  
+(setq org-return-follows-link  t)
 
 (add-hook 'org-mode-hook 'my/org-mode-setup())
 (add-hook 'org-mode-hook 'my/org-font-setup())

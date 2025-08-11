@@ -58,6 +58,9 @@ If a language server is not required, disable eglot, snippets, go-mode and rust-
 Disable evil to disable vim keybindings.
 
 The following packages need to be enabled so that evil-collection can be installed. Additionally, evil has an error in emacs 29 with the version available on elpa
+
+Some ideas are taken from:
+https://www.patrickdelliott.com/emacs.d/
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
   (require 'package)
   (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
@@ -81,6 +84,7 @@ The following packages need to be enabled so that evil-collection can be install
   (tool-bar-mode -1)   	            ;; Disable the toolbar
   (menu-bar-mode -1)                ;; Disable the menu bar
   (scroll-bar-mode -1)              ;; Disable visible scrollbar
+  (pixel-scroll-precision-mode 1) ;; enable smooth scrolling
 
   ;; Remember recently edited files. Can then be shown with recentf-open-files
   (recentf-mode 1)
@@ -96,13 +100,36 @@ The following packages need to be enabled so that evil-collection can be install
   (menu-bar--display-line-numbers-mode-relative)
 
   ;; automatically close brackets
-  ;;(electric-pair-mode 1)
+  (electric-pair-mode 1)
 
   ;; disable sound
   (setq ring-bell-function 'ignore)
 
-  ;; set backup folder
-  (setq backup-directory-alist `(("." . "~/.local/share/emacs/backups")))
+  ;; set backup and autosave folders
+  (make-directory "~/.local/share/emacs/autosave/" t)
+  (make-directory "~/.local/share/emacs/backups/" t)
+  (setq auto-save-file-name-transforms '((".*" "~/.local/share/emacs/autosave/" t)))
+  (setq backup-directory-alist `(("." . "~/.local/share/emacs/backups/")))
+
+  ;; copy the current file instead of moving and then copying back
+  (setq backup-by-copying t)
+
+  ;; remove need to set two spaces at the end of sentences
+  (setq sentence-end-double-space nil)
+
+  ;; disable automatic resizing of the frame
+  (setq frame-inhibit-implied-resize t)
+
+  ;; Highlight trailing whitespace.
+  (setq-default show-trailing-whitespace t)
+  (set-face-background 'trailing-whitespace "yellow")
+
+  ;; enter y or n instead of yes/no
+  (defalias 'yes-or-no-p 'y-or-n-p)
+
+  (setq indent-tabs-mode nil) ;; no tab
+
+  (setq create-lockfiles nil) ;; no need to create lockfiles
 
 #+end_src
 ** My custom functions
@@ -112,18 +139,19 @@ The following packages need to be enabled so that evil-collection can be install
 * Keybindings
 ** General keybindings
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
-    (global-set-key (kbd "C-+") 'text-scale-increase)                ;; zoom in
-    (global-set-key (kbd "C--") 'text-scale-decrease)                ;; zoom out
-    (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)       ;; zoom in with mouse wheel
-    (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)     ;; zoom out with mouse wheel
-  ;;copy link anker to clipboard, insert with C-c C-l
-  (global-set-key (kbd "C-c l") 'org-store-link)
-  ;; duplicate current line
- ;; first unbind the C-, map in orgmode, then redefine the keymap
-  (with-eval-after-load 'org
-     (define-key org-mode-map (kbd "C-,") nil))
+     (global-set-key (kbd "C-+") 'text-scale-increase)                ;; zoom in
+     (global-set-key (kbd "C--") 'text-scale-decrease)                ;; zoom out
+     (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)       ;; zoom in with mouse wheel
+     (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)     ;; zoom out with mouse wheel
+   ;;copy link anker to clipboard, insert with C-c C-l
+   (global-set-key (kbd "C-c l") 'org-store-link)
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit) ;; escape quits everything
+   ;; duplicate current line
+  ;; first unbind the C-, map in orgmode, then redefine the keymap
+   (with-eval-after-load 'org
+      (define-key org-mode-map (kbd "C-,") nil))
 
-  (global-set-key (kbd "C-,") 'duplicate-line)
+   (global-set-key (kbd "C-,") 'duplicate-line)
 #+end_src
 ** Custom Bindings
 See https://www.emacswiki.org/emacs/MoveLine
@@ -405,10 +433,10 @@ Adds doc string to functions displayed in the minibuffer. No alternative in stan
 ** Company
 Enable integration of snippets with suggestions as popup in text instead of completion at point.
 Without this function, for snippet expansion, TAB can be used and for symbol completion M-C-i with M-arrow and M-Enter to go through suggestions and select one
-#+BEGIN_SRC emacs-lisp :tangle ~/.config/emacs/init.el
+#+BEGIN_SRC emacs-lisp :tangle no
       ; Enable company-mode with language server support
       (require 'company)
-        (setq company-minimum-prefix-length 2)
+        (setq company-minimum-prefix-length 4)
       (add-hook 'after-init-hook 'global-company-mode)
   (setq company-backends '(company-files company-capf company-yasnippet))
 
@@ -416,12 +444,55 @@ Without this function, for snippet expansion, TAB can be used and for symbol com
   (require 'company-quickhelp)
     (company-quickhelp-mode)
 #+END_SRC
+** Cape
+#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
+(require 'cape)
+  ;; Bind prefix keymap providing all Cape commands under a mnemonic key.
+  ;; Press C-c p ? to for help.
+  (global-set-key (kbd "C-c p") 'cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
+  ;; Alternatively bind Cape commands individually.
+  ;; :bind (("C-c p d" . cape-dabbrev)
+  ;;        ("C-c p h" . cape-history)
+  ;;        ("C-c p f" . cape-file)
+  ;;        ...)
+  ;; (add-hook 'completion-at-point-functions #'cape-history)
+
+(setq completion-at-point-functions
+      (list (cape-capf-super
+                       #'cape-keyword
+		       #'cape-file
+                       #'cape-dabbrev
+		      (cape-company-to-capf #'company-yasnippet))
+            completion-at-point-functions))
+
+;;;; Merge Cape with Eglot's completions
+;;(defun my/setup-cape-with-eglot ()
+;;  "Use Cape sources in addition to Eglot completions."
+;;  (setq-local completion-at-point-functions
+;;              (list (cape-capf-super
+;;                     #'eglot-completion-at-point
+;;                     #'cape-keyword
+;;                     #'cape-file
+;;                     #'cape-dabbrev
+;;                     (cape-company-to-capf #'company-yasnippet)))))
+;;
+;;(add-hook 'eglot-managed-mode-hook #'my/setup-cape-with-eglot)
+  #+end_src
+** Buildin autocomplete
+#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
+;; Ensure it uses minibuffer completion
+(setq completion-in-region-function
+      (lambda (&rest args)
+        (apply #'consult-completion-in-region args))) ;; if you have consult
+;; Or if you don't have consult:
+;; (setq completion-in-region-function #'completion--in-region)
+
+ #+end_src
 ** Markdown
 Better formatting for eldoc buffer
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
   (require 'markdown-mode)
 #+end_src
->
 * Consult
 Allows searching for files and within files via grep and ripgrep.
 Alternatives are the vanilla functions
@@ -454,7 +525,7 @@ In addition, ensure that yasnippets are used in eglot
             '((go "https://github.com/tree-sitter/tree-sitter-go")
               (rust "https://github.com/tree-sitter/tree-sitter-rust")
   	    (elixir "https://github.com/elixir-lang/tree-sitter-elixir")
-  	      (heex "https://github.com/tree-sitter/tree-sitter-heex"))
+  	      (heex "https://github.com/phoenixframework/tree-sitter-heex"))
   	  )
   (defun my/install-treesit_languages()
    (interactive)
@@ -495,7 +566,7 @@ In addition, ensure that yasnippets are used in eglot
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
   (require 'elixir-mode)
   (setq indent-tabs-mode nil)
-  (setq elixir-announce-deprecations t)
+ (setq elixir-announce-deprecations t)
     (setq elixir-mode-treesitter-derive t)
     (add-hook 'elixir-mode-hook'
             (lambda () (setq indent-tabs-mode nil)))
@@ -524,8 +595,8 @@ This chang allows to manually create empty .project.el file in a directory. This
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
   ;; RETURN will follow links in org-mode files
-  (setq org-return-follows-link  t)  
-  
+  (setq org-return-follows-link  t)
+
   (add-hook 'org-mode-hook 'my/org-mode-setup())
   (add-hook 'org-mode-hook 'my/org-font-setup())
 
@@ -605,53 +676,53 @@ Instead of evil-mode maybe use viper mode that alread emulates vi-keybindings.
 
 ** Additional evil keybindings
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
-       ;; set leader key in all states
-       (evil-set-leader 'normal (kbd "SPC"))
-       (evil-set-leader nil (kbd "SPC"))
+     ;; set leader key in all states
+     (evil-set-leader 'normal (kbd "SPC"))
+     (evil-set-leader nil (kbd "SPC"))
 
-       ;; set local leader
-       (evil-set-leader 'normal "," t)
+     ;; set local leader
+     (evil-set-leader 'normal "," t)
 
-      ;; window navigation
-        (define-key evil-normal-state-map (kbd "C-w <right>") '("Change to right window" . evil-window-right))
-        (define-key evil-normal-state-map (kbd "C-w <left>") '("Change to left window" . evil-window-left))
-       (define-key evil-normal-state-map (kbd "C-w <up>") '("Change to upper window" . evil-window-top))
-       (define-key evil-normal-state-map (kbd "C-w <down>") '("Change to bottom window" . evil-window-down))
-        (define-key evil-normal-state-map (kbd "C-w k") '("Close window" . evil-window-delete)) 
-      ;; files
-       (define-key evil-normal-state-map (kbd "<leader> f f") '("Search files" . consult-find))
-       (define-key evil-normal-state-map (kbd "<leader> f r") '("Recent files" . recentf))
-       (define-key evil-normal-state-map (kbd "<leader> f g") '("Search files (grep)" . consult-grep))
-       (define-key evil-normal-state-map (kbd "<leader> f n") '("New file" . evil-buffer-new))
+    ;; window navigation
+      (define-key evil-normal-state-map (kbd "C-w <right>") '("Change to right window" . evil-window-right))
+      (define-key evil-normal-state-map (kbd "C-w <left>") '("Change to left window" . evil-window-left))
+     (define-key evil-normal-state-map (kbd "C-w <up>") '("Change to upper window" . evil-window-top))
+     (define-key evil-normal-state-map (kbd "C-w <down>") '("Change to bottom window" . evil-window-down))
+      (define-key evil-normal-state-map (kbd "C-w k") '("Close window" . evil-window-delete)) 
+    ;; files
+     (define-key evil-normal-state-map (kbd "<leader> f f") '("Search files" . consult-find))
+     (define-key evil-normal-state-map (kbd "<leader> f r") '("Recent files" . recentf))
+     (define-key evil-normal-state-map (kbd "<leader> f g") '("Search files (grep)" . consult-grep))
+     (define-key evil-normal-state-map (kbd "<leader> f n") '("New file" . evil-buffer-new))
 
-       ;; buffers
-       (define-key evil-normal-state-map (kbd "<leader> b b") '("Switch to buffer" . switch-to-buffer))
-       (define-key evil-normal-state-map (kbd "<leader> b k") '("Kill current buffer" . kill-current-buffer))
-       (define-key evil-normal-state-map (kbd "<leader> b r") '("Rename buffer" . rename-buffer))
-       (define-key evil-normal-state-map (kbd "<leader> b s") '("Save buffer" . basic-save-buffer))
+     ;; buffers
+     (define-key evil-normal-state-map (kbd "<leader> b b") '("Switch to buffer" . switch-to-buffer))
+     (define-key evil-normal-state-map (kbd "<leader> b k") '("Kill current buffer" . kill-current-buffer))
+     (define-key evil-normal-state-map (kbd "<leader> b r") '("Rename buffer" . rename-buffer))
+     (define-key evil-normal-state-map (kbd "<leader> b s") '("Save buffer" . basic-save-buffer))
 
-       ;; tabs
-       (define-key evil-normal-state-map (kbd "<leader> t t") '("Switch to tab" . tab-switch))
+     ;; tabs
+     (define-key evil-normal-state-map (kbd "<leader> t t") '("Switch to tab" . tab-switch))
 
-       ;; search
-       (define-key evil-normal-state-map (kbd "<leader> s o") '("Search heading" - consult-outline))
-       (define-key evil-normal-state-map (kbd "<leader> s l") '("Search line" . consult-line))
+     ;; search
+     (define-key evil-normal-state-map (kbd "<leader> s o") '("Search heading" - consult-outline))
+     (define-key evil-normal-state-map (kbd "<leader> s l") '("Search line" . consult-line))
 
-       ;; org-mode
-       (define-key evil-normal-state-map (kbd "<leader> o e") '("Export org file" . org-export-dispatch))
-        (define-key evil-normal-state-map (kbd "<leader> o a") '("Open org agenda" . org-agenda))
-       (define-key evil-normal-state-map (kbd "<leader> o t") '("Export code blocks" . org-babel-tangle))
-       (define-key evil-normal-state-map (kbd "<leader> o i s") '("Insert scheduled date" . org-schedule))
+     ;; org-mode
+     (define-key evil-normal-state-map (kbd "<leader> o e") '("Export org file" . org-export-dispatch))
+      (define-key evil-normal-state-map (kbd "<leader> o a") '("Open org agenda" . org-agenda))
+     (define-key evil-normal-state-map (kbd "<leader> o t") '("Export code blocks" . org-babel-tangle))
+     (define-key evil-normal-state-map (kbd "<leader> o i s") '("Insert scheduled date" . org-schedule))
 
-       ;; flycheck
-       (define-key evil-normal-state-map (kbd "<leader> l l") '("Show list of flycheck errors" . flymake-show-buffer-diagnostics))
-       (define-key evil-normal-state-map (kbd "<leader> l n") '("Next flycheck error" . flymake-goto-next-error))
-       (define-key evil-normal-state-map (kbd "<leader> l p") '("Previous flycheck error" . flymake-goto-previous-error))
-
-      ;; lsp
-       (define-key evil-normal-state-map (kbd "<leader> g r n") '("Rename variable or function" . eglot-rename))
-    (define-key evil-normal-state-map (kbd "<leader> g d") '("LSP goto definition" . xref-find-definitions))
-    (define-key evil-normal-state-map (kbd "<leader> g D") '("LSP Find references" . xref-find-references))
-    (define-key evil-normal-state-map (kbd "K") '("LSP show doc in buffer" . eldoc))
-    (define-key evil-normal-state-map (kbd "C-.") '("LSP execute code action" . eglot-code-actions))
+     ;; flycheck
+     (define-key evil-normal-state-map (kbd "<leader> l l") '("Show list of flycheck errors" . flymake-show-buffer-diagnostics))
+     (define-key evil-normal-state-map (kbd "<leader> l n") '("Next flycheck error" . flymake-goto-next-error))
+     (define-key evil-normal-state-map (kbd "<leader> l p") '("Previous flycheck error" . flymake-goto-previous-error))
+  
+    ;; lsp
+     (define-key evil-normal-state-map (kbd "<leader> g r n") '("Rename variable or function" . eglot-rename))
+  (define-key evil-normal-state-map (kbd "<leader> g d") '("LSP goto definition" . xref-find-definitions))
+  (define-key evil-normal-state-map (kbd "<leader> g D") '("LSP Find references" . xref-find-references))
+  (define-key evil-normal-state-map (kbd "K") '("LSP show doc in buffer" . eldoc))
+  (define-key evil-normal-state-map (kbd "C-.") '("LSP execute code action" . eglot-code-actions))
 #+end_src
