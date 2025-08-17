@@ -1,7 +1,7 @@
 # set monitors
 output eDP-2 pos 0 0 res 2560x1440
 output DP-1 pos 2560 0 res 2560x1440
-workspace 1 output eDP-2
+workspace 1 output eDP-1
 
 # set floating for window roles
 for_window [app_id="pavucontrol" ] floating enable, resize set width 40 ppt height 30 ppt
