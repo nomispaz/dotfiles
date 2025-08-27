@@ -5,56 +5,63 @@
 (add-to-list 'load-path "/usr/share/emacs/site-lisp")
 (add-to-list 'load-path "~/.config/emacs/site-lisp")
 
-(setq inhibit-startup-screen t)   ;; Disable the welcome screen
-(tool-bar-mode -1)   	            ;; Disable the toolbar
-(menu-bar-mode -1)                ;; Disable the menu bar
-(scroll-bar-mode -1)              ;; Disable visible scrollbar
-(pixel-scroll-precision-mode 1) ;; enable smooth scrolling
+;; first remap major modes to major-ts-mode
+ (setq major-mode-remap-alist
+   '((elixir-mode . elixir-ts-mode)
+    (go-mode . go-ts-mode)
+(rust-mode . rust-ts-mode)
+(java-mode . java-ts-mode)))
 
-;; Remember recently edited files. Can then be shown with recentf-open-files
-(recentf-mode 1)
+ (setq inhibit-startup-screen t)   ;; Disable the welcome screen
+ (tool-bar-mode -1)   	            ;; Disable the toolbar
+ (menu-bar-mode -1)                ;; Disable the menu bar
+ (scroll-bar-mode -1)              ;; Disable visible scrollbar
+ (pixel-scroll-precision-mode 1) ;; enable smooth scrolling
 
-;; Save what you enter into minibuffer prompts
-(setq history-length 25)
-(savehist-mode 1)
+ ;; Remember recently edited files. Can then be shown with recentf-open-files
+ (recentf-mode 1)
 
-;; Remember and restore the last cursor location of opened files
-(save-place-mode 1)
+ ;; Save what you enter into minibuffer prompts
+ (setq history-length 25)
+ (savehist-mode 1)
 
-;; show relative line numbers
-(menu-bar--display-line-numbers-mode-relative)
+ ;; Remember and restore the last cursor location of opened files
+ (save-place-mode 1)
 
-;; automatically close brackets
-(electric-pair-mode 1)
+ ;; show relative line numbers
+ (menu-bar--display-line-numbers-mode-relative)
 
-;; disable sound
-(setq ring-bell-function 'ignore)
+ ;; automatically close brackets
+ (electric-pair-mode 1)
 
-;; set backup and autosave folders
-(make-directory "~/.local/share/emacs/autosave/" t)
-(make-directory "~/.local/share/emacs/backups/" t)
-(setq auto-save-file-name-transforms '((".*" "~/.local/share/emacs/autosave/" t)))
-(setq backup-directory-alist `(("." . "~/.local/share/emacs/backups/")))
+ ;; disable sound
+ (setq ring-bell-function 'ignore)
 
-;; copy the current file instead of moving and then copying back
-(setq backup-by-copying t)
+ ;; set backup and autosave folders
+ (make-directory "~/.local/share/emacs/autosave/" t)
+ (make-directory "~/.local/share/emacs/backups/" t)
+ (setq auto-save-file-name-transforms '((".*" "~/.local/share/emacs/autosave/" t)))
+ (setq backup-directory-alist `(("." . "~/.local/share/emacs/backups/")))
 
-;; remove need to set two spaces at the end of sentences
-(setq sentence-end-double-space nil)
+ ;; copy the current file instead of moving and then copying back
+ (setq backup-by-copying t)
 
-;; disable automatic resizing of the frame
-(setq frame-inhibit-implied-resize t)
+ ;; remove need to set two spaces at the end of sentences
+ (setq sentence-end-double-space nil)
 
-;; Highlight trailing whitespace.
-(setq-default show-trailing-whitespace t)
-(set-face-background 'trailing-whitespace "yellow")
+ ;; disable automatic resizing of the frame
+ (setq frame-inhibit-implied-resize t)
 
-;; enter y or n instead of yes/no
-(defalias 'yes-or-no-p 'y-or-n-p)
+ ;; Highlight trailing whitespace.
+ (setq-default show-trailing-whitespace t)
+ (set-face-background 'trailing-whitespace "yellow")
 
-(setq indent-tabs-mode nil) ;; no tab
+ ;; enter y or n instead of yes/no
+ (defalias 'yes-or-no-p 'y-or-n-p)
 
-(setq create-lockfiles nil) ;; no need to create lockfiles
+ (setq indent-tabs-mode nil) ;; no tab
+
+ (setq create-lockfiles nil) ;; no need to create lockfiles
 
 ;; (require 'nomispaz)
 
@@ -71,6 +78,7 @@
     (define-key org-mode-map (kbd "C-,") nil))
 
  (global-set-key (kbd "C-,") 'duplicate-line)
+ (global-set-key (kbd "C-x TAB") 'indent-region)
 
 (defun move-line-up ()
     (interactive)
@@ -206,6 +214,7 @@
 (require 'yasnippet)
 (require 'yasnippet-snippets)
 (yas-global-mode 1)
+(global-set-key (kbd "C-c C-s") 'yas-insert-snippet)
 
 (require 'cape)
   ;; Bind prefix keymap providing all Cape commands under a mnemonic key.
@@ -257,14 +266,56 @@
     ()
     (setq company-backends '((company-capf :with company-yasnippet))))
 (add-hook 'eglot--managed-mode-hook #'add-yasnippet)
-(add-to-list 'eglot-server-programs '(elixir-mode "/usr/share/elixir-ls/language_server.sh"))
+(add-to-list 'eglot-server-programs '(elixir-mode "/usr/bin/language_server.sh"))
+(add-to-list 'eglot-server-programs '(java-mode . (lambda (i p) (list "~/.local/share/jdtls/bin/jdtls" "-configuration" "~/.local/share/jdtls/config_linux"))))
+
+(defun my/setup-local-jdtls ()
+  "Ensure ~/.local/share/jdtls exists and is up to date with /usr/libexec/jdtls.
+Also copy the config_linux folder from /usr/share/jdtls only if it is newer."
+  (let* ((local-dir (expand-file-name "~/.local/share/jdtls"))
+         (system-dir "/usr/libexec/jdtls")
+         (config-src "/usr/share/jdtls/config_linux")
+         (config-dest (expand-file-name "config_linux" local-dir))
+         (local-exists (file-directory-p local-dir)))
+    ;; Step 1: ensure JDTLS exists locally
+    (cond
+     ((not local-exists)
+      (message "JDTLS: copying fresh install from %s → %s ..." system-dir local-dir)
+      (copy-directory system-dir local-dir t t t)
+      (message "JDTLS: installed locally at %s" local-dir))
+     (t
+      (let* ((local-time (nth 5 (file-attributes local-dir)))
+             (system-time (nth 5 (file-attributes system-dir))))
+        (when (time-less-p local-time system-time)
+          (message "JDTLS: system version is newer, refreshing local copy...")
+          (delete-directory local-dir t)
+          (copy-directory system-dir local-dir t t t)
+          (message "JDTLS: refreshed local copy at %s" local-dir)))))
+
+    ;; Step 2: copy config_linux only if system version is newer or missing locally
+    (when (file-directory-p config-src)
+      (let ((copy-needed
+             (or (not (file-directory-p config-dest))
+                 (time-less-p (nth 5 (file-attributes config-dest))
+                              (nth 5 (file-attributes config-src))))))
+        (when copy-needed
+          (message "JDTLS: copying config_linux from %s → %s ..." config-src config-dest)
+          (when (file-directory-p config-dest)
+            (delete-directory config-dest t))
+          (copy-directory config-src config-dest t t t)
+          (message "JDTLS: config_linux copied to %s" config-dest))))))
+
+;; Run at startup
+(my/setup-local-jdtls)
 
 ; tree-sitter setup languages
     (setq treesit-language-source-alist
           '((go "https://github.com/tree-sitter/tree-sitter-go")
+	    (gomod "https://github.com/camdencheek/tree-sitter-go-mod")
             (rust "https://github.com/tree-sitter/tree-sitter-rust")
 	    (elixir "https://github.com/elixir-lang/tree-sitter-elixir")
-	      (heex "https://github.com/phoenixframework/tree-sitter-heex"))
+	    (heex "https://github.com/phoenixframework/tree-sitter-heex")
+	    (java "https://github.com/tree-sitter/tree-sitter-java"))
 	  )
 (defun my/install-treesit_languages()
  (interactive)
@@ -292,15 +343,25 @@
 (add-hook 'rust-mode-hook 'breadcrumb-local-mode)
 (setq rust-format-on-save t)
 
-(require 'elixir-mode)
- (setq indent-tabs-mode nil)
-(setq elixir-announce-deprecations t)
-   (setq elixir-mode-treesitter-derive t)
-   (add-hook 'elixir-mode-hook'
-           (lambda () (setq indent-tabs-mode nil)))
- (add-hook 'elixir-mode-hook 'eglot-ensure)
- (add-hook 'elixir-mode-hook 'yas-minor-mode)
- (add-hook 'elixir-mode-hook 'breadcrumb-local-mode)
+; Enable lsp-mode for Go and Rust modes
+(setq java-mode-treesitter-derive t)
+(add-hook 'java-ts-mode-hook 'eglot-ensure)
+(add-hook 'java-ts-mode-hook 'yas-minor-mode)
+(add-hook 'java-ts-mode-hook 'breadcrumb-local-mode)
+
+;; this is necessary since elixir-ts-mode doesn't start automatically when an elixir-file is opened in contrast to elixir-mode
+ (add-to-list 'auto-mode-alist '("\\.ex\\'"  . elixir-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.exs\\'" . elixir-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.heex\\'" . heex-ts-mode))
+
+       (setq indent-tabs-mode nil)
+     (setq elixir-announce-deprecations t)
+        (setq elixir-mode-treesitter-derive t)
+        (add-hook 'elixir-ts-mode-hook'
+                (lambda () (setq indent-tabs-mode nil)))
+      (add-hook 'elixir-ts-mode-hook 'eglot-ensure)
+      (add-hook 'elixir-ts-mode-hook 'yas-minor-mode)
+      (add-hook 'elixir-ts-mode-hook 'breadcrumb-local-mode)
 
 (setq project-vc-extra-root-markers '(".project.el"))
 (require 'project)

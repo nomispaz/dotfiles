@@ -67,6 +67,14 @@ layout {
     // You can change the default width of the new windows.
     default-column-width { proportion 0.5; }
 
+    preset-window-heights {
+        // The default preset widths are 1/3, 1/2 and 2/3 of the output.
+        proportion 0.33333
+        proportion 0.5
+	proportion 0.75
+        proportion 1.0
+    }
+
     // You can change how the focus ring looks.
     focus-ring {
         // off
@@ -93,11 +101,14 @@ layout {
 }
 
 // Autostart
-spawn-at-startup "waybar"
+//spawn-at-startup "waybar"
+// spawn-at-startup "cosmic-panel"
+spawn-at-startup "nwg-panel"
+spawn-at-startup "gammastep-indicator -l 50.82:6.12"
 // 
 
 // https://github.com/Drakulix/cosmic-ext-extra-sessions/tree/main/niri
-// spawn-at-startup "cosmic-ext-alternative-startup"
+//spawn-at-startup "cosmic-ext-alternative-startup"
 
 // enable x11
 spawn-at-startup "xwayland-satellite"
@@ -110,6 +121,7 @@ spawn-at-startup "swaybg" "-m" "fill" "-i" "/home/simonheise/.config/sway/backgr
 
 spawn-at-startup "/usr/libexec/xdg-desktop-portal-gtk"
 spawn-at-startup "/usr/libexec/xdg-desktop-portal-wlr"
+spawn-at-startup "/usr/libexec/xdg-desktop-portal-gnome"
 
 // ask apps to ignore client side decoration if possible. hides title bars if possible
 prefer-no-csd
@@ -156,11 +168,12 @@ binds {
     Mod+H { show-hotkey-overlay; }
 
     Mod+Return hotkey-overlay-title="Open a Terminal: alacritty" { spawn "alacritty"; }
-    Mod+D hotkey-overlay-title="Run an Application: rofi" { spawn "rofi" "-show" "drun"; }
-    //Mod+D { spawn "cosmic-launcher"; }
+    //Mod+D hotkey-overlay-title="Run an Application: rofi" { spawn "rofi" "-show" "drun"; }
+    Mod+D { spawn "cosmic-launcher"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
-    Super+B hotkey-overlay-title="Start Browser" { spawn "brave-bin"; }
+    Super+B hotkey-overlay-title="Start Browser" { spawn "brave-browser"; }
     Super+S hotkey-overlay-title="Start steam" { spawn "steam"; }
+    Super+E hotkey-overlay-title="Start emacs" { spawn "emacs"; }
 
     // The allow-when-locked=true property makes them work even when the session is locked.
     XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.05+"; }

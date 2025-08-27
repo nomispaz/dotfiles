@@ -24,7 +24,7 @@ set $mod Mod4
 
 # assign programs to variables
 set $terminal alacritty
-set $browser brave-bin
+set $browser brave-browser
 set $files dolphin
 set $editor emacs
 

@@ -5,21 +5,21 @@ exec hash dbus-update-activation-environment 2>/dev/null && \
 
 # start authentication agent
 # arch
-exec /usr/lib64/polkit-kde-authentication-agent-1
+#exec /usr/lib64/polkit-kde-authentication-agent-1
 
 # gentoo
-exec /usr/libexec/polkit-kde-authentication-agent-1
-exec /usr/libexec/polkit-gnome-authentication-agent-1
+#exec /usr/libexec/polkit-kde-authentication-agent-1
+#exec /usr/libexec/polkit-gnome-authentication-agent-1
 
 #exec kwalletd6
 # arch
-exec --no-startup-id /usr/lib/pam_kwallet_init 
+#exec --no-startup-id /usr/lib/pam_kwallet_init 
 
 # gentoo
-exec --no-startup-id /usr/libexec/pam_kwallet_init
+#exec --no-startup-id /usr/libexec/pam_kwallet_init
 
 # enable kwallet-pam and autologin (on NixOS)
-exec --no-startup-id /run/current-system/sw/libexec/pam_kwallet_init
+#exec --no-startup-id /run/current-system/sw/libexec/pam_kwallet_init
 
 # start networkmanager applet
 exec nm-applet --indicator
@@ -36,8 +36,8 @@ exec tuxedo-control-center
 for_window [class="tuxedo-control-center"] move scratchpad
 
 # start statusbar
-exec waybar
-#exec_always nwg-panel
+#exec waybar
+exec_always nwg-panel
 
 # enable autotiling via additional personal script
 exec $HOME/.config/sway/scripts/autotiling/start.sh
