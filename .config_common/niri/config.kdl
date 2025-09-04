@@ -104,7 +104,6 @@ layout {
 //spawn-at-startup "waybar"
 // spawn-at-startup "cosmic-panel"
 spawn-at-startup "nwg-panel"
-spawn-at-startup "gammastep-indicator -l 50.82:6.12"
 // 
 
 // https://github.com/Drakulix/cosmic-ext-extra-sessions/tree/main/niri
@@ -122,6 +121,8 @@ spawn-at-startup "swaybg" "-m" "fill" "-i" "/home/simonheise/.config/sway/backgr
 spawn-at-startup "/usr/libexec/xdg-desktop-portal-gtk"
 spawn-at-startup "/usr/libexec/xdg-desktop-portal-wlr"
 spawn-at-startup "/usr/libexec/xdg-desktop-portal-gnome"
+
+spawn-at-startup "gammastep-indicator"
 
 // ask apps to ignore client side decoration if possible. hides title bars if possible
 prefer-no-csd

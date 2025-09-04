@@ -82,63 +82,62 @@ https://www.patrickdelliott.com/emacs.d/
 * General setup
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
 
-          ;; first remap major modes to major-ts-mode
-          (setq major-mode-remap-alist
-            '((elixir-mode . elixir-ts-mode)
-             (go-mode . go-ts-mode)
-    	 (rust-mode . rust-ts-mode)
-  	 (java-mode . java-ts-mode)))
+   ;; first remap major modes to major-ts-mode
+   (setq major-mode-remap-alist
+     '((elixir-mode . elixir-ts-mode)
+      (go-mode . go-ts-mode)
+  (rust-mode . rust-ts-mode)
+  (java-mode . java-ts-mode)))
 
-          (setq inhibit-startup-screen t)   ;; Disable the welcome screen
-          (tool-bar-mode -1)   	            ;; Disable the toolbar
-          (menu-bar-mode -1)                ;; Disable the menu bar
-          (scroll-bar-mode -1)              ;; Disable visible scrollbar
-          (pixel-scroll-precision-mode 1) ;; enable smooth scrolling
+   (setq inhibit-startup-screen t)   ;; Disable the welcome screen
+   (tool-bar-mode -1)   	            ;; Disable the toolbar
+   (menu-bar-mode -1)                ;; Disable the menu bar
+   (scroll-bar-mode -1)              ;; Disable visible scrollbar
+   (pixel-scroll-precision-mode 1) ;; enable smooth scrolling
 
-          ;; Remember recently edited files. Can then be shown with recentf-open-files
-          (recentf-mode 1)
+   ;; Remember recently edited files. Can then be shown with recentf-open-files
+   (recentf-mode 1)
 
-          ;; Save what you enter into minibuffer prompts
-          (setq history-length 25)
-          (savehist-mode 1)
+   ;; Save what you enter into minibuffer prompts
+   (setq history-length 25)
+   (savehist-mode 1)
 
-          ;; Remember and restore the last cursor location of opened files
-          (save-place-mode 1)
+   ;; Remember and restore the last cursor location of opened files
+   (save-place-mode 1)
 
-          ;; show relative line numbers
-          (menu-bar--display-line-numbers-mode-relative)
+   ;; show relative line numbers
+   (menu-bar--display-line-numbers-mode-relative)
+   ;; automatically close brackets
+   (electric-pair-mode 1)
 
-          ;; automatically close brackets
-          (electric-pair-mode 1)
+   ;; disable sound
+   (setq ring-bell-function 'ignore)
 
-          ;; disable sound
-          (setq ring-bell-function 'ignore)
+   ;; set backup and autosave folders
+   (make-directory "~/.local/share/emacs/autosave/" t)
+   (make-directory "~/.local/share/emacs/backups/" t)
+   (setq auto-save-file-name-transforms '((".*" "~/.local/share/emacs/autosave/" t)))
+   (setq backup-directory-alist `(("." . "~/.local/share/emacs/backups/")))
 
-          ;; set backup and autosave folders
-          (make-directory "~/.local/share/emacs/autosave/" t)
-          (make-directory "~/.local/share/emacs/backups/" t)
-          (setq auto-save-file-name-transforms '((".*" "~/.local/share/emacs/autosave/" t)))
-          (setq backup-directory-alist `(("." . "~/.local/share/emacs/backups/")))
+   ;; copy the current file instead of moving and then copying back
+   (setq backup-by-copying t)
 
-          ;; copy the current file instead of moving and then copying back
-          (setq backup-by-copying t)
+   ;; remove need to set two spaces at the end of sentences
+   (setq sentence-end-double-space nil)
 
-          ;; remove need to set two spaces at the end of sentences
-          (setq sentence-end-double-space nil)
+   ;; disable automatic resizing of the frame
+   (setq frame-inhibit-implied-resize t)
 
-          ;; disable automatic resizing of the frame
-          (setq frame-inhibit-implied-resize t)
+   ;; Highlight trailing whitespace.
+   (setq-default show-trailing-whitespace t)
+   (set-face-background 'trailing-whitespace "yellow")
 
-          ;; Highlight trailing whitespace.
-          (setq-default show-trailing-whitespace t)
-          (set-face-background 'trailing-whitespace "yellow")
+   ;; enter y or n instead of yes/no
+   (defalias 'yes-or-no-p 'y-or-n-p)
 
-          ;; enter y or n instead of yes/no
-          (defalias 'yes-or-no-p 'y-or-n-p)
+   (setq indent-tabs-mode nil) ;; no tab
 
-          (setq indent-tabs-mode nil) ;; no tab
-
-          (setq create-lockfiles nil) ;; no need to create lockfiles
+   (setq create-lockfiles nil) ;; no need to create lockfiles
 
 #+end_src
 ** My custom functions
@@ -638,6 +637,7 @@ Also copy the config_linux folder from /usr/share/jdtls only if it is newer."
   (add-hook 'java-ts-mode-hook 'eglot-ensure)
   (add-hook 'java-ts-mode-hook 'yas-minor-mode)
   (add-hook 'java-ts-mode-hook 'breadcrumb-local-mode)
+  (add-hook 'java-ts-mode-hook #'display-line-numbers-mode)
 #+END_SRC
 
 Use build-in elixir-ts-mode --> no requirement for additional mode

@@ -30,7 +30,6 @@
 
  ;; show relative line numbers
  (menu-bar--display-line-numbers-mode-relative)
-
  ;; automatically close brackets
  (electric-pair-mode 1)
 
@@ -348,6 +347,7 @@ Also copy the config_linux folder from /usr/share/jdtls only if it is newer."
 (add-hook 'java-ts-mode-hook 'eglot-ensure)
 (add-hook 'java-ts-mode-hook 'yas-minor-mode)
 (add-hook 'java-ts-mode-hook 'breadcrumb-local-mode)
+(add-hook 'java-ts-mode-hook #'display-line-numbers-mode)
 
 ;; this is necessary since elixir-ts-mode doesn't start automatically when an elixir-file is opened in contrast to elixir-mode
  (add-to-list 'auto-mode-alist '("\\.ex\\'"  . elixir-ts-mode))

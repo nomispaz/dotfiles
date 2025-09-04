@@ -1,7 +1,7 @@
 [
   {
     "name": "panel-top",
-    "output": "",
+    "output": "eDP-1",
     "layer": "bottom",
     "position": "top",
     "controls": "right",
@@ -223,7 +223,7 @@
     "hyprland-workspaces": {},
     "run-if-output-exist": [],
     "run-if-output-absent": [],
-    "monitor": "BOE 0x0A67 Unknown",
+    "monitor": "",
     "width-as-percentage": false,
     "start-hidden": false,
     "hyprland-submap": {},
@@ -296,6 +296,8 @@
       "angle": 0.0,
       "sigrt": 34,
       "use-sigrt": false
-    }
+    },
+    "niri-taskbar": {},
+    "pinned": {}
   }
 ]
