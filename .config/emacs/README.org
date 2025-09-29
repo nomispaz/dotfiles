@@ -82,62 +82,73 @@ https://www.patrickdelliott.com/emacs.d/
 * General setup
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
 
-   ;; first remap major modes to major-ts-mode
-   (setq major-mode-remap-alist
-     '((elixir-mode . elixir-ts-mode)
-      (go-mode . go-ts-mode)
-  (rust-mode . rust-ts-mode)
-  (java-mode . java-ts-mode)))
+     ;; first remap major modes to major-ts-mode
+     (setq major-mode-remap-alist
+       '((elixir-mode . elixir-ts-mode)
+        (go-mode . go-ts-mode)
+    (rust-mode . rust-ts-mode)
+    (java-mode . java-ts-mode)))
 
-   (setq inhibit-startup-screen t)   ;; Disable the welcome screen
-   (tool-bar-mode -1)   	            ;; Disable the toolbar
-   (menu-bar-mode -1)                ;; Disable the menu bar
-   (scroll-bar-mode -1)              ;; Disable visible scrollbar
-   (pixel-scroll-precision-mode 1) ;; enable smooth scrolling
+     (setq inhibit-startup-screen t)   ;; Disable the welcome screen
+     (tool-bar-mode -1)   	            ;; Disable the toolbar
+     (menu-bar-mode -1)                ;; Disable the menu bar
+     (scroll-bar-mode -1)              ;; Disable visible scrollbar
+     (pixel-scroll-precision-mode 1) ;; enable smooth scrolling
 
-   ;; Remember recently edited files. Can then be shown with recentf-open-files
-   (recentf-mode 1)
+     ;; Remember recently edited files. Can then be shown with recentf-open-files
+     (recentf-mode 1)
 
-   ;; Save what you enter into minibuffer prompts
-   (setq history-length 25)
-   (savehist-mode 1)
+     ;; Save what you enter into minibuffer prompts
+     (setq history-length 25)
+     (savehist-mode 1)
 
-   ;; Remember and restore the last cursor location of opened files
-   (save-place-mode 1)
+     ;; Remember and restore the last cursor location of opened files
+     (save-place-mode 1)
 
-   ;; show relative line numbers
-   (menu-bar--display-line-numbers-mode-relative)
-   ;; automatically close brackets
-   (electric-pair-mode 1)
+     ;; show relative line numbers
+     (menu-bar--display-line-numbers-mode-relative)
+    (global-display-line-numbers-mode 1)
+    (dolist (mode '(                     ;; Disable line numbers for the specified modes
+    		org-mode-hook
+    		pdf-view-mode-hook
+    		term-mode-hook
+    		eshell-mode-hook
+    		vterm-mode-hook
+    		treemacs-mode-hook	
+    		imenu-list-minor-mode-hook
+    		imenu-list-major-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode -1))))
+     ;; automatically close brackets
+     (electric-pair-mode 1)
 
-   ;; disable sound
-   (setq ring-bell-function 'ignore)
+     ;; disable sound
+     (setq ring-bell-function 'ignore)
 
-   ;; set backup and autosave folders
-   (make-directory "~/.local/share/emacs/autosave/" t)
-   (make-directory "~/.local/share/emacs/backups/" t)
-   (setq auto-save-file-name-transforms '((".*" "~/.local/share/emacs/autosave/" t)))
-   (setq backup-directory-alist `(("." . "~/.local/share/emacs/backups/")))
+     ;; set backup and autosave folders
+     (make-directory "~/.local/share/emacs/autosave/" t)
+     (make-directory "~/.local/share/emacs/backups/" t)
+     (setq auto-save-file-name-transforms '((".*" "~/.local/share/emacs/autosave/" t)))
+     (setq backup-directory-alist `(("." . "~/.local/share/emacs/backups/")))
 
-   ;; copy the current file instead of moving and then copying back
-   (setq backup-by-copying t)
+     ;; copy the current file instead of moving and then copying back
+     (setq backup-by-copying t)
 
-   ;; remove need to set two spaces at the end of sentences
-   (setq sentence-end-double-space nil)
+     ;; remove need to set two spaces at the end of sentences
+     (setq sentence-end-double-space nil)
 
-   ;; disable automatic resizing of the frame
-   (setq frame-inhibit-implied-resize t)
+     ;; disable automatic resizing of the frame
+     (setq frame-inhibit-implied-resize t)
 
-   ;; Highlight trailing whitespace.
-   (setq-default show-trailing-whitespace t)
-   (set-face-background 'trailing-whitespace "yellow")
+     ;; Highlight trailing whitespace.
+     (setq-default show-trailing-whitespace t)
+     (set-face-background 'trailing-whitespace "yellow")
 
-   ;; enter y or n instead of yes/no
-   (defalias 'yes-or-no-p 'y-or-n-p)
+     ;; enter y or n instead of yes/no
+     (defalias 'yes-or-no-p 'y-or-n-p)
 
-   (setq indent-tabs-mode nil) ;; no tab
+     (setq indent-tabs-mode nil) ;; no tab
 
-   (setq create-lockfiles nil) ;; no need to create lockfiles
+     (setq create-lockfiles nil) ;; no need to create lockfiles
 
 #+end_src
 ** My custom functions
@@ -301,17 +312,70 @@ See https://www.emacswiki.org/emacs/MoveLine
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
 ;; Define a helper function to display a popup menu with all commands for a mode
 (defun my/display-mode-menu (mode)
-  "Display a popup menu with all commands available for MODE."
-  (let ((mode-map (symbol-function mode)))
-    (if (keymapp mode-map)
-        (popup-menu
-         (easy-menu-create-menu
-          (symbol-name mode)
-          (cl-loop for key in (cdr mode-map)
-                   for binding = (cdr key)
-                   when (commandp binding)
-                   collect (vector (symbol-name binding) binding))))
-      (message "No command menu available for %s" (symbol-name mode)))))
+  "Show a curated popup menu for MODE."
+  (pcase mode
+    ;; Yasnippet
+    ('yas-minor-mode
+     (popup-menu
+      '("Yasnippet"
+        ["Insert snippet" yas-insert-snippet]
+        ["Reload all snippets" yas-reload-all]
+        ["Create new snippet" yas-new-snippet])))
+
+    ;; Flymake
+    ('flymake-mode
+     (popup-menu
+      '("Flymake"
+        ["Show diagnostics" flymake-show-diagnostics-buffer]
+        ["Run checks" flymake-start])))
+
+    ;; Go
+    ('go-mode
+     (popup-menu
+      '("Go"
+        ["Run go build" compile :keys "M-x compile"]
+        ["Go run main.go" (lambda () (interactive) (compile "go run main.go"))])))
+
+    ;; Rust
+    ('rust-mode
+     (popup-menu
+      '("Rust"
+        ["Cargo build" cargo-process-build]
+        ["Cargo run" cargo-process-run]
+        ["Cargo test" cargo-process-test])))
+
+    ;; Python
+    ('python-mode
+     (popup-menu
+      '("Python"
+        ["Run REPL" run-python]
+        ["Check file with pylint"
+         (lambda () (interactive)
+           (compile (format "pylint %s"
+                            (shell-quote-argument buffer-file-name))))])))
+
+    ;; Java
+    ('java-mode
+     (popup-menu
+      '("Java"
+        ["Compile current file"
+         (lambda () (interactive)
+           (compile (format "javac %s"
+                            (shell-quote-argument buffer-file-name))))]
+        ["Run current class"
+         (lambda () (interactive)
+           (let ((classname (file-name-base buffer-file-name)))
+             (compile (format "java %s" classname))))]
+        ["Start REPL (JShell)" jshell]
+        ["Format buffer"
+         (lambda () (interactive)
+           (if (fboundp 'eglot-format-buffer)
+               (eglot-format-buffer)
+             (message "No formatter available")))])))
+
+    ;; Default
+    (_ (message "No curated menu for %s" mode))))
+
 
 ;; Helper function to make clickable modeline text with a popup menu
 (defun my/modeline-menu-clickable (text mode)
@@ -529,6 +593,7 @@ In addition, ensure that yasnippets are used in eglot
   (add-hook 'eglot--managed-mode-hook #'add-yasnippet)
   (add-to-list 'eglot-server-programs '(elixir-mode "/usr/bin/language_server.sh"))
   (add-to-list 'eglot-server-programs '(java-mode . (lambda (i p) (list "~/.local/share/jdtls/bin/jdtls" "-configuration" "~/.local/share/jdtls/config_linux"))))
+  
 #+end_src
 Emacs has problems with jdtls (java lsp from eclipse) that is not located in the user directory --> copy the installed language server to user directory if not already there:
 #+begin_src emacs-lisp :tangle ~/.config/emacs/init.el

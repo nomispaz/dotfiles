@@ -30,6 +30,17 @@
 
  ;; show relative line numbers
  (menu-bar--display-line-numbers-mode-relative)
+(global-display-line-numbers-mode 1)
+(dolist (mode '(                     ;; Disable line numbers for the specified modes
+		org-mode-hook
+		pdf-view-mode-hook
+		term-mode-hook
+		eshell-mode-hook
+		vterm-mode-hook
+		treemacs-mode-hook	
+		imenu-list-minor-mode-hook
+		imenu-list-major-mode-hook))
+(add-hook mode (lambda () (display-line-numbers-mode -1))))
  ;; automatically close brackets
  (electric-pair-mode 1)
 
@@ -127,17 +138,70 @@
 
 ;; Define a helper function to display a popup menu with all commands for a mode
 (defun my/display-mode-menu (mode)
-  "Display a popup menu with all commands available for MODE."
-  (let ((mode-map (symbol-function mode)))
-    (if (keymapp mode-map)
-        (popup-menu
-         (easy-menu-create-menu
-          (symbol-name mode)
-          (cl-loop for key in (cdr mode-map)
-                   for binding = (cdr key)
-                   when (commandp binding)
-                   collect (vector (symbol-name binding) binding))))
-      (message "No command menu available for %s" (symbol-name mode)))))
+  "Show a curated popup menu for MODE."
+  (pcase mode
+    ;; Yasnippet
+    ('yas-minor-mode
+     (popup-menu
+      '("Yasnippet"
+        ["Insert snippet" yas-insert-snippet]
+        ["Reload all snippets" yas-reload-all]
+        ["Create new snippet" yas-new-snippet])))
+
+    ;; Flymake
+    ('flymake-mode
+     (popup-menu
+      '("Flymake"
+        ["Show diagnostics" flymake-show-diagnostics-buffer]
+        ["Run checks" flymake-start])))
+
+    ;; Go
+    ('go-mode
+     (popup-menu
+      '("Go"
+        ["Run go build" compile :keys "M-x compile"]
+        ["Go run main.go" (lambda () (interactive) (compile "go run main.go"))])))
+
+    ;; Rust
+    ('rust-mode
+     (popup-menu
+      '("Rust"
+        ["Cargo build" cargo-process-build]
+        ["Cargo run" cargo-process-run]
+        ["Cargo test" cargo-process-test])))
+
+    ;; Python
+    ('python-mode
+     (popup-menu
+      '("Python"
+        ["Run REPL" run-python]
+        ["Check file with pylint"
+         (lambda () (interactive)
+           (compile (format "pylint %s"
+                            (shell-quote-argument buffer-file-name))))])))
+
+    ;; Java
+    ('java-mode
+     (popup-menu
+      '("Java"
+        ["Compile current file"
+         (lambda () (interactive)
+           (compile (format "javac %s"
+                            (shell-quote-argument buffer-file-name))))]
+        ["Run current class"
+         (lambda () (interactive)
+           (let ((classname (file-name-base buffer-file-name)))
+             (compile (format "java %s" classname))))]
+        ["Start REPL (JShell)" jshell]
+        ["Format buffer"
+         (lambda () (interactive)
+           (if (fboundp 'eglot-format-buffer)
+               (eglot-format-buffer)
+             (message "No formatter available")))])))
+
+    ;; Default
+    (_ (message "No curated menu for %s" mode))))
+
 
 ;; Helper function to make clickable modeline text with a popup menu
 (defun my/modeline-menu-clickable (text mode)

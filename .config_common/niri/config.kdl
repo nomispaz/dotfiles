@@ -116,7 +116,7 @@ environment {
 }
 
 // background image
-spawn-at-startup "swaybg" "-m" "fill" "-i" "/home/simonheise/.config/sway/background/wald.jpg"
+spawn-at-startup "swaybg" "-m" "fill" "-i" "/home/nomispaz/.config/sway/background/wald.jpg"
 
 spawn-at-startup "/usr/libexec/xdg-desktop-portal-gtk"
 spawn-at-startup "/usr/libexec/xdg-desktop-portal-wlr"
