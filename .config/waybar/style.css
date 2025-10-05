@@ -1,10 +1,11 @@
 * {
     border:        none;
     border-radius: 0;
-    font-family: "Font Awesome 5 Free";
-    font-size:     16px;
-    font-weight:   bold;
-    min-height: 0;
+    font-family:   "Source Sans Pro", "FontAwesome 6 Free";
+    font-size:     18px;
+    box-shadow:    none;
+    text-shadow:   none;
+    transition-duration: 0s;
 }
 
 #taskbar {

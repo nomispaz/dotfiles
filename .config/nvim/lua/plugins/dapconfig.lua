@@ -1,7 +1,8 @@
-{
+return {
   "mfussenegger/nvim-dap",
   dependencies = {
     "rcarriga/nvim-dap-ui", -- UI for DAP
+    "nvim-neotest/nvim-nio",
     "williamboman/mason.nvim", -- Optional: for managing debuggers
     "jay-babu/mason-nvim-dap.nvim", -- Optional: bridge mason & da
   },

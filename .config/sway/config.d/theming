@@ -1,7 +1,7 @@
 # Theming
 #
 # set inner and outer window gaps
-gaps inner 2
+gaps inner 1
 gaps outer 0 
 
 # thin borders and hide titlebar
