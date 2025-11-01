@@ -1,7 +1,7 @@
 [calendars]
 
 [[private]]
-path = /home/simonheise/.local/share/khal/calendars/private
+path = /home/nomispaz/.local/share/khal/calendars/private
 type = calendar
 
 [locale]

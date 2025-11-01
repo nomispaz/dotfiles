@@ -33,6 +33,11 @@ set $menu rofi -show drun
 
 # Keybindings
 #
+
+# Cycle through workspaces
+bindsym $mod+tab workspace next_on_output
+bindsym $mod+Shift+tab workspace prev_on_output
+
 # start programs
 bindsym $mod+b exec $browser
 bindsym $mod+e exec $editor

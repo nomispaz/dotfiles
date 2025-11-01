@@ -1,7 +1,7 @@
 title = "Config for linutil"
 
 [user]
-name = "simonheise"
+name = "nomispaz"
 userhome = "$HOME"
 
 [git]

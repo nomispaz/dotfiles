@@ -41,12 +41,12 @@ sudo = true
 [[configs.config_entry]]
 extra_config = '''
 #user = "libvirt-qemu"
-user = "simonheise"
+user = "nomispaz"
 '''
 [[configs.config_entry]]
 extra_config = '''
 #group = "libvirt-qemu"
-group = "simonheise"
+group = "nomispaz"
 '''
 
 # set boot options in grub

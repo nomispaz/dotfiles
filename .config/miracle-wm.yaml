@@ -11,7 +11,7 @@ startup_apps:
   # - command: nwg-panel
   # If true, the application will automatically restart
   #  restart_on_death: true
-  - command: swaybg -i /home/simonheise/.config/sway/background/wald.jpg
+  - command: swaybg -i /home/nomispaz/.config/sway/background/wald.jpg
     restart_on_death: true
     # If true, the application will be started with "systemd-run --user --property Restart=on-failure <COMMAND>"
     in_systemd_scoipe: true
