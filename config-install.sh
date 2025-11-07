@@ -2,7 +2,7 @@
 git clone --bare https://github.com/nomispaz/dotfiles.git $HOME/git_repos/dotfiles
 # predefine config as alias for git with set git- and work-tree
 function config {
-   git --git-dir=$HOME/git_repos/dotfiles/ --work-tree=$HOME $@
+   git --git-dir=$HOME/git_repos/dotfiles/ --depth=1 --work-tree=$HOME $@
 }
 
 # checkout the dotfiles
