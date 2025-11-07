@@ -6,85 +6,28 @@ function config {
 }
 
 # checkout the dotfiles
-mkdir -p .config-backup
 config checkout
 if [ $? = 0 ]; then
-  echo "Checked out config.";
-  else
-    echo "Backing up pre-existing dot files.";
-    config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .config-backup/{}
-fi;
-config checkout
+  echo "Checked out config."
+else
+  echo "Backing up pre-existing dotfiles..."
+
+  mkdir -p $HOME/.config-backup
+
+  # Find all conflicting files and move them safely
+  config checkout 2>&1 | grep -E "^\s+\." | awk '{print $1}' | while read -r file; do
+    # Ensure the parent directory exists in backup
+    mkdir -p "$(dirname ".config-backup/$file")"
+    mv "$file" ".config-backup/$file"
+  done
+
+  echo "Retrying checkout..."
+  config checkout
+fi
+
 # don't show untracked files since all files in $HOME would be shown
 config config status.showUntrackedFiles no
 
-SOURCE_DIR="$HOME/.config_common"
-TARGET_DIR="$HOME/.config"
-echo $SOURCE_DIR
-
-# first apply the common configs
-# Recursively find files (not directories) in source
-if [ -d "$SOURCE_DIR" ]; then
-  echo "Applying distro agnostic configs"
-
-  find "$SOURCE_DIR" -type f | while read -r src_file; do
-    # Compute relative path from source dir
-    rel_path="${src_file#$SOURCE_DIR/}"
-  
-    # Compute the target path in ~/.config
-    target_file="$TARGET_DIR/$rel_path"
-  
-    # Ensure the target directory exists
-    target_dir="$(dirname "$target_file")"
-    mkdir -p "$target_dir"
-  
-    # If file already exists, back it up or skip
-    if [ -e "$target_file" ] && [ ! -L "$target_file" ]; then
-        echo "Backing up existing file: $target_file -> $target_file.bak"
-        mv "$target_file" "$target_file.bak"
-    fi
-  
-    # Create (or overwrite) the symlink
-    ln -sf "$src_file" "$target_file"
-    echo "Linked: $target_file -> $src_file"
-  done
-  echo "Distro agnostic configs applied"
-
-else
-    echo "No special config found"
-fi
-
-# check for distribution specific settings
+# switch to distribution specific settings if possible
 custom_config=$(cat /etc/os-release | grep "^ID=" | cut -d '=' -f 2)
-SOURCE_DIR="$HOME/.config_$custom_config"
-echo $SOURCE_DIR
-
-# check if there are distro-specific configs that need to overwrite the common configs
-if [ -d "$SOURCE_DIR" ]; then
-  echo "Using config for distribution: $custom_config"
-
-  # Recursively find files (not directories) in source
-  find "$SOURCE_DIR" -type f | while read -r src_file; do
-    # Compute relative path from source dir
-    rel_path="${src_file#$SOURCE_DIR/}"
-
-    # Compute the target path in ~/.config
-    target_file="$TARGET_DIR/$rel_path"
-
-    # Ensure the target directory exists
-    target_dir="$(dirname "$target_file")"
-    mkdir -p "$target_dir"
-
-    # If file already exists, back it up or skip
-    if [ -e "$target_file" ] && [ ! -L "$target_file" ]; then
-        echo "Backing up existing file: $target_file -> $target_file.bak"
-        mv "$target_file" "$target_file.bak_$custom_config"
-    fi
-
-    # Create (or overwrite) the symlink
-    ln -sf "$src_file" "$target_file"
-    echo "Linked: $target_file -> $src_file"
-  done
-else
-    echo "No host-specific config found for $custom_config --> using common configs"
-fi
+git switch $custom_config
