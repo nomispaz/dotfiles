@@ -5,7 +5,7 @@ BRANCH=${1:-${BRANCH:-main}}
 echo "Installing dotfiles from branch: $BRANCH"
 
 # clone repository into a bare git repository
-git clone --depth 1 --bare https://github.com/nomispaz/dotfiles.git $HOME/git_repos/dotfiles
+git clone --bare https://github.com/nomispaz/dotfiles.git $HOME/git_repos/dotfiles
 # predefine config as alias for git with set git- and work-tree
 function config {
    git --git-dir=$HOME/git_repos/dotfiles/ --work-tree=$HOME $@
