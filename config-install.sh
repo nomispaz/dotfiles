@@ -1,3 +1,9 @@
+# read the branch (main if non is given)
+set -e
+BRANCH=${1:-${BRANCH:-main}}
+
+echo "Installing dotfiles from branch: $BRANCH"
+
 # clone repository into a bare git repository
 git clone --bare https://github.com/nomispaz/dotfiles.git $HOME/git_repos/dotfiles
 # predefine config as alias for git with set git- and work-tree
@@ -28,6 +34,4 @@ fi
 # don't show untracked files since all files in $HOME would be shown
 config config status.showUntrackedFiles no
 
-# switch to distribution specific settings if possible
-custom_config=$(cat /etc/os-release | grep "^ID=" | cut -d '=' -f 2)
-git switch $custom_config
+config switch $BRANCH
