@@ -41,7 +41,7 @@ bindsym $mod+Shift+tab workspace prev_on_output
 # start programs
 bindsym $mod+b exec $browser
 bindsym $mod+e exec $editor
-bindsym $mod+Return exec $terminal
+bindsym $mod+t exec $terminal
 bindsym $mod+s exec steam
 
 # open start menu
