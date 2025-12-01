@@ -111,7 +111,7 @@ layout {
 //spawn-at-startup "waybar"
 // spawn-at-startup "cosmic-panel"
 spawn-at-startup "nwg-panel"
-// 
+spawn-at-startup "swaync"
 
 spawn-at-startup "/usr/libexec/polkit-gnome-authentication-agent-1"
 
