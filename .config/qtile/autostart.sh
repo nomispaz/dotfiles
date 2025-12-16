@@ -2,12 +2,17 @@
 
 ### AUTOSTART PROGRAMS ###
 # wl-clipboard-history -t &
+systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP &
 dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=qtile &
 # start authentication agent
-/usr/lib64/polkit-kde-authentication-agent-1 &
+# /usr/lib64/polkit-kde-authentication-agent-1 &
 #exec kwalletd6
-/usr/lib/pam_kwallet_init --no-startup-id &
+# /usr/lib/pam_kwallet_init --no-startup-id &
+/usr/libexec/polkit-gnome-authentication-agent-1 &
 sleep 2 &
+nwg-panel &
+sleep 2 &
+swaync &
 nm-applet --indicator &
 dunst &
 # start gammastep indicator for systray

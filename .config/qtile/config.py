@@ -48,7 +48,6 @@ os.environ["WLR_NO_HARDWARE_CURSORS"] = "1"
 os.environ["RANGER_LOAD_DEFAULT_RC"] = "false"
 os.environ["XDG_SESSION_TYPE"] = "wayland"
 
-
 # autostart
 @hook.subscribe.startup_once
 def start_once():
@@ -62,7 +61,7 @@ if qtile.core.name == "x11":
 elif qtile.core.name == "wayland":
     wl_input_rules = {
         "type:touchpad": InputConfig(tap=True, middle_emulation=True),
-        "type:keyboard": InputConfig(kb_layout='de', kb_variant='nodeadkeys', kb_options='caps:ctrl_modifier', kb_numlock='enabled')
+        "type:keyboard": InputConfig(kb_layout="de", kb_options="caps:ctrl_modifier", kb_numlock="enabled"),
     }
 
 
@@ -130,10 +129,10 @@ keys = [
     Key([mod], "Escape", lazy.shutdown(), desc="Shutdown Qtile"),
 
     # fn keys
-    Key([], "XF86MonBrightnessDown", lazy.spawn('brightnessctl set 5%-')),
-    Key([], "XF86MonBrightnessUp", lazy.spawn('brightnessctl set 5%+')),
-    Key([], "XF86AudioRaiseVolume", lazy.spawn('wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+')),
-    Key([], "XF86AudioLowerVolume", lazy.spawn('wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-')),
+    Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl set 5%-")),
+    Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl set 5%+")),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+")),
+    Key([], "XF86AudioLowerVolume", lazy.spawn("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-")),
 
     # Key([], "XF86AudioLowerVolume",
     #     lazy.spawn('wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- \
@@ -162,16 +161,16 @@ keys = [
         & dunstctl close-all',
                    shell=True),
         lazy.spawn('dunstify $(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ \
-        | awk "!/MUTED/{exit 1}" && echo "mic muted")',
+        | awk "!/MUTED/{exit 1}" && echo "mic unmuted")',
                    shell=True),
         lazy.spawn('dunstify $(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ \
-        | awk "/MUTED/{exit 1}" && echo "mic unmuted")',
+        | awk "/MUTED/{exit 1}" && echo "mic muted")',
                    shell=True)),
 
     # start programs with shortcuts
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-    Key([mod], "b", lazy.spawn('firefox'), desc="Launch firefox"),
-    Key([mod], "s", lazy.spawn('prime-run steam'), desc="Launch steam on nvidia"),
+    Key([mod], "b", lazy.spawn('brave-browser'), desc="Launch firefox"),
+    Key([mod], "s", lazy.spawn('steam'), desc="Launch steam on nvidia"),
     Key([mod], "d", lazy.spawn('rofi -show drun'), desc="Launch rofi"),
     Key([mod], "e", lazy.spawn('emacs'), desc="Launch emacs"),
 
@@ -224,33 +223,33 @@ wThermalSensor = widget.ThermalSensor(background=colors['Red'], threshold=100, w
 wBacklight = widget.Backlight(background=colors['Rosewater'], backlight_name=vDevBacklightLaptop, **decoration_group, width=70, format=myfunctions.myfunctions.get_icons('nerd_sun')+" {percent:2.0%}")
 wVolume = myvolume.Volume(background=colors['Lavender'], **decoration_group)
 wMic = mymicrophone.Mic(background=colors['Lavender'], **decoration_group)
-wCPU = widget.CPU(background=colors['Sky'], width=180, **decoration_group, mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('htop')})
-wMemory = widget.Memory(background=colors['Sky'], width=120, format="RAM: {MemPercent}%", **decoration_group, mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('htop')})
+wCPU = widget.CPU(background=colors['Sky'], width=160, **decoration_group, mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('htop')})
+wMemory = widget.Memory(background=colors['Sky'], width=80, format=" {MemPercent}%", **decoration_group, mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('htop')})
 wNet = widget.Net(background=colors['Sapphire'], **decoration_group, width=180, format='Net: {down:.0f}{down_suffix} ↓↑ {up:.0f}{up_suffix}')
 wBattery = widget.Battery(background=colors['Sapphire'], width=50, **decoration_group)
 wClock = widget.Clock(background=colors['Blue'], format="%Y-%m-%d %a %H:%M", width=220, **decoration_group, mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('qtcal')})
 
 screens = [
     Screen(
-        wallpaper='~/git_repos/dotfiles/sway/background/wald.jpg',
+        wallpaper='~/.config/sway/background/wald.jpg',
         wallpaper_mode='fill',
-        top=bar.Bar(
-            [
-                wGroupBox,
-                wWindowName,
-                wTextBox,
-                wStatusNotifier,
-                # wThermalSensor,
-                wBacklight,
-                wVolume,
-                wMic,
-                wCPU,
-                wMemory,
-                wClock
-                ],
-            32,
-            background=colors['Transparent'],
-        ),
+#        top=bar.Bar(
+#            [
+#                wGroupBox,
+#                wWindowName,
+#                wTextBox,
+#                wStatusNotifier,
+#                # wThermalSensor,
+#                wBacklight,
+#                wVolume,
+#                wMic,
+#                wCPU,
+#                wMemory,
+#                wClock
+#                ],
+#            32,
+#            background=colors['Transparent'],
+#        ),
         # You can uncomment this variable if you see that on X11 floating resize/moving is laggy
         # By default we handle these events delayed to already improve performance, however your system might still be struggling
         # This variable is set to None (no cap) by default, but you can set it to 60 to indicate that you limit it to 60 events per second
@@ -259,22 +258,22 @@ screens = [
     Screen(
         # wallpaper='~/Pictures/wallpapers/1920x1080_px_forest-1262037.jpg',
         wallpaper_mode='fill',
-        top=bar.Bar(
-            [
-                wGroupBox,
-                wWindowName,
-                wTextBox,
-                # wThermalSensor,
-                wBacklight,
-                wVolume,
-                wMic,
-                wCPU,
-                wMemory,
-                wClock
-                ],
-            32,
-            background=colors['Transparent'],
-        ),
+#        top=bar.Bar(
+#            [
+#                wGroupBox,
+#                wWindowName,
+#                wTextBox,
+#                # wThermalSensor,
+#                wBacklight,
+#                wVolume,
+#                wMic,
+#                wCPU,
+#                wMemory,
+#                wClock
+#                ],
+#            32,
+#            background=colors['Transparent'],
+#        ),
     ),
 ]
 
@@ -341,6 +340,7 @@ keys.extend([
     Key(['control'], 'F10', lazy.group['0'].dropdown_toggle('wdisplays')),
     Key(['control'], 'F11', lazy.group['0'].dropdown_toggle('term')),
     Key(['control'], 'F12', lazy.group['0'].dropdown_toggle('tcc')),
+    Key([mod], 'Minus', lazy.group['0'].dropdown_toggle('term')),
 ])
 
 # Drag floating layouts.

@@ -194,8 +194,8 @@ binds {
     XF86AudioMicMute     allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
 
     // change brightness
-    XF86MonBrightnessDown { spawn "brightnessctl" "set" "5%-"; }
-    XF86MonBrightnessUp { spawn "brightnessctl" "set" "5%+"; }
+    XF86MonBrightnessDown { spawn-sh "brightnessctl set 5%-"; }
+    XF86MonBrightnessUp { spawn-sh "brightnessctl set 5%+"; }
 
     // mute Microphone
     Mod+Y allow-when-locked=true { spawn "~/.config/niri/mute_mic.sh"; }

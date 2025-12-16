@@ -26,7 +26,8 @@ exec /usr/libexec/polkit-gnome-authentication-agent-1
 exec nm-applet --indicator
 
 # start notification agent
-exec dunst 
+#exec dunst 
+exec swaync
 
 # start gammastep indicator for systray (the lat and lon exist in the config file but that is not read correctly on gentoo)
 exec gammastep-indicator -l 50.82:6.12

@@ -16,7 +16,7 @@
     // workbench settings
     "workbench.activityBar.location": "bottom",
     "workbench.editor.showTabs": "none",
-    "workbench.colorTheme": "Catppuccin Mocha",
+    "workbench.colorTheme": "Tokyo Night",
     "workbench.statusBar.visible": true,
     // bar visibilities
     "window.menuBarVisibility": "toggle",
@@ -61,5 +61,8 @@
             ]
         },
     ],
-    "errorLens.enabled": true
+    "errorLens.enabled": true,
+    "rust-analyzer.workspace.discoverConfig": null,
+    "chat.disableAIFeatures": false,
+    "github.copilot.selectedCompletionModel": ""
 }
