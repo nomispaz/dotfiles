@@ -29,7 +29,7 @@ import subprocess
 import qtile_extras
 from colors import colors
 from qtile_extras import widget
-from libqtile import bar, layout, qtile
+from libqtile import bar, layout, qtile, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen, ScratchPad, DropDown
 from libqtile.lazy import lazy
 from libqtile.backend.wayland import InputConfig
@@ -37,8 +37,6 @@ from libqtile.backend.wayland import InputConfig
 from qtile_extras.widget.decorations import PowerLineDecoration, RectDecoration
 from mymodules.mywidgets import myvolume, mymicrophone
 import myfunctions
-
-from libqtile import hook
 
 # read current path
 absolute_path = os.path.dirname(__file__)
@@ -54,7 +52,6 @@ def start_once():
     script = os.path.expanduser("~/.config/qtile/autostart.sh")
     subprocess.run([script])
 
-
 # define input configurations for x11/wayland
 if qtile.core.name == "x11":
     None
@@ -63,7 +60,6 @@ elif qtile.core.name == "wayland":
         "type:touchpad": InputConfig(tap=True, middle_emulation=True),
         "type:keyboard": InputConfig(kb_layout="de", kb_options="caps:ctrl_modifier", kb_numlock="enabled"),
     }
-
 
 # Modkey is windows-key
 mod = "mod4"
@@ -149,10 +145,10 @@ keys = [
         & dunstctl close-all',
                    shell=True),
         lazy.spawn('dunstify $(wpctl get-volume @DEFAULT_AUDIO_SINK@ \
-        | awk "!/MUTED/{exit 1}" && echo "sound muted")',
+        | awk "!/MUTED/{exit 1}" && echo "sound unmuted")',
                    shell=True),
         lazy.spawn('dunstify $(wpctl get-volume @DEFAULT_AUDIO_SINK@ \
-        | awk "/MUTED/{exit 1}" && echo "sound unmuted")',
+        | awk "/MUTED/{exit 1}" && echo "sound muted")',
                    shell=True)),
 
     # mute microphone
@@ -179,101 +175,142 @@ keys = [
 
 ]
 
+# layout
+
+layout_theme = {"border_width": 3,
+                "margin": 1,
+                "border_focus": colors['Rosewater'],
+                "border_focus_stack": colors['Red'],
+                "insert_position": 1
+                }
+
 layouts = [
-    layout.Columns(border_focus_stack=colors['Red'], border_focus=[colors['Rosewater']], border_width=4, insert_position=1),
-    # Try more layouts by unleashing below layouts.
-    # layout.Matrix(),
-    # layout.Max(),
+    layout.Columns(**layout_theme),
 ]
 
 widget_defaults = dict(
     font="Font Awesome 5 Free",
     fontsize=18,
     padding=0,
-    background=colors['Transparent'],
-    foreground=colors['Base'],
+    background=colors['DarkGrey'],
 )
 extension_defaults = widget_defaults.copy()
 
 decoration_group = {
     "decorations": [
-        RectDecoration(use_widget_background=True, padding_y=5, filled=True, radius=0),
-        PowerLineDecoration(path="forward_slash", padding_y=5)
+        RectDecoration(use_widget_background=True, padding_y=0, filled=True, radius=0),
+#        PowerLineDecoration(path="forward_slash", padding_y=5)
     ],
     "padding": 10,
 }
 
 # echo read device name for backlight control. Currently only works for internal amdgpu
-vDevBacklightLaptopCmd = subprocess.run('brightnessctl -m | grep amdgpu', capture_output=True, shell=True, text=True).stdout
+vDevBacklightLaptopCmd = subprocess.run(
+        'brightnessctl -m | grep amdgpu', 
+        capture_output=True, shell=True, text=True).stdout
 vDevBacklightLaptop = str(vDevBacklightLaptopCmd).split(',')[0]
-
-
-# inject qtile-extra decorations into mywidgets
-widget.modify(myvolume.Volume, **decoration_group)
-widget.modify(mymicrophone.Mic, **decoration_group)
 
 # widgets
 
 # widget.CurrentLayout(**decoration_group),
-wGroupBox = widget.GroupBox(background=colors['Overlay0'], **decoration_group)
-wWindowName = widget.WindowName(**decoration_group)
-wTextBox = widget.TextBox(width=1000)
-wStatusNotifier = qtile_extras.widget.StatusNotifier(background=colors['Text'], **decoration_group)
-wThermalSensor = widget.ThermalSensor(background=colors['Red'], threshold=100, width=80, **decoration_group, mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('tcc')})
-wBacklight = widget.Backlight(background=colors['Rosewater'], backlight_name=vDevBacklightLaptop, **decoration_group, width=70, format=myfunctions.myfunctions.get_icons('nerd_sun')+" {percent:2.0%}")
-wVolume = myvolume.Volume(background=colors['Lavender'], **decoration_group)
-wMic = mymicrophone.Mic(background=colors['Lavender'], **decoration_group)
-wCPU = widget.CPU(background=colors['Sky'], width=160, **decoration_group, mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('htop')})
-wMemory = widget.Memory(background=colors['Sky'], width=80, format=" {MemPercent}%", **decoration_group, mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('htop')})
-wNet = widget.Net(background=colors['Sapphire'], **decoration_group, width=180, format='Net: {down:.0f}{down_suffix} ↓↑ {up:.0f}{up_suffix}')
-wBattery = widget.Battery(background=colors['Sapphire'], width=50, **decoration_group)
-wClock = widget.Clock(background=colors['Blue'], format="%Y-%m-%d %a %H:%M", width=220, **decoration_group, mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('qtcal')})
+wGroupBox = widget.GroupBox(
+        **decoration_group
+        )
+wWindowName = widget.WindowName(
+        **decoration_group
+        )
+wStatusNotifier = qtile_extras.widget.StatusNotifier(
+        **decoration_group
+        )
+wThermalSensor = widget.ThermalSensor(
+        threshold=100, 
+        width=80, 
+        mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('tcc')},
+        foreground=colors['Red'],
+        **decoration_group)
+wBacklight = widget.Backlight(
+        backlight_name=vDevBacklightLaptop, 
+        width=70, 
+        format=myfunctions.myfunctions.get_icons('nerd_sun')+" {percent:2.0%}",
+        foreground=colors['Rosewater'],
+        **decoration_group
+        )
+wVolume = myvolume.Volume(
+        #foreground=colors['Lavender'],
+        **decoration_group
+        )
+wMic = mymicrophone.Mic(
+        #foreground=colors['Lavender'],
+        **decoration_group
+        )
+wCPU = widget.CPU(
+        width=160, 
+        mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('htop')},
+        foreground=colors['Sky'],
+        **decoration_group
+        )
+wMemory = widget.Memory(width=80, 
+                        format=" {MemPercent}%", 
+                        mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('htop')},
+                        foreground=colors['Sky'],
+                        **decoration_group)
+wNet = widget.Net(
+        width=180, 
+        format='Net: {down:.0f}{down_suffix} ↓↑ {up:.0f}{up_suffix}',
+        **decoration_group
+        )
+wBattery = widget.Battery(
+        width=50,
+        **decoration_group
+        )
+wClock = widget.Clock(
+        format="%Y-%m-%d %a %H:%M", 
+        width=220, 
+        mouse_callbacks={"Button1": lazy.group['0'].dropdown_toggle('qtcal')},
+        **decoration_group
+        )
 
 screens = [
     Screen(
         wallpaper='~/.config/sway/background/wald.jpg',
         wallpaper_mode='fill',
-#        top=bar.Bar(
-#            [
-#                wGroupBox,
-#                wWindowName,
-#                wTextBox,
-#                wStatusNotifier,
-#                # wThermalSensor,
-#                wBacklight,
-#                wVolume,
-#                wMic,
-#                wCPU,
-#                wMemory,
-#                wClock
-#                ],
-#            32,
-#            background=colors['Transparent'],
-#        ),
-        # You can uncomment this variable if you see that on X11 floating resize/moving is laggy
-        # By default we handle these events delayed to already improve performance, however your system might still be struggling
-        # This variable is set to None (no cap) by default, but you can set it to 60 to indicate that you limit it to 60 events per second
-        # x11_drag_polling_rate = 60,
+        top=bar.Bar(
+            [
+                wGroupBox,
+                wWindowName,
+                wTextBox,
+                wStatusNotifier,
+                wBacklight,
+                wVolume,
+                wMic,
+                wThermalSensor,
+                wCPU,
+                wMemory,
+                wClock
+                ],
+            32,
+            background=colors['Transparent'],
+        ),
     ),
     Screen(
         # wallpaper='~/Pictures/wallpapers/1920x1080_px_forest-1262037.jpg',
         wallpaper_mode='fill',
-#        top=bar.Bar(
-#            [
-#                wGroupBox,
-#                wWindowName,
-#                wTextBox,
-#                # wThermalSensor,
-#                wBacklight,
-#                wVolume,
-#                wMic,
-#                wCPU,
-#                wMemory,
-#                wClock
-#                ],
-#            32,
-#            background=colors['Transparent'],
-#        ),
+        top=bar.Bar(
+            [
+                wGroupBox,
+                wWindowName,
+                wTextBox,
+                # wThermalSensor,
+                wBacklight,
+                wVolume,
+                wMic,
+                wCPU,
+                wMemory,
+                wClock
+                ],
+            32,
+            background=colors['Transparent'],
+        ),
     ),
 ]
 

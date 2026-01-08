@@ -26,6 +26,6 @@ colors = {
     'Base': '#eff1f5',
     'Mantle': '#e6e9ef',
     'Crust': '#dce0e8',
-    'Transparent': '#00000000'
-
+    'Transparent': '#00000000',
+    'DarkGrey': '#282c34'
 }
