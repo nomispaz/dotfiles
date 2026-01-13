@@ -45,6 +45,7 @@ absolute_path = os.path.dirname(__file__)
 os.environ["WLR_NO_HARDWARE_CURSORS"] = "1"
 os.environ["RANGER_LOAD_DEFAULT_RC"] = "false"
 os.environ["XDG_SESSION_TYPE"] = "wayland"
+os.environ["XDG_CURRENT_DESKTOP"] = "wlroots"
 
 # autostart
 @hook.subscribe.startup_once
@@ -61,11 +62,19 @@ elif qtile.core.name == "wayland":
         "type:keyboard": InputConfig(kb_layout="de", kb_options="caps:ctrl_modifier", kb_numlock="enabled"),
     }
 
+#########################################################################
+# STANDARD APPS
+#########################################################################
+
+# terminal
+terminal = 'alacritty'
+
+#########################################################################
+# KEYBINDINGS
+#########################################################################
+
 # Modkey is windows-key
 mod = "mod4"
-
-# standard terminal
-terminal = 'alacritty'
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -175,7 +184,9 @@ keys = [
 
 ]
 
-# layout
+#########################################################################
+# LAYOUT AND BAR
+#########################################################################
 
 layout_theme = {"border_width": 3,
                 "margin": 1,
@@ -270,6 +281,10 @@ wClock = widget.Clock(
         **decoration_group
         )
 
+#########################################################################
+# SCREEN CONFIGURATION
+#########################################################################
+
 screens = [
     Screen(
         wallpaper='~/.config/sway/background/wald.jpg',
@@ -278,7 +293,6 @@ screens = [
             [
                 wGroupBox,
                 wWindowName,
-                wTextBox,
                 wStatusNotifier,
                 wBacklight,
                 wVolume,
@@ -289,31 +303,22 @@ screens = [
                 wClock
                 ],
             32,
-            background=colors['Transparent'],
+ #           background=colors['Transparent'],
         ),
     ),
+
+    # no bar on second screen
     Screen(
-        # wallpaper='~/Pictures/wallpapers/1920x1080_px_forest-1262037.jpg',
+        wallpaper='~/.config/sway/background/wald.jpg',
         wallpaper_mode='fill',
-        top=bar.Bar(
-            [
-                wGroupBox,
-                wWindowName,
-                wTextBox,
-                # wThermalSensor,
-                wBacklight,
-                wVolume,
-                wMic,
-                wCPU,
-                wMemory,
-                wClock
-                ],
-            32,
-            background=colors['Transparent'],
-        ),
     ),
 ]
 
+#########################################################################
+# WORKSPACES / GROUPS
+#########################################################################
+
+# group 1 and 2 on screen 0, 3 and 4 on screen 1
 groups = [
     Group(name="1", screen_affinity=0),
     Group(name="2", screen_affinity=0),
@@ -322,16 +327,16 @@ groups = [
     ScratchPad("0", [
         # define a drop down terminal.
         # it is placed in the upper third of screen by default.
+        # keybind is defined later
         DropDown("term", terminal, opacity=0.5),
-        DropDown("tcc", "tuxedo-control-center"),
         DropDown("wdisplays", "wdisplays"),
-        DropDown("htop", terminal + " -e htop"),
+        DropDown("htop", terminal + " -e htop", opacity=0.5),
         DropDown("qtcal", "python " + os.path.join(absolute_path, "myclasses/qtcal/qtcal.py --datadir=/home/nomispaz/.local/share/qtcal"), x=0.5, height=0.5, opacity=1),
         ]
     ),
 ]
 
-
+# define functions and keybinding to switch between workspaces or move windows between workspaces
 def go_to_group(name: str):
     def _inner(qtile):
         if len(qtile.screens) == 1:
@@ -346,7 +351,6 @@ def go_to_group(name: str):
             qtile.groups_map[name].toscreen()
 
     return _inner
-
 
 def go_to_group_and_move_window(name: str):
     def _inner(qtile):
@@ -365,7 +369,6 @@ def go_to_group_and_move_window(name: str):
 
     return _inner
 
-
 for i in groups:
     keys.append(Key([mod], i.name, lazy.function(go_to_group(i.name))))
 
@@ -376,7 +379,7 @@ for i in groups:
 keys.extend([
     Key(['control'], 'F10', lazy.group['0'].dropdown_toggle('wdisplays')),
     Key(['control'], 'F11', lazy.group['0'].dropdown_toggle('term')),
-    Key(['control'], 'F12', lazy.group['0'].dropdown_toggle('tcc')),
+    Key(['control'], 'F12', lazy.group['0'].dropdown_toggle('htop')),
     Key([mod], 'Minus', lazy.group['0'].dropdown_toggle('term')),
 ])
 
@@ -387,12 +390,30 @@ mouse = [
     Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
 
+#########################################################################
+# VARIOUS OPTIONS
+#########################################################################
+
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: list
 follow_mouse_focus = True
 bring_front_click = False
 floats_kept_above = True
 cursor_warp = True
+auto_fullscreen = True
+focus_on_window_activation = "smart"
+reconfigure_screens = True
+
+wmname = "LG3D"
+
+# If things like steam games want to auto-minimize themselves when losing
+# focus, should we respect this or not?
+auto_minimize = False
+
+#########################################################################
+# FLOATING RULES
+#########################################################################
+
 floating_layout = layout.Floating(
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
@@ -403,15 +424,5 @@ floating_layout = layout.Floating(
         Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
-        Match(title="ck3"),  # crusader kings 3
     ]
 )
-auto_fullscreen = True
-focus_on_window_activation = "smart"
-reconfigure_screens = True
-
-# If things like steam games want to auto-minimize themselves when losing
-# focus, should we respect this or not?
-auto_minimize = False
-
-wmname = "LG3D"
