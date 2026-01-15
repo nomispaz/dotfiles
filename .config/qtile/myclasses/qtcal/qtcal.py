@@ -184,7 +184,7 @@ def createDatabaseConnection(dbFile):
     DbVersion = None
     try:
         DbConnection = sqlite3.connect(dbFile)
-        DbVersion = sqlite3.version
+        DbVersion = sqlite3.sqlite_version
     except sqlite3.Error as e:
         DbVersion = e
     return DbVersion, DbConnection

@@ -35,6 +35,14 @@ from libqtile.lazy import lazy
 from libqtile.backend.wayland import InputConfig
 
 from qtile_extras.widget.decorations import PowerLineDecoration, RectDecoration
+
+from qtile_extras.popup import (
+    PopupRelativeLayout,
+    PopupImage,
+    PopupText
+)
+
+
 from mymodules.mywidgets import myvolume, mymicrophone
 import myfunctions
 
@@ -53,6 +61,79 @@ def start_once():
     script = os.path.expanduser("~/.config/qtile/autostart.sh")
     subprocess.run([script])
 
+# power menu
+def show_power_menu(qtile):
+    controls = [
+        PopupImage(
+            filename="~/.config/qtile/pictures/lock-svgrepo-com.svg",
+            pos_x=0.15,
+            pos_y=0.1,
+            width=0.1,
+            height=0.5,
+            mouse_callbacks={
+                "Button1": lazy.shutdown()
+            }
+        ),
+        PopupImage(
+            filename="~/.config/qtile/pictures/gnome-session-reboot-svgrepo-com.svg",
+            pos_x=0.45,
+            pos_y=0.1,
+            width=0.1,
+            height=0.5,
+            mouse_callbacks={
+                "Button1": lazy.spawn("bash -c reboot")
+            }
+        ),
+        PopupImage(
+            filename="~/.config/qtile/pictures/shut-down-svgrepo-com.svg",
+            pos_x=0.75,
+            pos_y=0.1,
+            width=0.1,
+            height=0.5,
+            highlight="A00000",
+            mouse_callbacks={
+                "Button1": lazy.spawn("bash -c shutdown")
+            }
+        ),
+        PopupText(
+            text="Exit Qtile",
+            pos_x=0.1,
+            pos_y=0.7,
+            width=0.2,
+            height=0.2,
+            h_align="center",
+            fontsize=20
+        ),
+        PopupText(
+            text="Reboot",
+            pos_x=0.4,
+            pos_y=0.7,
+            width=0.2,
+            height=0.2,
+            h_align="center",
+            fontsize=20
+        ),
+        PopupText(
+            text="Shutdown",
+            pos_x=0.7,
+            pos_y=0.7,
+            width=0.2,
+            height=0.2,
+            h_align="center",
+            fontsize=20
+        ),
+    ]
+
+    layout = PopupRelativeLayout(
+        qtile,
+        width=1000,
+        height=200,
+        controls=controls,
+        background=colors['DarkGrey'],
+        initial_focus=None,
+    )
+
+    layout.show(centered=True)
 # define input configurations for x11/wayland
 if qtile.core.name == "x11":
     None
@@ -132,6 +213,7 @@ keys = [
     Key([mod], "t", lazy.window.toggle_floating(), desc="Toggle floating on the focused window"),
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod], "Escape", lazy.shutdown(), desc="Shutdown Qtile"),
+    Key([mod, "shift"], "q", lazy.function(show_power_menu)),
 
     # fn keys
     Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl set 5%-")),
@@ -426,3 +508,4 @@ floating_layout = layout.Floating(
         Match(title="pinentry"),  # GPG key password entry
     ]
 )
+
