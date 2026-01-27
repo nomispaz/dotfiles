@@ -35,11 +35,43 @@ opt.conceallevel = 2 --conceal links
 opt.concealcursor = 'nc'
 opt.completeopt = {'menu', 'menuone', 'noselect'} --autocomplete selection
 
+-- =========================
+-- Folding (Treesitter)
+-- =========================
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldtext = "v:folddashes.substitute(getline(v:foldstart),'/\\\\*\\\\|\\\\*/\\\\|{{{\\\\d\\\\=','','g')"
+vim.opt.foldenable = true
+vim.opt.foldlevel = 99       -- open all folds by default
+vim.opt.foldlevelstart = 99
+
 require("config.autocommands")
 require("config.functions")
 require("config.keymaps")
 
 require("config.lazy")
 
-vim.cmd.colorscheme "catppuccin-mocha"
---vim.cmd.colorscheme "tokyonight-night"
+--vim.cmd.colorscheme "catppuccin-mocha"
+vim.cmd.colorscheme "tokyonight-night"
+
+-- Toggle fold under cursor with Shift+Tab
+vim.keymap.set('n', '<S-Tab>', 'za', { noremap = true, silent = true })
+
+vim.keymap.set('n', '<leader>c', function()
+  local any_closed = false
+  local line_count = vim.api.nvim_buf_line_count(0)
+
+  for lnum = 1, line_count do
+    if vim.fn.foldclosed(lnum) ~= -1 then
+      any_closed = true
+      break
+    end
+  end
+
+  if any_closed then
+    vim.cmd('normal! zR') -- open all folds
+  else
+    vim.cmd('normal! zM') -- close all folds
+  end
+end, { noremap = true, silent = true })
+

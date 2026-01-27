@@ -4,7 +4,12 @@ helper = "libsecret";
 [user]
 email = "nomispaz@example.org"
 name = "nomispaz"
+	signingkey = /home/nomispaz/.ssh/codeberg_gentoo.pub
 [diff]
 	tool = vimdiff
 [difftool]
 	prompt = false
+[gpg]
+	format = ssh
+[commit]
+	gpgSign = true

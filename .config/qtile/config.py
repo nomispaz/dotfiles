@@ -53,13 +53,13 @@ absolute_path = os.path.dirname(__file__)
 os.environ["WLR_NO_HARDWARE_CURSORS"] = "1"
 os.environ["RANGER_LOAD_DEFAULT_RC"] = "false"
 os.environ["XDG_SESSION_TYPE"] = "wayland"
-os.environ["XDG_CURRENT_DESKTOP"] = "wlroots"
+os.environ["XDG_CURRENT_DESKTOP"] = "sway"
 
 # autostart
 @hook.subscribe.startup_once
 def start_once():
     script = os.path.expanduser("~/.config/qtile/autostart.sh")
-    subprocess.run([script])
+    subprocess.call(script)
 
 # power menu
 def show_power_menu(qtile):
@@ -92,7 +92,7 @@ def show_power_menu(qtile):
             height=0.5,
             highlight="A00000",
             mouse_callbacks={
-                "Button1": lazy.spawn("bash -c shutdown")
+                "Button1": lazy.spawn("bash -c poweroff")
             }
         ),
         PopupText(
@@ -256,7 +256,7 @@ keys = [
 
     # start programs with shortcuts
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-    Key([mod], "b", lazy.spawn('brave-browser'), desc="Launch firefox"),
+    Key([mod], "b", lazy.spawn('brave-browser-stable'), desc="Launch brave"),
     Key([mod], "s", lazy.spawn('steam'), desc="Launch steam on nvidia"),
     Key([mod], "d", lazy.spawn('rofi -show drun'), desc="Launch rofi"),
     Key([mod], "e", lazy.spawn('emacs'), desc="Launch emacs"),

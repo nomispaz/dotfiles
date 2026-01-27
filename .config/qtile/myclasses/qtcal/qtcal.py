@@ -178,7 +178,6 @@ class QtCalWindow(QMainWindow):
 
 ###############################################################################
 
-
 def createDatabaseConnection(dbFile):
     DbConnection = None
     DbVersion = None

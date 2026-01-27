@@ -11,14 +11,15 @@ alias emacsd='systemctl --user restart --now emacs'
 
 #
 # gentoo
+# use changeduse instead of newuse to prevent unnecessary rebuilds
 alias emergesync='sudo emerge --sync'
 function emergeinstall
     sudo snapper -c root create --description "install package $argv"
-    sudo emerge -avgDN $argv
+    sudo emerge -avgDU $argv
 end
 function emergeupdate
     sudo snapper -c root create --description "system update" -c number
-    sudo emerge -avugDN --read-news @world
+    sudo emerge -avugDU --read-news @world
 end
 function emergeclean
     sudo snapper -c root create --description "system cleanup" -c number

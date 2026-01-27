@@ -180,10 +180,10 @@ binds {
 
     Mod+Return hotkey-overlay-title="Open a Terminal: alacritty" { spawn "alacritty"; }
     Mod+T hotkey-overlay-title="Open a Terminal: alacritty" { spawn "alacritty"; }
-    //Mod+D hotkey-overlay-title="Run an Application: rofi" { spawn "rofi" "-show" "drun"; }
-    Mod+D { spawn "cosmic-launcher"; }
+    Mod+D hotkey-overlay-title="Run an Application: rofi" { spawn "rofi" "-show" "drun"; }
+    //Mod+D { spawn "cosmic-launcher"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
-    Super+B hotkey-overlay-title="Start Browser" { spawn "brave-browser"; }
+    Super+B hotkey-overlay-title="Start Browser" { spawn "brave-browser-stable"; }
     Super+S hotkey-overlay-title="Start steam" { spawn "steam"; }
     Super+E hotkey-overlay-title="Start emacs" { spawn "emacs"; }
 

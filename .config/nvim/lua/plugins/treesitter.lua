@@ -1,38 +1,11 @@
 return {
     { 
         "nvim-treesitter/nvim-treesitter",
-        version = false,
+	lazy = false,
+	ild = ':TSUpdate',
         config = function()
-            require("nvim-treesitter.configs").setup({
-                -- A list of parser names, or "all"
-                ensure_installed = { 
-                    "bash",
-                    "c",
-                    "diff",
-		    "elixir",
-                    "go",
-                    "html",
-                    "javascript",
-                    "jsdoc",
-                    "json",
-                    "jsonc",
-                    "lua",
-                    "luadoc",
-                    "luap",
-                    "markdown",
-                    "markdown_inline",
-                    "python",
-                    "query",
-                    "regex",
-		    "rust",
-                    "toml",
-                    "tsx",
-                    "typescript",
-                    "vim",
-                    "vimdoc",
-                    "yaml",
-                },
-
+	    require'nvim-treesitter'.install { 'go', 'bash', 'markdown'}
+            require("nvim-treesitter").setup({
                 -- Install parsers synchronously (only applied to `ensure_installed`)
                 sync_install = false,
 
