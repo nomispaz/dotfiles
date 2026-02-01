@@ -37,7 +37,7 @@
 		term-mode-hook
 		eshell-mode-hook
 		vterm-mode-hook
-		treemacs-mode-hook	
+		treemacs-mode-hook
 		imenu-list-minor-mode-hook
 		imenu-list-major-mode-hook))
 (add-hook mode (lambda () (display-line-numbers-mode -1))))
@@ -133,8 +133,8 @@
 
 (set-face-attribute 'mouse nil :background "white")
 
-(require 'catppuccin-theme)
-(load-theme 'catppuccin :no-confirm)
+(require 'spacemacs-theme)
+(load-theme 'spacemacs-dark :no-confirm)
 
 ;; Define a helper function to display a popup menu with all commands for a mode
 (defun my/display-mode-menu (mode)
@@ -369,7 +369,7 @@ Also copy the config_linux folder from /usr/share/jdtls only if it is newer."
           (message "JDTLS: config_linux copied to %s" config-dest))))))
 
 ;; Run at startup
-(my/setup-local-jdtls)
+;;(my/setup-local-jdtls)
 
 ; tree-sitter setup languages
     (setq treesit-language-source-alist
@@ -555,3 +555,19 @@ org-hide-emphasis-markers t)
 (define-key evil-normal-state-map (kbd "<leader> g D") '("LSP Find references" . xref-find-references))
 (define-key evil-normal-state-map (kbd "K") '("LSP show doc in buffer" . eldoc))
 (define-key evil-normal-state-map (kbd "C-.") '("LSP execute code action" . eglot-code-actions))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("7fd8b914e340283c189980cd1883dbdef67080ad1a3a9cc3df864ca53bdc89cf"
+     "bbb13492a15c3258f29c21d251da1e62f1abb8bbd492386a673dcfab474186af"
+     "a0ac98a1bde5d6336295fd350155a4aac1d63c53c1b3773062271074d16ebeb5"
+     default)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

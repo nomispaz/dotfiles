@@ -19,7 +19,7 @@ function emergeinstall
 end
 function emergeupdate
     sudo snapper -c root create --description "system update" -c number
-    sudo emerge -avugDU --read-news @world
+    sudo emerge -augDU --read-news @world
 end
 function emergeclean
     sudo snapper -c root create --description "system cleanup" -c number
