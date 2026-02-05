@@ -1,3 +1,40 @@
+-- show all files of current directory and subdirectories in the quickfix window
+vim.api.nvim_create_user_command("NomispazDirFilesRecursive", function()
+  local cwd = vim.fn.getcwd()
+  local items = {}
+
+  local function scan(dir)
+    local handle = vim.loop.fs_scandir(dir)
+    if not handle then return end
+
+    while true do
+      local name, t = vim.loop.fs_scandir_next(handle)
+      if not name then break end
+
+      local full = dir .. "/" .. name
+      if t == "file" then
+        table.insert(items, { filename = full })
+      elseif t == "directory" then
+        scan(full)
+      end
+    end
+  end
+
+  scan(cwd)
+  vim.fn.setqflist(items, "r")
+  vim.cmd("copen")
+end, {})
+
+-- show recent files in the quickfix window
+vim.api.nvim_create_user_command("NomispazRecentFiles", function()
+  local items = {}
+  for _, file in ipairs(vim.v.oldfiles) do
+    table.insert(items, { filename = file })
+  end
+  vim.fn.setqflist(items, "r")
+  vim.cmd("copen")
+end, {})
+
 -- Define a command to save session with user input
 vim.api.nvim_create_user_command('NompazSaveSession', function()
 

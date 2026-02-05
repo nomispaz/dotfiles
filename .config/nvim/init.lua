@@ -40,6 +40,38 @@ opt.conceallevel = 2 --conceal links
 opt.concealcursor = 'nc'
 opt.completeopt = {'menu', 'menuone', 'noselect', 'popup', 'fuzzy'} --autocomplete selection
 
+-- activate tree view in file-browser (Ex, Sex, Vex)
+vim.g.netrw_liststyle = 3
+
+-- =========================
+-- Activate treesitter without nvim-treesitter
+-- =========================
+
+--vim.api.nvim_create_autocmd("FileType", {
+--    callback = function(ev)
+--
+--        -- Turn off regex-based syntax highlighting
+--        vim.bo[ev.buf].syntax = "off"
+--        -- start treesitter
+--        pcall(vim.treesitter.start, ev.buf)
+--    end
+--})
+
+vim.cmd("syntax off")
+
+
+vim.api.nvim_create_autocmd("FileType", {
+  callback = function(ev)
+    local buf = ev.buf
+    local lang = vim.treesitter.language.get_lang(vim.bo[buf].filetype)
+    if not lang then return end
+
+    pcall(vim.treesitter.start, buf, lang)
+  end,
+})
+
+
+
 -- =========================
 -- Folding (Treesitter)
 -- =========================
@@ -148,3 +180,65 @@ require("config.lazy")
 --vim.cmd.colorscheme "catppuccin-mocha"
 vim.cmd.colorscheme "tokyonight-night"
 
+-- ===================================================
+-- LSP
+-- ===================================================
+
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+vim.lsp.config('gopls', {
+    cmd = { "gopls" },
+    root_markers = { "go.mod", ".git" },
+    filetypes = { "go" },
+    capabilities = capabilities,
+})
+
+vim.lsp.config('marksman', {
+    cmd = { 'marksman', 'server' },
+    root_markers = { ".marksman.toml", ".git" },
+    filetypes = { "markdown", "markdown.mdx" },
+})
+
+vim.lsp.enable('marksman')
+vim.lsp.enable('gopls')
+--vim.lsp.enable('pylsp')
+
+-- ===================================================
+-- Completion
+-- ===================================================
+
+-- attach LSP to completion function
+vim.api.nvim_create_autocmd("LspAttach", {
+    callback = function(ev)
+        -- LSP completion
+        vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
+
+        -- Enable built-in LSP completion engine
+        vim.lsp.completion.enable(true, ev.data.client_id, ev.buf, {
+            autotrigger = false,
+        })
+    end,
+})
+
+vim.opt.complete = {
+  "f",   -- file paths  
+  ".",   -- buffer words
+  "k",   -- dictionary (optional, safe)
+    }
+
+-- Expand or jump forward
+local ls = require("luasnip")
+
+vim.keymap.set({ "i", "s" }, "<Tab>", function()
+  if require("luasnip").jumpable(1) then
+    -- usage of plug is necessary since otherwise no jumping within the snippet with expr = true. Without expr = true, no tab outside
+    return "<Plug>luasnip-jump-next"
+  else
+    return "<Tab>"
+  end
+end, { expr = true, silent = true })
+
+vim.keymap.set({"i"}, "<C-K>", function() ls.expand() end, {silent = true})
+--vim.keymap.set({"i", "s"}, "<C-L>", function() ls.jump( 1) end, {silent = true})
+--vim.keymap.set({"i", "s"}, "<C-J>", function() ls.jump(-1) end, {silent = true})

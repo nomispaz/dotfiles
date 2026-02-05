@@ -20,56 +20,19 @@ return {
 -- ===================================================
 -- completion
 -- ===================================================
-    {
-    "hrsh7th/nvim-cmp",
-    dependencies = {
-      "onsails/lspkind.nvim",
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-path",
-      "hrsh7th/cmp-buffer",
-      "L3MON4D3/LuaSnip",
-      "saadparwaiz1/cmp_luasnip",
-    },
-    config = function()
-      require "config.completion"
-    end,
-    },
-
--- ===================================================
--- lspconfig
--- ===================================================
-    {
-	"neovim/nvim-lspconfig",
-    	vim.lsp.enable('marksman'),
-    	vim.lsp.enable('gopls'),
-	vim.lsp.enable('pylsp'),
-    	--vim.lsp.enable('pylsp', {
-      	--    settings = {
-	--        pylsp = {
-        --            plugins = {
-        --                pyflakes = {
-	--                    enabled = true,
-        --      		    maxLineLength = 200},
-        --      		black = { enabled = true },
-        --      		pylsp_mypy = { enabled = true },
-        --      		pycodestyle = {
-	--        	    maxLineLength = 200,
-        --      		},
-        --  	    }
-        --	}
-      	--    }
-    	--}),
-    },
-
--- ===================================================
--- lualine
--- ===================================================
---    {
---        'nvim-lualine/lualine.nvim',
---        dependencies = { 'nvim-tree/nvim-web-devicons' },
---        config = function()
---            require('lualine').setup()
---        end,
+--     {
+--    "hrsh7th/nvim-cmp",
+--    dependencies = {
+--      "onsails/lspkind.nvim",
+--      "hrsh7th/cmp-nvim-lsp",
+--      "hrsh7th/cmp-path",
+--      "hrsh7th/cmp-buffer",
+--      "L3MON4D3/LuaSnip",
+--      "saadparwaiz1/cmp_luasnip",
+--    },
+--    config = function()
+--      require "config.completion"
+--    end,
 --    },
 
 -- ===================================================
@@ -94,7 +57,7 @@ return {
         "nvim-telescope/telescope.nvim",
         dependencies = { "nvim-lua/plenary.nvim" }
     },
-
+    
 -- ===================================================
 -- treesitter
 -- ===================================================

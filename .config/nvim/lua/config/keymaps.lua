@@ -12,11 +12,13 @@ keymap("n", "<leader>sl", "<cmd>lua NompazLoadSessions()<cr>", { desc = "Load se
 
 -- Telescope functions
 -- find files
-keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Open file search" })
+--keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Open file search" })
+keymap("n", "<leader>ff", "<cmd>NomispazDirFilesRecursive<cr>", { desc = "Open file search" })
 -- find in files
 keymap("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { desc = "Search files (grep)" })
 -- show recent files
-keymap("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Show recent files" })
+--keymap("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Show recent files" })
+keymap("n", "<leader>fr", "<cmd>NomispazRecentFiles<cr>", { desc = "Show recent files" })
 
 -- new file
 keymap("n", "<leader>fn", "<cmd>ene <BAR> startinsert<cr>", { desc = "New file" })
@@ -49,9 +51,9 @@ keymap("n", "<A-Down>", "<cmd>m +1<cr>", { desc = "Move row 1 down" })
 keymap("x", "<A-Down>", "<cmd>'<,'>move-2<CR>gv=gv<cr>", { desc = "Move row 1 down" })
 
 -- dap commands
-vim.keymap.set("n", "<F5>", function() require("dap").continue() end)
-vim.keymap.set("n", "<F10>", function() require("dap").step_over() end)
-vim.keymap.set("n", "<F11>", function() require("dap").step_into() end)
-vim.keymap.set("n", "<F12>", function() require("dap").step_out() end)
-vim.keymap.set("n", "<Leader>b", function() require("dap").toggle_breakpoint() end)
-vim.keymap.set("n", "<Leader>B", function() require("dap").set_breakpoint(vim.fn.input('Breakpoint condition: ')) end)
+--vim.keymap.set("n", "<F5>", function() require("dap").continue() end)
+--vim.keymap.set("n", "<F10>", function() require("dap").step_over() end)
+--vim.keymap.set("n", "<F11>", function() require("dap").step_into() end)
+--vim.keymap.set("n", "<F12>", function() require("dap").step_out() end)
+--vim.keymap.set("n", "<Leader>b", function() require("dap").toggle_breakpoint() end)
+--vim.keymap.set("n", "<Leader>B", function() require("dap").set_breakpoint(vim.fn.input('Breakpoint condition: ')) end)
