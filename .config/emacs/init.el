@@ -277,7 +277,7 @@
 (require 'yasnippet)
 (require 'yasnippet-snippets)
 (yas-global-mode 1)
-(global-set-key (kbd "C-c C-s") 'yas-insert-snippet)
+(global-set-key (kbd "C-k") 'yas-insert-snippet)
 
 (require 'cape)
   ;; Bind prefix keymap providing all Cape commands under a mnemonic key.

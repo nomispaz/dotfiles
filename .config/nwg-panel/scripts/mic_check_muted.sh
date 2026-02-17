@@ -1,3 +1,5 @@
+#!/usr/bin/bash
+
 # Get the volume information
 volume_info=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@)
 

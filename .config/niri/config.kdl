@@ -110,8 +110,9 @@ layout {
 // Autostart
 //spawn-at-startup "waybar"
 // spawn-at-startup "cosmic-panel"
-spawn-at-startup "nwg-panel"
-spawn-at-startup "swaync"
+// spawn-at-startup "nwg-panel"
+//spawn-at-startup "swaync"
+spawn-at-startup "dunst"
 
 spawn-at-startup "/usr/libexec/polkit-gnome-authentication-agent-1"
 
@@ -132,7 +133,7 @@ spawn-at-startup "swaybg" "-m" "fill" "-i" "/home/nomispaz/.config/sway/backgrou
 // spawn-at-startup "/usr/libexec/xdg-desktop-portal-gnome"
 
 spawn-at-startup "gammastep-indicator"
-spawn-at-startup "swaync"
+//spawn-at-startup "swaync"
 
 // ask apps to ignore client side decoration if possible. hides title bars if possible
 prefer-no-csd

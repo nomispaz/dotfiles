@@ -92,7 +92,7 @@ def show_power_menu(qtile):
             height=0.5,
             highlight="A00000",
             mouse_callbacks={
-                "Button1": lazy.spawn("bash -c poweroff")
+                "Button1": lazy.spawn("bash -c /usr/sbin/poweroff")
             }
         ),
         PopupText(
@@ -282,7 +282,7 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font="Font Awesome 5 Free",
+    font="FontAwesome",
     fontsize=18,
     padding=0,
     background=colors['DarkGrey'],

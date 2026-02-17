@@ -1,0 +1,12 @@
+# ~/.xinputrc
+
+# Detect session type (Wayland or X11)
+if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+    # For Wayland (KDE, GNOME, etc.), no need to force GTK_IM_MODULE or QT_IM_MODULE
+    export XMODIFIERS="@im=ibus"
+else
+    # For X11 (XFCE, MATE, LXDE, etc.), force compatibility
+    export GTK_IM_MODULE=ibus
+    export QT_IM_MODULE=ibus
+    export XMODIFIERS="@im=ibus"
+fi

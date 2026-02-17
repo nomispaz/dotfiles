@@ -47,28 +47,18 @@ vim.g.netrw_liststyle = 3
 -- Activate treesitter without nvim-treesitter
 -- =========================
 
---vim.api.nvim_create_autocmd("FileType", {
---    callback = function(ev)
+--vim.cmd("syntax off")
 --
---        -- Turn off regex-based syntax highlighting
---        vim.bo[ev.buf].syntax = "off"
---        -- start treesitter
---        pcall(vim.treesitter.start, ev.buf)
---    end
+--
+--vim.api.nvim_create_autocmd("FileType", {
+--  callback = function(ev)
+--    local buf = ev.buf
+--    local lang = vim.treesitter.language.get_lang(vim.bo[buf].filetype)
+--    if not lang then return end
+--
+--    pcall(vim.treesitter.start, buf, lang)
+--  end,
 --})
-
-vim.cmd("syntax off")
-
-
-vim.api.nvim_create_autocmd("FileType", {
-  callback = function(ev)
-    local buf = ev.buf
-    local lang = vim.treesitter.language.get_lang(vim.bo[buf].filetype)
-    if not lang then return end
-
-    pcall(vim.treesitter.start, buf, lang)
-  end,
-})
 
 
 
@@ -208,37 +198,35 @@ vim.lsp.enable('gopls')
 -- Completion
 -- ===================================================
 
--- attach LSP to completion function
-vim.api.nvim_create_autocmd("LspAttach", {
-    callback = function(ev)
-        -- LSP completion
-        vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
-
-        -- Enable built-in LSP completion engine
-        vim.lsp.completion.enable(true, ev.data.client_id, ev.buf, {
-            autotrigger = false,
-        })
-    end,
-})
-
-vim.opt.complete = {
-  "f",   -- file paths  
-  ".",   -- buffer words
-  "k",   -- dictionary (optional, safe)
-    }
-
--- Expand or jump forward
-local ls = require("luasnip")
-
-vim.keymap.set({ "i", "s" }, "<Tab>", function()
-  if require("luasnip").jumpable(1) then
-    -- usage of plug is necessary since otherwise no jumping within the snippet with expr = true. Without expr = true, no tab outside
-    return "<Plug>luasnip-jump-next"
-  else
-    return "<Tab>"
-  end
-end, { expr = true, silent = true })
-
-vim.keymap.set({"i"}, "<C-K>", function() ls.expand() end, {silent = true})
---vim.keymap.set({"i", "s"}, "<C-L>", function() ls.jump( 1) end, {silent = true})
---vim.keymap.set({"i", "s"}, "<C-J>", function() ls.jump(-1) end, {silent = true})
+---- attach LSP to completion function
+--vim.api.nvim_create_autocmd("LspAttach", {
+--    callback = function(ev)
+--        -- LSP completion
+--        vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
+--
+--        -- Enable built-in LSP completion engine
+--        vim.lsp.completion.enable(true, ev.data.client_id, ev.buf, {
+--            autotrigger = true,
+--        })
+--    end,
+--})
+--
+--vim.opt.complete = {
+--  "f",   -- file paths  
+--  ".",   -- buffer words
+--  "k",   -- dictionary (optional, safe)
+--    }
+--
+---- Expand or jump forward
+--local ls = require("luasnip")
+--
+--vim.keymap.set({ "i", "s" }, "<Tab>", function()
+--  if require("luasnip").jumpable(1) then
+--    -- usage of plug is necessary since otherwise no jumping within the snippet with expr = true. Without expr = true, no tab outside
+--    return "<Plug>luasnip-jump-next"
+--  else
+--    return "<Tab>"
+--  end
+--end, { expr = true, silent = true })
+--
+--vim.keymap.set({"i"}, "<C-K>", function() ls.expand() end, {silent = true})
