@@ -23,7 +23,7 @@ import os, sys
 from PyQt6.QtCore import Qt, QDate
 from PyQt6 import uic
 from datetime import date, datetime, timedelta
-from PyQt6.QtGui import QFont
+from PyQt6.QtGui import QFont, QGuiApplication
 from PyQt6.QtWidgets import QMainWindow, QApplication, QTableWidgetItem
 
 ############################################################
@@ -279,6 +279,7 @@ def main():
         qtcalApp = QApplication(sys.argv)
         qtcalApp.setFont(QFont("Awesome", 16))
         qtcalApp.setApplicationName("qtcal")
+        QGuiApplication.setDesktopFileName('qtcal')
 
         # Create a Qt widget, which will be our window.
         qtcalWindow = QtCalWindow(vDbVersion, vDbConnection)

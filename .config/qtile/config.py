@@ -53,7 +53,7 @@ absolute_path = os.path.dirname(__file__)
 os.environ["WLR_NO_HARDWARE_CURSORS"] = "1"
 os.environ["RANGER_LOAD_DEFAULT_RC"] = "false"
 os.environ["XDG_SESSION_TYPE"] = "wayland"
-os.environ["XDG_CURRENT_DESKTOP"] = "sway"
+os.environ["XDG_CURRENT_DESKTOP"] = "wlroots"
 
 # autostart
 @hook.subscribe.startup_once
@@ -413,7 +413,7 @@ groups = [
         DropDown("term", terminal, opacity=0.5),
         DropDown("wdisplays", "wdisplays"),
         DropDown("htop", terminal + " -e htop", opacity=0.5),
-        DropDown("qtcal", "python " + os.path.join(absolute_path, "myclasses/qtcal/qtcal.py --datadir=/home/nomispaz/.local/share/qtcal"), x=0.5, height=0.5, opacity=1),
+        DropDown("qtcal", "python3 " + os.path.join(absolute_path, "myclasses/qtcal/qtcal.py --datadir=/home/nomispaz/.local/share/qtcal"), x=0.5, height=0.5, opacity=1),
         ]
     ),
 ]

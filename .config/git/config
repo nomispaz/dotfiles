@@ -4,7 +4,7 @@ helper = "libsecret";
 [user]
 email = "nomispaz@example.org"
 name = "nomispaz"
-	signingkey = /home/nomispaz/.ssh/codeberg_gentoo.pub
+signingkey = /home/nomispaz/.ssh/id_ed25519.pub
 [diff]
 	tool = vimdiff
 [difftool]

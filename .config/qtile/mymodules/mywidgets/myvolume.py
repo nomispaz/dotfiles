@@ -17,7 +17,7 @@ class VolumeBase(base._TextBox):
     defaults = [
         ("padding", 3, "Padding left and right. Calculated if None."),
         ("mute_foreground", None, "Foreground color for mute volume."),
-        ("mute_format", " ", "Format to display when volume is muted."),
+        ("mute_format", "\uf6a9", "Format to display when volume is muted."),
         ("unmute_format", " {volume}%", "Format of text to display when volume is not muted."),
     ]
 
